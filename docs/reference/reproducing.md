@@ -2,10 +2,9 @@
 
 Nothing on a results page is typed by hand: the tables are computed from
 `scoreboard.csv` and each fit's `knobs.csv` at render time, the figures from the
-same outputs. Prose lives in `reports/loco_option_matrix/make_pages.py`, never in
-`docs/inverted_tunes/reports/*.md`, `docs/method.md` or
-`docs/inverted_tunes/studies/measured-optics.md` — those five files are
-overwritten on every render.
+same outputs. Page text lives in `loco_report/pages.py` and
+`loco_report/studies.py`, never in the markdown — every file under
+`docs/*_tunes/` and `docs/method.md` is overwritten on every render.
 
 ## From nothing
 
@@ -27,11 +26,10 @@ uv run python scripts/predict_loco.py --momentum-mode multi --merge
 uv run python scripts/case_optics.py
 uv run python scripts/case_optics.py --momentum-mode multi
 
-# 4. figures, then pages
-uv run python scripts/report_cases.py
-uv run python reports/loco_option_matrix/make_pages.py
-uv run python scripts/report_cases.py --momentum-mode multi
-uv run python reports/loco_option_matrix/make_pages.py --momentum-mode multi
+# 4. cross-campaign comparison, then every figure and page for a direction
+uv run python scripts/analyse_cross_campaign.py --direction inverted
+uv run python scripts/plot_cross_campaign.py --direction inverted
+uv run python -m loco_report --direction inverted
 
 # 5. the site
 uv run --with zensical zensical build     # into site/
@@ -67,13 +65,13 @@ commands for its own options at the bottom.
 
 | file | what it owns |
 |---|---|
-| `loco_common/campaign.py` | the two configurations: acquisitions, scan log, circuits, measured optics, results roots |
+| `loco_common/campaign.py` | every configuration: acquisitions, scan log, circuits, measured optics, results roots |
 | `loco_common/case_names.py` | which options each page shows, and every name a reader sees |
 | `scripts/measured_optics.py` | measured optics per configuration, against both models |
 | `scripts/predict_loco.py` | scores each fit on the six targets |
 | `scripts/case_optics.py` | twisses each fitted lattice against its start model |
-| `scripts/report_cases.py` | every figure |
-| `reports/loco_option_matrix/make_pages.py` | the method page, the results pages, every table |
+| `scripts/report_cases.py` | the cross-campaign frames and comparison figures |
+| `loco_report/` | every figure, every results page, the method page and every table |
 
 A fit lives under `results/matrix[_<campaign>][_multi]/<planes>__<families>__<lump>`.
 That slug is an address and never appears on a page except inside a shell command.

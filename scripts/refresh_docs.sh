@@ -1,6 +1,10 @@
 #!/bin/sh
-# Full LOCO report pipeline for every campaign the inverted-tunes report pages
-# tab between (loco_common.campaign.INVERTED_PAGE_CAMPAIGNS). Each stage's
+# Full LOCO report pipeline for one direction's campaigns.
+#
+#     sh scripts/refresh_docs.sh inverted
+#     sh scripts/refresh_docs.sh normal
+#
+# Each stage's
 # stdout/stderr goes to its own file under .logs/, named with the $TAG prefix so
 # a normal-tunes refresh cannot overwrite an inverted one. Independent
 # (campaign, mode) work runs in parallel within a stage -- see the comment above
@@ -10,8 +14,8 @@ cd "$(dirname "$0")/.."
 
 mkdir -p .logs
 
-TAG=inverted
-DIRECTION=inverted
+DIRECTION="${1:?usage: $0 <inverted|normal>}"
+TAG="$DIRECTION"
 
 run() {
     name="$1"
@@ -31,7 +35,13 @@ wait_all() {
     [ "$status" -eq 0 ] || { echo "one or more of: $* failed; see .logs/" >&2; exit 1; }
 }
 
-CAMPAIGNS="inverted_second inverted_qde14_err inverted_qde14_qde3_err inverted_sexts_on"
+# The campaigns this direction's pages tab between, from the registry rather
+# than a second hand-maintained list.
+CAMPAIGNS=$(.venv/bin/python -c "
+from loco_common.campaign import INVERTED_PAGE_CAMPAIGNS, NORMAL_PAGE_CAMPAIGNS
+groups = {'inverted': INVERTED_PAGE_CAMPAIGNS, 'normal': NORMAL_PAGE_CAMPAIGNS}
+print(' '.join(c.slug for c in groups['$DIRECTION']))
+")
 
 # Clear cached artifacts so every stage is forced to regenerate from scratch.
 # Comment this block out to reuse whatever is already on disk.
@@ -60,7 +70,7 @@ wait_all measured_optics
 # each chain writes only under results/matrix_<campaign>[_multi]/, so the
 # chains can run at once; each stage inside a chain still waits on the last.
 # predict_loco writes scoreboard.shard1of1.csv and only --merge turns that into
-# the scoreboard.csv that report_cases' scores figure reads, so the merge is
+# the scoreboard.csv that loco_report's scores figure reads, so the merge is
 # part of the chain, not optional.
 pids=""
 for campaign in $CAMPAIGNS; do
@@ -97,27 +107,12 @@ for campaign in $CAMPAIGNS; do
     run "benchmark_${campaign}" python -m scripts.benchmark_methods --campaign "$campaign"
 done
 
-# Stage 5: report_cases.py only draws each (campaign, mode)'s own figures --
-# the cross-campaign comparison figures are stage 6 -- so every call here is
-# independent and can run at once.
-pids=""
-for campaign in $CAMPAIGNS; do
-    for mode in single multi; do
-        run "report_cases_${campaign}_${mode}" python scripts/report_cases.py --campaign "$campaign" --momentum-mode "$mode" &
-        pids="$pids $!"
-    done
-done
-wait_all report_cases
-
-# Stage 6: combine this direction's cross-campaign comparison once (analysis),
+# Stage 5: combine this direction's cross-campaign comparison once (analysis),
 # then draw it once (plotting). --direction keeps the run off the other
 # direction's results, which this script has not refreshed.
 run analyse_cross_campaign python scripts/analyse_cross_campaign.py --direction "$DIRECTION"
 run plot_cross_campaign python scripts/plot_cross_campaign.py --direction "$DIRECTION"
 
-run make_pages python reports/loco_option_matrix/make_pages.py \
-    --campaign $CAMPAIGNS
-
-run make_pages_multi python reports/loco_option_matrix/make_pages.py \
-    --momentum-mode multi \
-    --campaign $CAMPAIGNS
+# Stage 6: every figure and every page for this direction, both momentum
+# modes, in one call.
+run report python -m loco_report --direction "$DIRECTION"
