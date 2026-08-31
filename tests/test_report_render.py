@@ -90,3 +90,79 @@ def test_results_reports_which_options_have_a_fit(matrix, positions):
     assert results.has(OPTION)
     assert not results.has("no__such__case")
     assert results.valid((OPTION, "no__such__case")) == (OPTION,)
+
+
+DOCS = REPO_ROOT / "docs"
+FIGURE_ROOT = DOCS / "assets" / "figures"
+
+
+def generated_pages() -> list[Path]:
+    """The report pages loco_report writes, as they are on disk."""
+    return sorted(
+        path
+        for tree in ("inverted_tunes", "normal_tunes")
+        for path in (DOCS / tree / "reports").rglob("*.md")
+    )
+
+
+@pytest.fixture(scope="module")
+def pages() -> list[Path]:
+    found = generated_pages()
+    if not found:
+        pytest.skip("no report pages rendered yet")
+    return found
+
+
+def test_no_figure_repeats_its_caption_as_alt_text(pages):
+    """The old generator printed every caption twice; 654 of 654 figures did."""
+    import re
+
+    offenders = []
+    for path in pages:
+        text = path.read_text()
+        for match in re.finditer(
+            r"!\[(.*?)\]\(.*?\)\s*\n\s*<figcaption>(.*?)</figcaption>", text, re.S
+        ):
+            if match.group(1).strip() == match.group(2).strip():
+                offenders.append(f"{path.name}: {match.group(1)[:50]}")
+    assert not offenders, offenders[:5]
+
+
+def test_every_referenced_figure_exists(pages):
+    import re
+
+    missing = []
+    for path in pages:
+        for reference in re.findall(r"\]\((\.\./[^)]+\.png)\)", path.read_text()):
+            if not (path.parent / reference).resolve().exists():
+                missing.append(f"{path}: {reference}")
+    assert not missing, missing[:5]
+
+
+def test_no_page_carries_more_than_two_tables(pages):
+    """Bar charts over tables: two tables a page is the cap."""
+    over = []
+    for path in pages:
+        lines = path.read_text().splitlines()
+        # Distinct header rows: the same table repeated once per campaign tab
+        # is one table, not four.
+        headers = {
+            lines[index - 1].strip()
+            for index, line in enumerate(lines)
+            if index and line.strip().startswith("|---")
+        }
+        if len(headers) > 2:
+            over.append(f"{path.name}: {len(headers)} distinct tables")
+    assert not over, over
+
+
+def test_every_nav_target_exists():
+    import re
+
+    nav = (REPO_ROOT / "zensical.toml").read_text()
+    nav = nav[nav.index("nav = ["):nav.index("[project.theme]")]
+    missing = [
+        target for target in re.findall(r'"([^"]+\.md)"', nav)
+        if not (DOCS / target).exists()
+    ]
+    assert not missing, missing

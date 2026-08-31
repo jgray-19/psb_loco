@@ -1,28 +1,40 @@
 # PSB ring-3 LOCO
 
 Quadrupole `k1` recovery from measured orbit response on the CERN PS Booster,
-ring 3. Two machine configurations from the 2026-08-21 MD, nine Method-2 fits and one
-Method-1 fit each, scored against six measurements.
+ring 3. Two working points, four machine configurations each, two fitting
+methods, two momentum modes.
 
 <div class="grid cards" markdown>
 
 -   __[Method](method.md)__
 
-    What was measured, what was modelled, what was fitted. Statements only.
+    What was measured, what was modelled, what was fitted, and what each term
+    on these pages means.
 
--   __[Inverted tunes — results](inverted_tunes/reports/index.md)__
+-   __[Inverted tunes](inverted_tunes/reports/index.md)__
 
-    The numbers: three orbit-matching modes, two cases each, the
-    per-magnet fits and Method 1 on their own pages, four scenarios,
-    and the measured optics against both models.
+    Every fit at the inverted working point: delta, absolute and per-magnet
+    parametrisations, single and multi momentum, Method 1, the measured optics
+    and the error-injection scenarios.
 
--   __[Normal tunes — results](normal_tunes/index.md)__
+-   __[Normal tunes](normal_tunes/reports/index.md)__
 
-    The same layout, repeated at the P17/P23 tune point. Acquisition in
-    progress as of 2026-08-29.
+    The same set at the normal working point.
 
--   __[Reference](reference/reproducing.md)__
+-   __[Conventions](reference/conventions.md)__
 
-    How to rerun any of it, and the handover.
+    Signs, units and references needed to read the axes.
 
 </div>
+
+## What is on each results page
+
+| section | contents |
+|---|---|
+| Fitted knobs | every fitted magnet strength against `s`, with its error bar, and the same as \|value\| / sigma |
+| Fitted lattice | beta-beating, phase error, dispersion and coupling of each fitted lattice, against the start model and against the tune-matched model |
+| Tune and chromaticity | fitted tune and `Q'H` / `Q'V` per case, against the measurement |
+| Residuals | residual per BPM for each scored measurement, and the residual per scored measurement as a percentage of the measured amplitude |
+
+Each page tabs between the four machine configurations of its working point.
+Tabs are linked, so a choice holds across the page.

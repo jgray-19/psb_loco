@@ -37,8 +37,7 @@ nav = [
       ]},
   ]},
   { "Normal tunes" = [
-      "normal_tunes/index.md",
-      { "Method" = "normal_tunes/method.md" },
+      "normal_tunes/reports/index.md",
       { "Method 2 - single momentum" = [
           { "Delta orbits" = "normal_tunes/reports/delta.md" },
           { "Absolute orbits" = "normal_tunes/reports/absolute.md" },
@@ -60,10 +59,10 @@ nav = [
       ]},
   ]},
   { "Reference" = [
-      { "Reproducing" = "reference/reproducing.md" },
-      { "Handover" = "reference/handover.md" },
+      { "Conventions" = "reference/conventions.md" },
       { "Quadrupole roll" = "studies/quadrupole-roll.md" },
       { "Momentum calibration" = "studies/momentum-calibration.md" },
+      { "Reproducing" = "reference/reproducing.md" },
   ]},
 ]
 

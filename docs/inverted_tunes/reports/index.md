@@ -1,45 +1,27 @@
 # Results
 
-## Method 2 — single momentum
+Every fit on this working point. 4 machine configurations, shown as tabs on each page: Inverted tunes, 28th, Inverted tunes, QDE14 error, Inverted tunes, QDE14+QDE3 error, Inverted tunes, sextupoles on.
 
-These fits use every measured corrector kick at nominal RF only. Their predictions
-at the other four RF offsets are held-out validation.
+## Single momentum
 
-| page | contents |
-|---|---|
-| [Delta orbits](delta.md) | two fits, both planes as delta orbits |
-| [Absolute orbits](absolute.md) | two fits, both planes absolute |
-| [One knob per magnet](per-magnet.md) | 48 free gradients, delta and absolute orbit options |
+| page | fitted option | configurations with a fit |
+|---|---|---|
+| [Delta orbits](delta.md) | Gradients, lumped to 32 knobs by cell | 4 of 4 |
+| [Delta orbits](delta.md) | Gradients and rolls, lumped to 32 knobs by cell | 4 of 4 |
+| [Absolute orbits](absolute.md) | Gradients, bends and offsets, lumped to 32 knobs by cell | 4 of 4 |
+| [Absolute orbits](absolute.md) | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | 4 of 4 |
+| [One knob per magnet](per-magnet.md) | Gradients, one knob per magnet, delta orbits | 4 of 4 |
+| [One knob per magnet](per-magnet.md) | Gradients, bends and offsets, one knob per magnet, absolute orbits | 4 of 4 |
+| [Method 1](method1.md) | Method 1, lumped to 32 knobs by cell | 4 of 4 |
+| [Method 1](method1.md) | Gradients, lumped to 32 knobs by cell | 4 of 4 |
 
-## Method 2 — multi momentum
+## Multi momentum
 
-These fits use every measured corrector kick at all five RF offsets. The five
-momenta are batched into the same 49 MAD-NG workers used by the corresponding
-single-momentum layout.
-
-| page | contents |
-|---|---|
-| [Delta orbits](multi/delta.md) | both planes as delta orbits, 244 fitted targets |
-| [Absolute orbits](multi/absolute.md) | both planes absolute, 245 fitted targets |
-| [One knob per magnet](multi/per-magnet.md) | 48 free gradients, delta and absolute orbit options |
-
-## Method 1
-
-| page | contents |
-|---|---|
-| [Method 1](method1.md) | the response-matrix fit, delta orbits, against Method 2 |
-| [Method 1 against Method 2](benchmark.md) | same knobs and data: agreement and runtime |
-
-## Common measurements
-
-| page | contents |
-|---|---|
-| [Measured optics](../studies/measured-optics.md) | measured tune, $Q'$, beta and beta-beating, against both models |
-| [Scenario comparison](scenario-comparison.md) | fitted knob errors and tune/chroma, all scenarios against the baseline |
-
-Every page tabs between the two machine configurations; the optics page tabs
-between the four (configuration, model) pairs. Tabs are linked, so a choice
-holds for the page.
-
-Definitions are on the [method page](../../method.md). The narrative study of
-the rolls is [under Reference](../../studies/quadrupole-roll.md).
+| page | fitted option | configurations with a fit |
+|---|---|---|
+| [Delta orbits](multi/delta.md) | Gradients, lumped to 32 knobs by cell | 4 of 4 |
+| [Delta orbits](multi/delta.md) | Gradients and rolls, lumped to 32 knobs by cell | 4 of 4 |
+| [Absolute orbits](multi/absolute.md) | Gradients, bends and offsets, lumped to 32 knobs by cell | 4 of 4 |
+| [Absolute orbits](multi/absolute.md) | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | 4 of 4 |
+| [One knob per magnet](multi/per-magnet.md) | Gradients, one knob per magnet, delta orbits | 4 of 4 |
+| [One knob per magnet](multi/per-magnet.md) | Gradients, bends and offsets, one knob per magnet, absolute orbits | 4 of 4 |
