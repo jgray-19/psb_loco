@@ -156,3 +156,15 @@ def log_axis(axis, values, *, floor: float = 1e-3) -> None:
         return
     axis.set_yscale("log")
     axis.set_ylim(max(floor, 0.5 * finite.min()), 2.0 * finite.max())
+
+
+def legend_headroom(axis, fraction: float = 0.35) -> None:
+    """Grow the top of the y-axis so the legend does not sit on the data."""
+    low, high = axis.get_ylim()
+    if axis.get_yscale() == "log":
+        if low <= 0 or high <= 0:
+            return
+        span = np.log10(high) - np.log10(low)
+        axis.set_ylim(low, 10 ** (np.log10(high) + fraction * span))
+        return
+    axis.set_ylim(low, high + fraction * (high - low))

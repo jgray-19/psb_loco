@@ -30,7 +30,7 @@ test = ["markdown", "pymdown-extensions", "pytest", "xsuite", "xtrack-tools"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["loco_common*", "method1_madng_da*", "method2_delta_orbit*"]
+include = ["loco_common*", "loco_report*", "method1_madng_da*", "method2_delta_orbit*"]
 
 [tool.uv]
 package = true
