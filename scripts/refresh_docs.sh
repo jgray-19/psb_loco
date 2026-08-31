@@ -37,7 +37,7 @@ wait_all() {
 
 # The campaigns this direction's pages tab between, from the registry rather
 # than a second hand-maintained list.
-CAMPAIGNS=$(.venv/bin/python -c "
+CAMPAIGNS=$(python -c "
 from loco_common.campaign import INVERTED_PAGE_CAMPAIGNS, NORMAL_PAGE_CAMPAIGNS
 groups = {'inverted': INVERTED_PAGE_CAMPAIGNS, 'normal': NORMAL_PAGE_CAMPAIGNS}
 print(' '.join(c.slug for c in groups['$DIRECTION']))
