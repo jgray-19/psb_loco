@@ -7,10 +7,10 @@ six DVT correctors, each stepped through `offset_k = 0, ±dk, ±2dk` with
 
 That scan was run twice, at two quadrupole powerings — the "normal" tunes
 (measured 4.1711 / 4.2294) and the "inverted" ones (4.2335 / 4.1279), with the
-correctors untouched between them. Both are in `loco_common/campaign.py`; every
-script that reads the measurement takes `--campaign {normal, inverted,
-inverted_double}` and defaults to the first, which is what every published number
-predating the second configuration was fitted on.
+correctors untouched between them. `loco_common/campaign.py` holds nine
+configurations -- four per working point (`*_second`, `*_sexts_on`,
+`*_qde14_err`, `*_qde14_qde3_err`) plus `inverted_double`; every script that
+reads the measurement takes `--campaign <slug>` and defaults to `inverted_second`.
 
 The start model is **never tune-matched**: its two main quadrupole circuits are
 the machine's own LSA readings, so its tune disagrees with the measured one on
@@ -20,7 +20,7 @@ acquisitions and the tune/chroma scan, and twisses both lattices — un-matched 
 matched to the measured tune — so the cost of not matching is a number rather
 than an argument. `docs/studies/measured-optics.md` is the result.
 
-**Picking this up cold? Read [docs/reference/handover.md](docs/reference/handover.md) first** — settled
+**Picking this up cold? Read [HANDOVER.md](HANDOVER.md) first** — settled
 conventions, open problems in priority order, and the traps that cost time.
 
 Two methods, two folders. They share no solver and no objective, which is the
@@ -57,7 +57,7 @@ python -m method2_delta_orbit.run_method2 --campaign inverted --output results/m
 python compare_fits.py   # every results/*/knobs.csv against the measurement
 ```
 
-`--sequence-file` is currently required; see docs/reference/handover.md §2.
+`--sequence-file` is currently required; see HANDOVER.md §2.
 
 Method 2 also takes `--correctors`, `--offsets`, `--rf-offsets` and
 `--batch-momenta`. `--rf-offsets` enables the multi-momentum mode (see the caveat

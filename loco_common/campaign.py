@@ -14,7 +14,7 @@ each defaulting to the normal-tunes value -- is how a fit ends up reading the
 inverted acquisitions against the normal-tunes model.
 
 The measured optics carried here are *pinned numbers*, not a file read: the
-acquisition mount is often absent (docs/reference/handover.md section 2), and a campaign has
+acquisition mount is often absent (HANDOVER.md section 2), and a campaign has
 to be describable without it. :mod:`scripts.measured_optics` re-derives them from
 the MD's own files and fails if they have moved, so the pinning is checked rather
 than trusted.

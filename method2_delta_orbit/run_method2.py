@@ -222,7 +222,7 @@ def average_zero_step(
     now they carry signal (the static closed orbit) instead of being zero by
     construction, so they are averaged rather than dropped.
 
-    The caveat docs/reference/handover.md section 9.5 records applies here too: this averages
+    The caveat HANDOVER.md section 9.5 records applies here too: this averages
     the error *bars* along with the orbits, so the result is under-weighted by
     roughly the repeat count. With the absolute error floor dominating those bars
     it makes little difference, but it is the same bug and it is deliberate.
@@ -542,7 +542,7 @@ def run(
         # Not a tuning parameter: psb_md.closed_orbit_fitting documents that both
         # the shape and the scale of this prior are what pick the answer out of a
         # large null space. Overridable only so the sensitivity to it can be
-        # measured (docs/reference/handover.md §10); the default is the one to use.
+        # measured (HANDOVER.md §10); the default is the one to use.
         # Per family, because k1, k0 and dy do not share a unit and one global
         # median(diag H) would move the quadrupole prior off its measured knee
         # as soon as another family is enabled.

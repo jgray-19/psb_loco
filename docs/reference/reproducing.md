@@ -52,8 +52,7 @@ per-campaign: they go under `docs/assets/figures/scenarios/<direction>/`, since
 `predict_loco.py` writes `scoreboard.shard<i>of<n>.csv`; run it again with
 `--merge` to make the `scoreboard.csv` the scores figure reads.
 
-`scripts/refresh_normal_second_docs.sh` and
-`scripts/refresh_inverted_second_docs.sh` run all of it for one direction.
+`scripts/refresh_docs.sh <direction>` runs all of it for one direction.
 
 Steps 2 and 3 take `--options`, step 4 takes `--page`: rebuilding one page from
 existing fits is a couple of minutes. Each results page carries the exact

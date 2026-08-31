@@ -25,7 +25,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # markdown + pymdown-extensions render the docs the way the site does, so
-# tests/test_docs_render.py checks the pages the reader actually gets.
+# tests/test_report_render.py checks the pages the reader actually gets.
 test = ["markdown", "pymdown-extensions", "pytest", "xsuite", "xtrack-tools"]
 
 [tool.setuptools.packages.find]

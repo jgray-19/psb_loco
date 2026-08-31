@@ -50,13 +50,13 @@ KINETIC_ENERGY = 0.16  # GeV, PSB flat bottom -- kinetic, not total.
 #: different values (``kbr3dvt6l4`` by a factor 4.5) and, on all six DHZ, the
 #: wrong sign, because it stores LSA readings without applying the horizontal
 #: inversion :data:`loco_common.naming.LSA_K_SIGN` documents. Upstream is not
-#: edited (docs/reference/handover.md section 6), so the correct values live here.
+#: edited (HANDOVER.md section 6), so the correct values live here.
 #:
 #: **Both errors were invisible to every result recorded so far, by
 #: construction.** Method 2 fits a *delta* orbit and Method 1 fits a slope with a
 #: free intercept; a standing corrector offset cancels out of both. Measured on
 #: the ring-3 model, offsetting a corrector by 1e-3 rad changes its delta orbit
-#: by 5e-4 relative -- pure sextupole feed-down. Nothing in docs/reference/handover.md is
+#: by 5e-4 relative -- pure sextupole feed-down. Nothing in HANDOVER.md is
 #: invalidated by this correction. The absolute-orbit mode is the first thing
 #: here that reads the standing settings at first order, which is why it is the
 #: first thing that could notice.
@@ -99,7 +99,7 @@ SCAN_CORRECTOR_SETTINGS_LSA: dict[str, float] = {
 #: absorb the very gradient error LOCO exists to find into the two main circuits.
 #: :mod:`scripts.measured_optics` quantifies the gap for both campaigns.
 #:
-#: **Every number in docs/reference/handover.md predates this and was fitted from a start model
+#: **Every number in HANDOVER.md predates this and was fitted from a start model
 #: on the matched circuits.** They are not comparable to anything fitted after
 #: it and have to be regenerated. Pass ``scan_quads=False`` to reproduce one.
 SCAN_QUAD_SETTINGS: dict[str, float] = dict(NORMAL.quad_settings)

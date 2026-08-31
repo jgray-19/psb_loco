@@ -1,13 +1,13 @@
 """Evaluate every fitted LOCO option on one common set of predictions.
 
 A fit's own loss is not a score: each option fits a different target, so their
-residuals are not comparable -- the same trap docs/reference/handover.md section 9.4 documents
+residuals are not comparable -- the same trap HANDOVER.md section 9.4 documents
 for the momentum curve. What *is* comparable is what each fitted model predicts
 about the machine, so every result directory is evaluated here on the same three
 questions, whatever it was fitted on:
 
 1. **Delta orbits.** The 48 corrector trims at nominal RF, reference removed.
-   This is Method 2's home ground and the number docs/reference/handover.md quotes.
+   This is Method 2's home ground and the number HANDOVER.md quotes.
 2. **Static closed orbit.** The machine's untrimmed orbit in both planes, which
    only the bends (x) and quadrupole ``dy`` (y) can explain.
 3. **Dispersion.** The slope of the untrimmed orbit against momentum over the
