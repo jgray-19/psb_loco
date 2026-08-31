@@ -31,10 +31,7 @@ nav = [
           { "Method 1 against Method 2" = "inverted_tunes/reports/benchmark.md" },
       ]},
       { "Measured optics" = "inverted_tunes/studies/measured-optics.md" },
-      { "Scenario comparison" = [
-          { "Fitted with gradients only" = "inverted_tunes/reports/scenario-comparison.md" },
-          { "Fitted with gradients and rolls" = "inverted_tunes/reports/scenario-comparison-rolls.md" },
-      ]},
+      { "Scenario comparison" = "inverted_tunes/reports/scenarios.md" },
   ]},
   { "Normal tunes" = [
       "normal_tunes/reports/index.md",
@@ -53,10 +50,7 @@ nav = [
           { "Method 1 against Method 2" = "normal_tunes/reports/benchmark.md" },
       ]},
       { "Measured optics" = "normal_tunes/studies/measured-optics.md" },
-      { "Scenario comparison" = [
-          { "Fitted with gradients only" = "normal_tunes/reports/scenario-comparison.md" },
-          { "Fitted with gradients and rolls" = "normal_tunes/reports/scenario-comparison-rolls.md" },
-      ]},
+      { "Scenario comparison" = "normal_tunes/reports/scenarios.md" },
   ]},
   { "Reference" = [
       { "Conventions" = "reference/conventions.md" },

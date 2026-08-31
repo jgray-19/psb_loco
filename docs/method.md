@@ -1,103 +1,49 @@
 # Method
 
-PSB ring 3, flat bottom, kinetic energy 0.16 GeV. 16 BPMs per plane, 48 ring quadrupoles, 12 orbit correctors (6 DHZ, 6 DVT).
+Statements only. What was measured, what was modelled, what was fitted. The conventions the axes are drawn in are on the [conventions page](reference/conventions.md).
 
 ## Configurations
 
-The corrector scan was run twice on 2026-08-21, at two quadrupole powerings. The correctors were not changed between them.
+### Inverted tunes
 
-| | Inverted tunes, 28th | Inverted tunes, QDE14 error | Inverted tunes, QDE14+QDE3 error | Inverted tunes, sextupoles on |
-|---|---|---|---|---|
-| acquisitions | `0mm` | `0mm` | `0mm` | `0mm` |
-| scan log | `scan_20260828T093232.jsonl` | `scan_20260828T124746.jsonl` | `scan_20260828T153631.jsonl` | `scan_20260828T165943.jsonl` |
-| corrector step, LSA `/K` | 0, ±7.5e-05, ±0.00015 | 0, ±7.5e-05, ±0.00015 | 0, ±7.5e-05, ±0.00015 | 0, ±7.5e-05, ±0.00015 |
-| QFO / QDE, MAD $k_1$ | 0.7395237891 / -0.7377586523 | 0.7395237891 / -0.7377586523 | 0.7395237891 / -0.7377586523 | 0.7395237891 / -0.7377586523 |
-| trim circuits | all four at zero | all four at zero | all four at zero | all four at zero |
-| AC-dipole folders | `0mm`, `m2mm`, `2mm` | `0mm`, `m2mm`, `2mm` | `0mm`, `m2mm`, `2mm` | `0mm`, `m2mm`, `2mm` |
-| model tune, $k_1$ as sent | 4.3004 / 4.0163 | 4.3004 / 4.0163 | 4.3004 / 4.0163 | 4.3004 / 4.0163 |
-| model tune, matched | 4.2340 / 4.1276 | 4.2331 / 4.1277 | 4.2329 / 4.1276 | 4.2333 / 4.1283 |
+| configuration | measured $Q_x$ / $Q_y$ | QFO / QDE circuit, MAD $k_1$ | what it is |
+|---|---|---|---|
+| Inverted tunes, 28th | 4.2340 / 4.1276 | 0.7395238 / -0.7377587 | QFO raised and QDE lowered until the tunes swap sides: Qx = 4.233 above Qy = 4.128. The correctors were left where they were, so this is the same measurement of a different lattice. |
+| Inverted tunes, QDE14 error | 4.2331 / 4.1277 | 0.7395238 / -0.7377587 | The 28th's inverted lattice again, with QDE14 (kbrqd14corr = +0.0073775865) deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find the error. |
+| Inverted tunes, QDE14+QDE3 error | 4.2329 / 4.1276 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find both errors. |
+| Inverted tunes, sextupoles on | 4.2333 / 4.1283 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with the ring sextupoles powered instead of off. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits. |
 
-A third scan, `CO_measurements_inverted_tunes_double` / `scan_20260821T150756.jsonl`, repeats the inverted lattice with a single ±1.5e-4 step. It is fitted (`--campaign inverted_double`) and not shown on the pages.
+### Normal tunes
 
-## Orbit measurement
+| configuration | measured $Q_x$ / $Q_y$ | QFO / QDE circuit, MAD $k_1$ | what it is |
+|---|---|---|---|
+| Normal tunes, 29th | 4.1730 / 4.2293 | 0.7289003 / -0.7442766 | The 29th's repeat of the normal-tunes lattice, at the new P17/P23 tune point and orbit-corrector set. The LOCO scan (all three RF offsets) and chroma were retaken from scratch, same layout as the 28th's inverted-tunes campaign. |
+| Normal tunes, QDE14 error | 4.1731 / 4.2299 | 0.7289003 / -0.7442766 | The 29th's normal lattice again, with QDE14 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, same as INVERTED_QDE14_ERR. |
+| Normal tunes, QDE14+QDE3 error | 4.1731 / 4.2288 | 0.7289003 / -0.7442766 | The 29th's normal lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, same as INVERTED_QDE14_QDE3_ERR. |
+| Normal tunes, sextupoles on | 4.1735 / 4.2294 | 0.7289003 / -0.7442766 | The normal lattice with the ring sextupoles powered instead of off, taken on the 30th after the 29th ran out of time. The LOCO scan (all three RF offsets), the chroma and this campaign's own driven-tune optics were all retaken; unlike every other campaign here it also has AC-dipole-off blanks, so the dispersive-ripple and per-BPM interference removals do run. |
 
-1. Each corrector is trimmed to each step in the table above, at five RF-steering offsets; one acquisition per setting.
-2. A closed orbit is the mean over turns and bunches; its bar is the standard error of that mean.
-3. One reference orbit — the untrimmed machine at nominal RF — is subtracted from every orbit in the scan.
-4. LSA `/K` is taken as the kick in rad; the six DHZ carry a sign inversion, the six DVT do not.
+## Vocabulary
 
-## Tune and chromaticity
+**working point**
+: One of the two quadrupole powerings the MD ran: normal tunes or inverted tunes. A nav section each.
 
-Full XImeter tune/chroma export. Every measured `Dp/p` is converted to $p_t$ with the PSB accelerator class, then all ctimes are fitted together with one shared slope and a separate tune intercept per ctime. The plots show MAD-NG-native $dq1=dQ_x/dp_t$ and $dq2=dQ_y/dp_t$; their bars carry the common fit's $1\sigma$ slope errors. The file's `Xi` summary is not used.
+**configuration**
+: One machine state within a working point: the unperturbed baseline, or one of the three with an error injected. Four per working point, shown as the tabs on every results page. Called a *scenario* on the scenario-comparison page, where the baseline is subtracted from the other three.
 
-## Optics measurement
+**case**
+: One fitted option within a page: which knob families the fit was allowed to move, and how they were grouped. Two per page.
 
-1. AC-dipole turn-by-turn, two drive settings per configuration, 10 000 turns per acquisition, flat top from turn 2 000.
-2. The drive is re-measured per acquisition: ring-summed `|FFT|` peak within 0.006 of the set tune, refined by sub-bin projection maximisation on the loudest BPM; the folder value is the median.
-3. Preprocessing: demodulate, remove energy motion, remove interference, SSA clean per BPM (window 200, rank 4). The two removals need AC-dipole-off blanks; this MD took none, so they did not run.
-4. An omc3 model is built at the measured natural and driven tunes.
-5. Harpy over turns 2 500-9 500, then driven optics, then equation-compensated free optics.
-6. Beta is taken from phase and from amplitude, both reported.
+**orbit-matching mode**
+: What the fit was scored against. *Delta orbits* subtract a reference orbit from both planes, so a constant kick is invisible and quadrupole offsets are not fitted. *Absolute orbits* keep the machine's own closed orbit in both planes, so bends and offsets are constrained and free.
 
-## Models
+**momentum mode**
+: *Single momentum* fits the nominal-RF acquisitions only, and the other RF settings are held-out validation. *Multi momentum* fits every RF setting together.
 
-One sequence, `models/model_qx0.165000_qy0.227500/psb3_saved.seq`, twissed in MAD-NG (integrator method 6, DA/normal-form chromaticity), correctors at their scan settings. Two lattices per configuration:
+**lumping**
+: How per-magnet families were grouped. *Lumped to 32 knobs by cell* ties the two QFO flanking a QDE and leaves the QDE free. *One knob per magnet* frees all 48 against 16 BPMs per plane.
 
-- **$k_1$ as sent** — `kbrqf`/`kbrqd` at the LSA currents above, the four trims at zero, no matching. The fits start here.
-- **matched** — the same, then `kbrqf`/`kbrqd` matched to the measured natural tune (`MAD.match`, `fmin = 1e-8`).
+**Method 1**
+: The MAD-NG parametric-twiss fit of the measured response matrix, on the delta orbits, over the same 32 cell-grouped knobs.
 
-## Fits
-
-**Method 2**, on every page but one: delta closed orbits, Levenberg-Marquardt Gauss-Newton (`aba_optimiser.ClosedTwissFitter`), one MAD-NG worker per corrector setting, isotropic Tikhonov prior at strength 1e-4. The reference orbit and its Jacobian are recomputed every iteration.
-
-The **single-momentum** result pages fit nominal RF only: 48 non-zero corrector settings, plus one averaged static-orbit target when either plane is absolute. Their non-zero-RF scores are held-out validation.
-
-The **multi-momentum** result pages fit all five RF offsets (`-2, -1, 0, +1, +2 mm`): 240 non-zero corrector settings plus four dispersion targets for a pure-delta fit, or five averaged untrimmed orbit targets when a plane is absolute. The 244/245 targets are batched into 50 MAD-NG workers without changing the objective. Absolute-orbit fits first solve the matching nominal-momentum case, then use that lattice to initialise the joint five-momentum solve; the Tikhonov prior remains centred on zero error knobs.
-
-**Method 1**, on its own page: the measured response matrix is the target and a first-order MAD-NG parametric twiss the model. Every matrix cell is one weighted `MAD.match` equality, fitted directly with the 32 native cell-grouped $\Delta k_1 L$ knobs used by grouped Method 2. It stops on `XTOL`, when no knob moves by more than 0.3 % of itself; the objective tests are only made at a feasible point, which measured data never is.
-
-| page | planes keeping the closed orbit |
-|---|---|
-| [Delta orbits](inverted_tunes/reports/delta.md) | both planes as delta orbits |
-| [Absolute orbits](inverted_tunes/reports/absolute.md) | both planes absolute |
-| [One knob per magnet](inverted_tunes/reports/per-magnet.md) | one option from each of the three |
-| [Method 1](inverted_tunes/reports/method1.md) | both planes as delta orbits |
-| [Scenario comparison, gradients only](inverted_tunes/reports/scenario-comparison.md) | delta orbits, error-injection scenarios against the baseline |
-| [Scenario comparison, gradients and rolls](inverted_tunes/reports/scenario-comparison-rolls.md) | delta orbits, error-injection scenarios against the baseline |
-
-Two cases per Method-2 page:
-
-| case | free families | knobs |
-|---|---|---|
-| Gradients, lumped to 32 knobs by cell | gradients | lumped to 32 knobs by cell |
-| Gradients and rolls, lumped to 32 knobs by cell | gradients and rolls | lumped to 32 knobs by cell |
-
-Lumping to 32 ties the two QFO flanking a QDE and leaves the QDE free, by magnet name. Rolls are parametrised as the gradients are. Neither arm of a page frees a per-magnet knob: rolls per magnet are not run at all, and gradients per magnet — 48 against 16 BPMs per plane — are on the [one knob per magnet](inverted_tunes/reports/per-magnet.md) page rather than beside the lumped fits.
-
-## Scoring
-
-Every fit is stood up again and asked the same six questions; the number reported is residual rms as a percentage of the measured amplitude:
-
-| target | what is compared |
-|---|---|
-| delta x, delta y | corrector delta orbits |
-| static x, static y | the machine's closed orbit at each RF setting |
-| disp x, disp y | dispersion from the RF-offset orbits |
-
-Absolute planes are weighted with a 1e-4 m BPM zero-offset floor.
-
-## Figures
-
-| figure | contents |
-|---|---|
-| gradients, bends, offsets, rolls by `s` | fitted value per magnet, one panel per case, fit's own error bars |
-| significance | fitted value over its own error bar per magnet, log scale |
-| lattice | beta-beating, phase error and dispersion along `s` against the start model, per case, with measured beta-beating and measured dispersion at the BPMs; dispersion is the slope of the five untrimmed closed orbits versus reconstructed `pt` |
-| case tunes | each fit's tune against the measured tune, one bar per case, one panel per plane |
-| residuals | residual rms per BPM, with the statistical bar and the 0.1 mm systematic |
-| scores | residual rms against each scored measurement, one bar per case |
-| tune, chromaticity | measured against both model lattices, one bar per model |
-| beta-beating | measured beta-beating along $s$ against each reference model, from phase beta and from amplitude beta |
-| measured optics | measured beta and beta-beating against one model, one figure per model |
-
-[Reproducing any of it](reference/reproducing.md)
+**Method 2**
+: The closed-orbit fit: one MAD-NG worker per corrector setting, Levenberg-Marquardt over the same knobs.

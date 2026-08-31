@@ -204,5 +204,6 @@ def benchmark(root: Path, campaigns) -> list[dict]:
     for campaign in campaigns:
         record = read_json(root / f"{campaign.slug}.json")
         if record:
-            records.append({"campaign": campaign, **record})
+            # The record's own "campaign" is the slug; keep the object apart.
+            records.append({**record, "campaign_object": campaign})
     return records

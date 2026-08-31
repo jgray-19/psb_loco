@@ -16,7 +16,7 @@ from loco_common.campaign import (
 from loco_common.case_names import PLANES_PHRASE
 from loco_common.fit_mode import FitMode, fit_mode_by_slug
 from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_element_positions
-from loco_report import figures, render
+from loco_report import figures, render, studies
 from loco_report.data import Results
 from loco_report.pages import PAGE_SPECS, PageSpec
 from loco_report.style import FAMILIES
@@ -26,6 +26,8 @@ logger = logging.getLogger(__name__)
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS = REPO_ROOT / "docs"
 FIGURE_ROOT = DOCS / "assets" / "figures"
+SCENARIO_ROOT = FIGURE_ROOT / "scenarios"
+BENCHMARK_ROOT = REPO_ROOT / "results" / "benchmark"
 
 DIRECTIONS = {
     "inverted": INVERTED_PAGE_CAMPAIGNS,
@@ -147,6 +149,9 @@ def main(argv: list[str] | None = None) -> int:
             for campaign in campaigns:
                 for mode in modes:
                     results = Results(campaign, mode, positions)
+                    if mode is modes[0]:
+                        figures.measured_optics(
+                            results, campaign.figures_dir(FIGURE_ROOT))
                     for spec in specs_for(mode, specs):
                         written = draw(results, spec, figures_for(campaign, mode, spec))
                         logger.info("%s %s %s: %d figures",
@@ -158,6 +163,13 @@ def main(argv: list[str] | None = None) -> int:
                     destination.parent.mkdir(parents=True, exist_ok=True)
                     destination.write_text(render_page(spec, campaigns, mode, destination, positions))
                     logger.info("wrote %s", destination)
+            write_studies(args.direction, campaigns, modes)
+            method = DOCS / "method.md"
+            method.write_text(studies.render_method_page(
+                [(label, DIRECTIONS[key]) for key, label in
+                 (("inverted", "Inverted tunes"), ("normal", "Normal tunes"))],
+                method))
+            logger.info("wrote %s", method)
             index = DOCS / f"{args.direction}_tunes" / "reports" / "index.md"
             index.write_text(render_index(campaigns, modes, specs, index, positions))
             logger.info("wrote %s", index)
@@ -201,6 +213,27 @@ def render_index(campaigns, modes, specs, destination: Path, positions) -> str:
 def page_path_name(mode: FitMode, spec: PageSpec) -> str:
     part = "" if mode.slug == "single" else f"{mode.slug}/"
     return f"{part}{spec.slug}.md"
+
+
+def write_studies(direction: str, campaigns, modes) -> None:
+    """The three pages that are not per-case."""
+    tree = DOCS / f"{direction}_tunes"
+    scenario_root = SCENARIO_ROOT / direction
+    targets = (
+        (tree / "studies" / "measured-optics.md",
+         lambda path: studies.render_optics_page(
+             campaigns, FIGURE_ROOT, scenario_root, path)),
+        (tree / "reports" / "benchmark.md",
+         lambda path: studies.render_benchmark_page(
+             campaigns, BENCHMARK_ROOT, scenario_root, path)),
+        (tree / "reports" / "scenarios.md",
+         lambda path: studies.render_scenario_page(
+             campaigns, scenario_root, modes, path)),
+    )
+    for path, build in targets:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(build(path))
+        logger.info("wrote %s", path)
 
 
 def page_path(direction: str, mode: FitMode, spec: PageSpec) -> Path:
