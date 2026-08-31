@@ -192,7 +192,7 @@ def predict(open_interface, model, targets):
             for knob, value in standing.items():
                 set_corrector(interface, knob, value)
             nominal[offset] = orbit_at(interface, pt[offset])
-        except Exception:  # noqa: BLE001 -- MAD-NG raises a bare RuntimeError
+        except RuntimeError:  # what MAD-NG raises when the closed orbit diverges
             logger.warning("No closed orbit at RF %+g mm (pt %+.3e)", offset, pt[offset])
             nominal[offset] = nominal[0.0] * np.nan
             lost.append(offset)

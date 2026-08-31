@@ -71,15 +71,15 @@ def _matrices(
     target = np.zeros((2 * len(bpm_names), len(correctors)))
     weight = np.zeros_like(target)
     indexed = response.set_index(["NAME", "PLANE", "CORRECTOR"])
+    present = set(indexed.index)
     for p, plane in enumerate(("x", "y")):
         for b, bpm in enumerate(bpm_names):
             matrix_row = p * len(bpm_names) + b
             for i, corrector in enumerate(correctors):
                 factor = lsa_k_to_rad(corrector)
-                try:
-                    row = indexed.loc[(bpm, plane, corrector)]
-                except KeyError:
+                if (bpm, plane, corrector) not in present:
                     continue
+                row = indexed.loc[(bpm, plane, corrector)]
                 slope, error = float(row["SLOPE"]), float(row["ERRSLOPE"])
                 if not np.isfinite(slope) or not np.isfinite(error) or error <= 0.0:
                     continue
