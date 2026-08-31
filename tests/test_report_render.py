@@ -183,3 +183,20 @@ def test_no_figure_on_disk_is_unreferenced():
         if path.resolve() not in referenced
     )
     assert not orphans, [str(path) for path in orphans[:10]]
+
+
+def test_family_figures_chunk_past_the_panel_cap():
+    """A page with more cases than the panel cap spills into numbered figures."""
+    from dataclasses import replace
+
+    from loco_common.case_names import ABSOLUTE_PAGE
+    from loco_report.style import MAX_PANELS
+
+    page = replace(ABSOLUTE_PAGE, cases=ABSOLUTE_PAGE.cases * 2)
+    assert len(page.cases) > MAX_PANELS
+    chunks = [
+        page.cases[i:i + MAX_PANELS]
+        for i in range(0, len(page.cases), MAX_PANELS)
+    ]
+    assert len(chunks) == 2
+    assert all(len(chunk) <= MAX_PANELS for chunk in chunks)

@@ -15,6 +15,7 @@ from loco_report import metrics
 from loco_report.data import RESIDUAL_TARGETS, REFERENCES, Results, knob_statistics
 from loco_report.style import (
     BPM_ZERO_OFFSET,
+    MAX_PANELS,
     CASE_COLOURS,
     FAMILIES,
     PREFIT_COLOUR,
@@ -70,8 +71,23 @@ def family_by_s(results: Results, page: Page, suffix: str, output: Path) -> list
         return []
 
     family = FAMILIES[suffix]
+    # More cases than the panel cap allows spill into numbered figures rather
+    # than into a taller one.
+    items = list(blocks.items())
+    chunks = [items[i:i + MAX_PANELS] for i in range(0, len(items), MAX_PANELS)]
+    written = []
+    for index, chunk in enumerate(chunks):
+        part = "" if len(chunks) == 1 else f"_{index + 1}"
+        written.append(_family_panel(
+            results, page, family, chunk,
+            output / f"{page.slug}_{suffix.lstrip('.')}_by_s{part}.png",
+        ))
+    return written
+
+
+def _family_panel(results, page, family, blocks, path) -> Path:
     figure, axes = panels(len(blocks), sharey=True)
-    for axis, (slug, block) in zip(axes, blocks.items(), strict=True):
+    for axis, (slug, block) in zip(axes, blocks, strict=True):
         s = block["s"].to_numpy()
         values = family.scale * block["value"].to_numpy()
         mark_bpms(axis, results.positions)
@@ -86,14 +102,13 @@ def family_by_s(results: Results, page: Page, suffix: str, output: Path) -> list
     axes[-1].set_xlabel("s [m]")
     axes[0].legend(
         handles=[
-            *legend_handles(pd.concat(blocks.values())["element"]),
+            *legend_handles(pd.concat([b for _, b in blocks])["element"]),
             Line2D([], [], color="0.55", linestyle="--", linewidth=0.7, label="BPM"),
         ],
         fontsize=7, ncols=4, loc="upper left",
     )
     legend_headroom(axes[0])
-    name = f"{page.slug}_{suffix.lstrip('.')}_by_s.png"
-    return [_save(figure, output / name)]
+    return _save(figure, path)
 
 
 def family_significance(results: Results, page: Page, suffix: str,
