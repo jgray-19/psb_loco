@@ -182,103 +182,13 @@ PSB ring 3 · single momentum · both planes absolute · 4 machine configuration
     <figcaption>The same rolls as |value| / sigma, log scale.</figcaption>
     </figure>
 
-## Fitted lattice, against the start model
-
-=== "Inverted tunes, 28th"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/inverted_second/absolute/absolute_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/inverted_second/absolute/absolute_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/inverted_second/absolute/absolute_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/inverted_second/absolute/absolute_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Inverted tunes, QDE14 error"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/inverted_qde14_err/absolute/absolute_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/inverted_qde14_err/absolute/absolute_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/inverted_qde14_err/absolute/absolute_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/inverted_qde14_err/absolute/absolute_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Inverted tunes, QDE14+QDE3 error"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/inverted_qde14_qde3_err/absolute/absolute_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/inverted_qde14_qde3_err/absolute/absolute_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/inverted_qde14_qde3_err/absolute/absolute_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/inverted_qde14_qde3_err/absolute/absolute_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Inverted tunes, sextupoles on"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/inverted_sexts_on/absolute/absolute_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/inverted_sexts_on/absolute/absolute_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/inverted_sexts_on/absolute/absolute_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/inverted_sexts_on/absolute/absolute_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
 ## Fitted lattice, against the tune-matched model
 
 === "Inverted tunes, 28th"
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/inverted_second/absolute/absolute_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -300,7 +210,7 @@ PSB ring 3 · single momentum · both planes absolute · 4 machine configuration
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/inverted_qde14_err/absolute/absolute_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -322,7 +232,7 @@ PSB ring 3 · single momentum · both planes absolute · 4 machine configuration
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/inverted_qde14_qde3_err/absolute/absolute_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -344,7 +254,7 @@ PSB ring 3 · single momentum · both planes absolute · 4 machine configuration
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/inverted_sexts_on/absolute/absolute_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>

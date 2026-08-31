@@ -169,7 +169,7 @@ def test_every_nav_target_exists():
 
 
 def test_no_figure_on_disk_is_unreferenced():
-    """1062 figures on disk, 1062 referenced: the site shows everything it draws."""
+    """Every figure on disk is referenced: the site shows everything it draws."""
     import re
 
     referenced = {

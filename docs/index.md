@@ -32,7 +32,7 @@ methods, two momentum modes.
 | section | contents |
 |---|---|
 | Fitted knobs | every fitted magnet strength against `s`, with its error bar, and the same as \|value\| / sigma |
-| Fitted lattice | beta-beating, phase error, dispersion and coupling of each fitted lattice, against the start model and against the tune-matched model |
+| Fitted lattice | beta-beating, phase error, dispersion and coupling of each fitted lattice, against the tune-matched model, with the un-fitted machine-knob model dotted on every panel |
 | Tune and chromaticity | fitted tune and `Q'H` / `Q'V` per case, against the measurement |
 | Residuals | residual per BPM for each scored measurement, and the residual per scored measurement as a percentage of the measured amplitude |
 

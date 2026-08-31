@@ -23,9 +23,6 @@ RESIDUAL_TARGETS = {
     "absolute": "closed-orbit residual [mm]",
 }
 
-#: The two reference models every lattice figure differences against.
-REFERENCES = (("loco_model", ""), ("matched_model", "_matched"))
-
 
 @dataclass(frozen=True)
 class Results:

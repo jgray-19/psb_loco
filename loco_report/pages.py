@@ -61,20 +61,10 @@ KNOBS = SectionSpec("Fitted knobs", (
             "The same rolls as |value| / sigma, log scale."),
 ))
 
-LATTICE = SectionSpec("Fitted lattice, against the start model", (
-    _figure("beta_beating", "beta-beating along s",
-            "Beta-beating of each fitted lattice, with the measured points."),
-    _figure("phase_error", "phase error along s",
-            "Phase error of each fitted lattice, ring-wide slope kept."),
-    _figure("dispersion", "dispersion along s",
-            "Dispersion of each fitted lattice, with the measured points."),
-    _figure("coupling", "coupling RDT amplitudes along s",
-            "Coupling |f1001| and |f1010|, with omc3's measured amplitudes."),
-))
-
-LATTICE_MATCHED = SectionSpec("Fitted lattice, against the tune-matched model", (
+LATTICE = SectionSpec("Fitted lattice, against the tune-matched model", (
     _figure("beta_beating_matched", "beta-beating against the matched model",
-            "Beta-beating, referred to the lattice matched to the measured tune."),
+            "Beta-beating against the tune-matched model, with the measured "
+            "points; the machine-knob model is the dotted curve."),
     _figure("phase_error_matched", "phase error against the matched model",
             "Phase error, referred to the lattice matched to the measured tune."),
     _figure("dispersion_matched", "dispersion against the matched model",
@@ -100,7 +90,7 @@ RESIDUALS = SectionSpec("Residuals", (
             "amplitude, log scale."),
 ))
 
-SECTIONS = (KNOB_TABLE, KNOBS, LATTICE, LATTICE_MATCHED, TUNE, RESIDUALS)
+SECTIONS = (KNOB_TABLE, KNOBS, LATTICE, TUNE, RESIDUALS)
 
 #: Every rendered page, one per case_names Page.
 PAGE_SPECS = tuple(PageSpec(page=page, sections=SECTIONS) for page in ALL_PAGES)

@@ -130,103 +130,13 @@ PSB ring 3 · single momentum · mixed orbit-matching modes · 4 machine configu
     <figcaption>Fitted quadrupole offset per magnet, where offsets were free.</figcaption>
     </figure>
 
-## Fitted lattice, against the start model
-
-=== "Normal tunes, 29th"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/normal_second/per-magnet/per-magnet_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/normal_second/per-magnet/per-magnet_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/normal_second/per-magnet/per-magnet_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/normal_second/per-magnet/per-magnet_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Normal tunes, QDE14 error"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/normal_qde14_err/per-magnet/per-magnet_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/normal_qde14_err/per-magnet/per-magnet_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/normal_qde14_err/per-magnet/per-magnet_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/normal_qde14_err/per-magnet/per-magnet_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Normal tunes, QDE14+QDE3 error"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/normal_qde14_qde3_err/per-magnet/per-magnet_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/normal_qde14_qde3_err/per-magnet/per-magnet_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/normal_qde14_qde3_err/per-magnet/per-magnet_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/normal_qde14_qde3_err/per-magnet/per-magnet_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
-=== "Normal tunes, sextupoles on"
-
-    <figure markdown>
-    ![beta-beating along s](../../assets/figures/normal_sexts_on/per-magnet/per-magnet_beta_beating.png)
-    <figcaption>Beta-beating of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![phase error along s](../../assets/figures/normal_sexts_on/per-magnet/per-magnet_phase_error.png)
-    <figcaption>Phase error of each fitted lattice, ring-wide slope kept.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![dispersion along s](../../assets/figures/normal_sexts_on/per-magnet/per-magnet_dispersion.png)
-    <figcaption>Dispersion of each fitted lattice, with the measured points.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![coupling RDT amplitudes along s](../../assets/figures/normal_sexts_on/per-magnet/per-magnet_coupling.png)
-    <figcaption>Coupling |f1001| and |f1010|, with omc3's measured amplitudes.</figcaption>
-    </figure>
-
 ## Fitted lattice, against the tune-matched model
 
 === "Normal tunes, 29th"
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/normal_second/per-magnet/per-magnet_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -248,7 +158,7 @@ PSB ring 3 · single momentum · mixed orbit-matching modes · 4 machine configu
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/normal_qde14_err/per-magnet/per-magnet_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -270,7 +180,7 @@ PSB ring 3 · single momentum · mixed orbit-matching modes · 4 machine configu
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/normal_qde14_qde3_err/per-magnet/per-magnet_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>
@@ -292,7 +202,7 @@ PSB ring 3 · single momentum · mixed orbit-matching modes · 4 machine configu
 
     <figure markdown>
     ![beta-beating against the matched model](../../assets/figures/normal_sexts_on/per-magnet/per-magnet_beta_beating_matched.png)
-    <figcaption>Beta-beating, referred to the lattice matched to the measured tune.</figcaption>
+    <figcaption>Beta-beating against the tune-matched model, with the measured points; the machine-knob model is the dotted curve.</figcaption>
     </figure>
 
     <figure markdown>

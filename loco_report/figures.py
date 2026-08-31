@@ -12,7 +12,7 @@ from psb_md.plotting import finalize_figure, style_axis
 
 from loco_common.case_names import Page
 from loco_report import metrics
-from loco_report.data import RESIDUAL_TARGETS, REFERENCES, Results, knob_statistics
+from loco_report.data import RESIDUAL_TARGETS, Results, knob_statistics
 from loco_report.style import (
     BPM_ZERO_OFFSET,
     MAX_PANELS,
@@ -168,7 +168,7 @@ def rereferenced(frame: pd.DataFrame, start: pd.DataFrame,
 
 def prefit_vs_matched(start: pd.DataFrame,
                       matched: pd.DataFrame) -> dict[str, tuple]:
-    """The un-fitted start model against the matched model: iteration zero."""
+    """The un-fitted machine-knob model against the matched model: iteration zero."""
     common = start.index.intersection(matched.index)
     start, matched = start.loc[common], matched.loc[common]
     s = start["s"].to_numpy()
@@ -181,7 +181,7 @@ def prefit_vs_matched(start: pd.DataFrame,
         values = start[column].to_numpy() if column in start.columns else np.zeros(len(start))
         out[f"dispersion_{plane}"] = (s, values)
     for rdt in ("f1001", "f1010"):
-        # The start model's own coupling: an RDT amplitude minus another is not
+        # The machine-knob model's own coupling: an RDT amplitude minus another is not
         # a meaningful subtraction.
         if rdt in start.columns:
             out[f"coupling_{rdt}"] = (s, start[rdt].to_numpy())
@@ -243,33 +243,34 @@ def optics(results: Results, page: Page, output: Path) -> list[Path]:
         if not results.twiss(name).empty
     }
 
-    written: list[Path] = []
-    for reference, file_suffix in REFERENCES:
-        if not measured.empty and f"beat_x_{reference}" not in measured.columns:
-            continue
-        drawn, prefit = frames, None
-        if reference == "matched_model":
-            if not {"start-model", "matched-model"} <= set(models):
-                logger.warning("%s: no matched-model twiss", page.slug)
-                continue
-            drawn = {
-                slug: rereferenced(frame, models["start-model"], models["matched-model"])
-                for slug, frame in frames.items()
-            }
-            prefit = prefit_vs_matched(models["start-model"], models["matched-model"])
-        start_frame = next(iter(drawn.values()))
-        for stem, title, columns in OPTICS_FIGURES:
-            written.append(_optics_figure(
-                results, page, drawn, start_frame, prefit, measured, reference,
-                stem, title, columns, output / f"{page.slug}_{stem}{file_suffix}.png",
-            ))
-    return written
+    # Only the tune-matched reference: the machine-knob model is on every panel
+    # already, as the dotted un-fitted curve.
+    reference, file_suffix = "matched_model", "_matched"
+    if not measured.empty and f"beat_x_{reference}" not in measured.columns:
+        return []
+    if not {"start-model", "matched-model"} <= set(models):
+        logger.warning("%s: no matched-model twiss", page.slug)
+        return []
+
+    drawn = {
+        slug: rereferenced(frame, models["start-model"], models["matched-model"])
+        for slug, frame in frames.items()
+    }
+    prefit = prefit_vs_matched(models["start-model"], models["matched-model"])
+    start_frame = next(iter(drawn.values()))
+    return [
+        _optics_figure(
+            results, page, drawn, start_frame, prefit, measured, reference,
+            stem, title, columns, output / f"{page.slug}_{stem}{file_suffix}.png",
+        )
+        for stem, title, columns in OPTICS_FIGURES
+    ]
 
 
 def _optics_figure(results, page, drawn, start_frame, prefit, measured, reference,
                    stem, title, columns, path) -> Path:
     figure, axes = panels(2)
-    reference_label = "matched model" if reference == "matched_model" else "start model"
+    reference_label = "matched model"
     for index, (axis, column) in enumerate(zip(axes, columns, strict=True)):
         quantity = quantity_of(column)
         plane = column[-1] if column[-1] in "xy" else ""
@@ -298,7 +299,7 @@ def _optics_figure(results, page, drawn, start_frame, prefit, measured, referenc
                               measured_beat)
             axis.plot(pre_s, quantity.scale * pre_values, color=PREFIT_COLOUR,
                       linewidth=1.8, linestyle=":", zorder=2,
-                      label=f"pre-fit model, rms {text}")
+                      label=f"machine-knob model, un-fitted, rms {text}")
         for (slug, frame), colour in zip(drawn.items(), CASE_COLOURS, strict=False):
             values = frame[column].to_numpy()
             text = _curve_rms(results, column, frame["element"].to_numpy(), values,
@@ -430,7 +431,7 @@ def scores(results: Results, page: Page, output: Path) -> list[Path]:
         colour = "0.45" if slug == "start-model" else CASE_COLOURS[
             (index - 1) % len(CASE_COLOURS)
         ]
-        label = "start model — no fit" if slug == "start-model" else page.label(slug)
+        label = "machine-knob model — no fit" if slug == "start-model" else page.label(slug)
         axis.bar(offsets, values, width=width * 0.92, color=colour, label=label)
     # Log y: one 3700% bar would otherwise flatten the 0-100% band entirely.
     log_axis(axis, drawn, floor=0.1)
@@ -531,7 +532,7 @@ def _qprime_factor(summary: dict) -> float:
 
 
 def case_chromaticity(results: Results, page: Page, output: Path) -> list[Path]:
-    """Measured, start-model and fitted-lattice Q'H / Q'V per page."""
+    """Measured, machine-knob and fitted-lattice Q'H / Q'V per page."""
     from matplotlib.patches import Patch
 
     summary = results.optics_summary
@@ -592,7 +593,7 @@ def case_chromaticity(results: Results, page: Page, output: Path) -> list[Path]:
 
 #: The two reference lattices the measured optics is drawn against.
 MEASURED_REFERENCES = (
-    ("loco_model", "", "LOCO start model (un-matched)"),
+    ("loco_model", "", "machine-knob model (un-matched)"),
     ("matched_model", "_matched", "same lattice, tunes matched to the measurement"),
 )
 REFERENCE_LABELS = {key: label for key, _, label in MEASURED_REFERENCES}

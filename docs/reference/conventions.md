@@ -50,13 +50,15 @@ measured knee at 244 settings, not a tuning parameter.
 line a closed-orbit residual is read against; the statistical bar on a measured
 orbit is a standard error of the mean and is two orders of magnitude smaller.
 
-## Start model
+## Machine-knob model
 
-The start model is built on the machine's own circuit currents and its tune is
-not matched to the measurement. Matching moves `kbrqf` and `kbrqd`, which is the
-same lever a distributed gradient error pulls. Where a figure is drawn against a
-"matched model", that is a separate lattice with those two circuits matched to
-the measured tune, used as a second reference only.
+The machine-knob model is built on the machine's own circuit currents, as
+extracted, and its tune is not matched to the measurement. Matching moves
+`kbrqf` and `kbrqd`, which is the same lever a distributed gradient error pulls.
+It is where every fit starts, and it is the dotted un-fitted curve on the
+lattice figures. The "matched model" those figures are referred to is a separate
+lattice with those two circuits matched to the measured tune. On disk and in the
+scoreboard the machine-knob model is still keyed `start-model`.
 
 ## Corrector convention in xsuite
 

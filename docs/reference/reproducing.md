@@ -68,7 +68,7 @@ commands for its own options at the bottom.
 | `loco_common/case_names.py` | which options each page shows, and every name a reader sees |
 | `scripts/measured_optics.py` | measured optics per configuration, against both models |
 | `scripts/predict_loco.py` | scores each fit on the six targets |
-| `scripts/case_optics.py` | twisses each fitted lattice against its start model |
+| `scripts/case_optics.py` | twisses each fitted lattice against its machine-knob model |
 | `scripts/report_cases.py` | the cross-campaign frames and comparison figures |
 | `loco_report/` | every figure, every results page, the method page and every table |
 
