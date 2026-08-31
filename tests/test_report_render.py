@@ -166,3 +166,20 @@ def test_every_nav_target_exists():
         if not (DOCS / target).exists()
     ]
     assert not missing, missing
+
+
+def test_no_figure_on_disk_is_unreferenced():
+    """1062 figures on disk, 1062 referenced: the site shows everything it draws."""
+    import re
+
+    referenced = {
+        (page.parent / reference).resolve()
+        for page in DOCS.rglob("*.md")
+        for reference in re.findall(r"\]\(([^)]+\.png)\)", page.read_text())
+    }
+    orphans = sorted(
+        path.relative_to(FIGURE_ROOT)
+        for path in FIGURE_ROOT.rglob("*.png")
+        if path.resolve() not in referenced
+    )
+    assert not orphans, [str(path) for path in orphans[:10]]

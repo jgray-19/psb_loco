@@ -2,6 +2,36 @@
 
 PSB ring 3 · single momentum · both planes as delta orbits · 4 machine configurations as tabs.
 
+## Fitted knobs, per family
+
+=== "Normal tunes, 29th"
+
+    | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
+    |---|---|---|---|---|---|---|---|
+    | Method 1, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.36 | 4.98 | — | — | — |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.32 | 4.85 | 0.01 | 115.33 | 48 of 48 |
+
+=== "Normal tunes, QDE14 error"
+
+    | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
+    |---|---|---|---|---|---|---|---|
+    | Method 1, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.07 | 5.72 | — | — | — |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.03 | 5.63 | 0.01 | 148.79 | 48 of 48 |
+
+=== "Normal tunes, QDE14+QDE3 error"
+
+    | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
+    |---|---|---|---|---|---|---|---|
+    | Method 1, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.64 | 5.16 | — | — | — |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.57 | 4.97 | 0.01 | 122.60 | 48 of 48 |
+
+=== "Normal tunes, sextupoles on"
+
+    | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
+    |---|---|---|---|---|---|---|---|
+    | Method 1, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.05 | 5.63 | — | — | — |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.04 | 5.58 | 0.01 | 156.00 | 48 of 48 |
+
 ## Fitted knobs
 
 === "Normal tunes, 29th"

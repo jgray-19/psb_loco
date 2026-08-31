@@ -7,6 +7,7 @@ from pathlib import Path
 from loco_common.campaign import Campaign
 from loco_report import render
 from loco_report.data import Results, benchmark, read_json
+from loco_report.style import FAMILIES
 
 #: The two reference lattices, as (summary key, file suffix, tab word, how).
 MODELS = (
@@ -293,15 +294,21 @@ def render_scenario_page(campaigns, scenario_root: Path, modes,
     knob_tabs = {}
     for mode in modes:
         for _, case, word in SCENARIO_FITS:
-            path = scenario_root / "scenario-comparison" / mode.slug / case / "knob_diffs_dk1l.png"
-            if path.exists():
-                knob_tabs[f"{mode.label}, {word}"] = render.figure(
-                    str(path.relative_to(scenario_root)),
-                    "fitted gradient difference from baseline",
-                    "Fitted gradient per magnet, each scenario minus the "
-                    "unperturbed baseline.",
+            directory = scenario_root / "scenario-comparison" / mode.slug / case
+            found = [
+                render.figure(
+                    str((directory / f"knob_diffs_{suffix.lstrip('.')}.png")
+                        .relative_to(scenario_root)),
+                    f"fitted {family.word[:-1]} difference from baseline",
+                    f"Fitted {family.word[:-1]} per magnet, each scenario minus "
+                    "the unperturbed baseline.",
                     prefix,
                 )
+                for suffix, family in FAMILIES.items()
+                if (directory / f"knob_diffs_{suffix.lstrip('.')}.png").exists()
+            ]
+            if found:
+                knob_tabs[f"{mode.label}, {word}"] = "\n\n".join(found)
     if knob_tabs:
         blocks += [render.heading("Fitted gradients against the baseline"),
                    render.tabbed(knob_tabs)]
