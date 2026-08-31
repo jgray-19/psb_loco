@@ -1,0 +1,240 @@
+"""Run the nine cases the report pages show, for one campaign.
+
+A 60-case option-matrix sweep was run once, on the normal-tunes scan, and has
+been retired: it will not be repeated, its fits are gone and the page that
+quoted them with it. What a machine configuration needs is the cases the report
+pages actually compare, and those are declared in :mod:`loco_common.case_names`
+and read from there rather than re-listed here.
+
+The slug is the specification: ``<planes>__<families>__<lump>`` maps to the
+fitter's flags one-for-one.
+
+    uv run python scripts/run_campaign_fits.py --campaign inverted
+    uv run python scripts/run_campaign_fits.py --campaign inverted --dry-run
+
+Serial by construction: each fit spawns one MAD-NG process per corrector setting,
+so two fits at once oversubscribe the machine rather than finishing sooner.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from loco_common.campaign import add_campaign_argument, campaign_by_slug
+from loco_common.case_names import PAGES, PER_MAGNET_PAGE, every_page_case, parse_case
+from loco_common.fit_mode import (
+    MULTI,
+    SINGLE,
+    THREE,
+    add_fit_mode_argument,
+    fit_mode_by_slug,
+    result_is_valid,
+)
+
+logger = logging.getLogger(__name__)
+
+#: ``multi`` warm-starts straight from ``single``: its RF offsets are whatever
+#: the campaign's own scan actually covers (see ``available_rf_offsets``), not
+#: the fixed five-point list ``THREE`` was meant to bridge to.
+PREVIOUS_MODE = {THREE.slug: SINGLE, MULTI.slug: SINGLE}
+
+#: Which family letter turns on which flag. ``k1`` is the odd one out: quadrupole
+#: gradients are free by default, so its absence is the flag.
+FAMILY_FLAGS = {
+    "b": ["--optimise-bends"],
+    "dy": ["--optimise-quad-dy"],
+    "t": ["--optimise-quad-tilt"],
+}
+
+def command(
+    slug: str,
+    campaign: str,
+    sequence_file: Path,
+    output_root: Path,
+    momentum_mode: str = "single",
+) -> list[str]:
+    case = parse_case(slug)
+    mode = fit_mode_by_slug(momentum_mode)
+    campaign_object = campaign_by_slug(campaign)
+    rf_offsets = mode.rf_offsets_for(campaign_object)
+    argv = [
+        sys.executable, "-m", "method2_delta_orbit.run_method2",
+        "--campaign", campaign,
+        "--sequence-file", str(sequence_file),
+        "--output", str(output_root / slug),
+    ]
+    if case.planes != "none":
+        argv += ["--absolute-planes", *list(case.planes)]
+    if "k1" not in case.family_list:
+        argv += ["--no-optimise-quadrupoles"]
+    for family in case.family_list:
+        argv += FAMILY_FLAGS.get(family, [])
+    if case.lump != "none":
+        argv += ["--group-quadrupoles-by-cell"]
+    if rf_offsets != (0.0,):
+        argv += ["--rf-offsets", *(f"{offset:g}" for offset in rf_offsets)]
+        argv += ["--momentum-source", "chroma"]
+    if mode.batch_momenta:
+        argv += ["--batch-momenta"]
+    if mode.slug != "single" and case.planes != "none":
+        previous = PREVIOUS_MODE[mode.slug]
+        initial = previous.results_root(campaign_by_slug(campaign)) / slug / "knobs.csv"
+        argv += ["--initial-knobs", str(initial)]
+    return argv
+
+
+def staged_result_is_valid(
+    directory: Path,
+    *,
+    require_warm_start: bool,
+    expected_initial: Path | None = None,
+) -> bool:
+    if not result_is_valid(directory):
+        return False
+    if not require_warm_start:
+        return True
+    summary = json.loads((directory / "summary.json").read_text())
+    recorded = summary.get("initial_knobs")
+    if not recorded:
+        return False
+    if expected_initial is None:
+        return True
+    return Path(recorded).resolve() == expected_initial.resolve()
+
+
+def run_case(
+    argv: list[str], destination: Path, log: Path, *, require_warm_start: bool
+) -> bool:
+    """Run into a sibling staging directory and publish only a valid fit."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    staging_root = Path(tempfile.mkdtemp(prefix=f".{destination.name}.staging-", dir=destination.parent))
+    staged = staging_root / destination.name
+    staged_argv = argv.copy()
+    staged_argv[staged_argv.index("--output") + 1] = str(staged)
+    with log.open("w") as handle:
+        result = subprocess.run(staged_argv, stdout=handle, stderr=subprocess.STDOUT, check=False)
+    if result.returncode or not staged_result_is_valid(
+        staged, require_warm_start=require_warm_start
+    ):
+        shutil.rmtree(staging_root)
+        return False
+
+    backup = destination.with_name(f".{destination.name}.previous")
+    if backup.exists():
+        shutil.rmtree(backup)
+    if destination.exists():
+        destination.replace(backup)
+    staged.replace(destination)
+    shutil.rmtree(staging_root)
+    if backup.exists():
+        shutil.rmtree(backup)
+    return True
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    add_campaign_argument(parser, default="inverted_second")
+    add_fit_mode_argument(parser)
+    parser.add_argument("--sequence-file", type=Path, default=None)
+    parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--log-dir", type=Path, default=Path("/tmp/campaign_fits"))
+    parser.add_argument("--cases", nargs="+", default=None, help="Case slugs; default is every page case.")
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+
+    from loco_common.model import DEFAULT_SEQUENCE_FILE
+
+    campaign = campaign_by_slug(args.campaign)
+    mode = fit_mode_by_slug(args.momentum_mode)
+    sequence_file = args.sequence_file or DEFAULT_SEQUENCE_FILE
+    output_root = args.output or mode.results_root(campaign)
+    args.log_dir.mkdir(parents=True, exist_ok=True)
+
+    multi_cases = list(
+        dict.fromkeys(slug for page in (*PAGES, PER_MAGNET_PAGE) for slug in page.cases)
+    )
+    cases = args.cases or (multi_cases if mode.slug == "multi" else every_page_case())
+    for slug in cases:
+        case = parse_case(slug)
+        warm_start = mode.slug != "single" and case.planes != "none"
+        argv = command(slug, campaign.slug, sequence_file, output_root, mode.slug)
+        if args.dry_run:
+            print(" ".join(argv))
+            continue
+        if warm_start:
+            prerequisite_modes = (SINGLE,) if mode.slug == "three" else (SINGLE, THREE)
+            prerequisite_failed = False
+            for prerequisite in prerequisite_modes:
+                prerequisite_destination = prerequisite.results_root(campaign) / slug
+                requires_earlier = prerequisite.slug != "single"
+                if staged_result_is_valid(
+                    prerequisite_destination, require_warm_start=requires_earlier
+                ):
+                    continue
+                prerequisite_argv = command(
+                    slug,
+                    campaign.slug,
+                    sequence_file,
+                    prerequisite.results_root(campaign),
+                    prerequisite.slug,
+                )
+                prerequisite_log = (
+                    args.log_dir / f"{campaign.slug}__{prerequisite.slug}__{slug}.log"
+                )
+                logger.info(
+                    "=== %s warm start %s -> %s",
+                    prerequisite.label,
+                    slug,
+                    prerequisite_log,
+                )
+                if not run_case(
+                    prerequisite_argv,
+                    prerequisite_destination,
+                    prerequisite_log,
+                    require_warm_start=requires_earlier,
+                ):
+                    logger.error(
+                        "FAILED %s warm start %s (see %s)",
+                        prerequisite.label,
+                        slug,
+                        prerequisite_log,
+                    )
+                    prerequisite_failed = True
+                    break
+            if prerequisite_failed:
+                continue
+        destination = output_root / slug
+        expected_initial = (
+            Path(argv[argv.index("--initial-knobs") + 1]) if warm_start else None
+        )
+        if staged_result_is_valid(
+            destination,
+            require_warm_start=warm_start,
+            expected_initial=expected_initial,
+        ):
+            logger.info("skip %s (already fitted)", slug)
+            continue
+        log = args.log_dir / f"{campaign.slug}__{mode.slug}__{slug}.log"
+        logger.info("=== %s -> %s", slug, log)
+        started = time.monotonic()
+        succeeded = run_case(argv, destination, log, require_warm_start=warm_start)
+        elapsed = time.monotonic() - started
+        if not succeeded:
+            logger.error("FAILED %s after %.0f s (see %s)", slug, elapsed, log)
+        else:
+            logger.info("done %s in %.0f s", slug, elapsed)
+
+
+if __name__ == "__main__":
+    main()

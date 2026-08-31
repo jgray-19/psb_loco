@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psb-loco"
+version = "0.1.0"
+description = "PSB ring-3 LOCO: quadrupole k1 recovery from measured orbit response, by two independent methods."
+requires-python = ">=3.11,<3.12"
+license = "MIT"
+authors = [{ name = "Joshua Gray" }]
+dependencies = [
+    "aba_optimiser",
+    # psb_md.modelling imports cpymad at module scope (make_madx_sequence).
+    "cpymad",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "psb-md",
+    "pyarrow",
+    "tfs-pandas",
+    "tmom-recon",
+    "turn_by_turn==1.5.0",
+]
+
+[project.optional-dependencies]
+# markdown + pymdown-extensions render the docs the way the site does, so
+# tests/test_docs_render.py checks the pages the reader actually gets.
+test = ["markdown", "pymdown-extensions", "pytest", "xsuite", "xtrack-tools"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["loco_common*", "method1_madng_da*", "method2_delta_orbit*"]
+
+[tool.uv]
+package = true
+environments = ["sys_platform == 'linux'"]
+
+[tool.uv.sources]
+aba_optimiser = { path = "../sgd-magnet-tuner", editable = true }
+psb-md = { path = "../psb_md", editable = true }
+tmom-recon = { path = "../tmom-recon", editable = true }
+xtrack-tools = { path = "../xtrack-tools", editable = true }
+
+[tool.pytest.ini_options]
+markers = ["slow: spawns MAD-NG or tracks with xsuite"]
+addopts = "-m 'not slow'"
+testpaths = ["tests"]

@@ -1,0 +1,10 @@
+.logs/
+.venv/
+.cache/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.pyc
+*.egg-info/
+# Build output of `zensical build`; regenerated from docs/.
+site/

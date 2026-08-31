@@ -1,0 +1,10 @@
+{
+  "dpp": 0.0,
+  "driven_excitation": null,
+  "driven_tunes": null,
+  "natural_tunes": [
+    0.165,
+    0.2275
+  ],
+  "ring": 3
+}

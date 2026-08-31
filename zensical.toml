@@ -1,0 +1,109 @@
+[project]
+site_name = "PSB ring-3 LOCO"
+site_description = "Quadrupole k1 recovery from measured orbit response, by two independent methods."
+site_author = "Joshua Gray"
+site_url = "https://example.invalid/psb-loco/"
+
+# arithmatex is in generic mode below, which only emits \(...\); without this
+# nothing typesets it and every $...$ on the site renders as literal delimiters.
+extra_javascript = [
+  "javascripts/mathjax.js",
+  "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+]
+
+nav = [
+  { "Overview" = "index.md" },
+  { "Method" = "method.md" },
+  { "Inverted tunes" = [
+      "inverted_tunes/reports/index.md",
+      { "Method 2 - single momentum" = [
+          { "Delta orbits" = "inverted_tunes/reports/delta.md" },
+          { "Absolute orbits" = "inverted_tunes/reports/absolute.md" },
+          { "One knob per magnet" = "inverted_tunes/reports/per-magnet.md" },
+      ]},
+      { "Method 2 - multi momentum" = [
+          { "Delta orbits" = "inverted_tunes/reports/multi/delta.md" },
+          { "Absolute orbits" = "inverted_tunes/reports/multi/absolute.md" },
+          { "One knob per magnet" = "inverted_tunes/reports/multi/per-magnet.md" },
+      ]},
+      { "Method 1" = [
+          { "Method 1 result" = "inverted_tunes/reports/method1.md" },
+          { "Method 1 against Method 2" = "inverted_tunes/reports/benchmark.md" },
+      ]},
+      { "Measured optics" = "inverted_tunes/studies/measured-optics.md" },
+      { "Scenario comparison" = [
+          { "Fitted with gradients only" = "inverted_tunes/reports/scenario-comparison.md" },
+          { "Fitted with gradients and rolls" = "inverted_tunes/reports/scenario-comparison-rolls.md" },
+      ]},
+  ]},
+  { "Normal tunes" = [
+      "normal_tunes/index.md",
+      { "Method" = "normal_tunes/method.md" },
+      { "Method 2 - single momentum" = [
+          { "Delta orbits" = "normal_tunes/reports/delta.md" },
+          { "Absolute orbits" = "normal_tunes/reports/absolute.md" },
+          { "One knob per magnet" = "normal_tunes/reports/per-magnet.md" },
+      ]},
+      { "Method 2 - multi momentum" = [
+          { "Delta orbits" = "normal_tunes/reports/multi/delta.md" },
+          { "Absolute orbits" = "normal_tunes/reports/multi/absolute.md" },
+          { "One knob per magnet" = "normal_tunes/reports/multi/per-magnet.md" },
+      ]},
+      { "Method 1" = [
+          { "Method 1 result" = "normal_tunes/reports/method1.md" },
+          { "Method 1 against Method 2" = "normal_tunes/reports/benchmark.md" },
+      ]},
+      { "Measured optics" = "normal_tunes/studies/measured-optics.md" },
+      { "Scenario comparison" = [
+          { "Fitted with gradients only" = "normal_tunes/reports/scenario-comparison.md" },
+          { "Fitted with gradients and rolls" = "normal_tunes/reports/scenario-comparison-rolls.md" },
+      ]},
+  ]},
+  { "Reference" = [
+      { "Reproducing" = "reference/reproducing.md" },
+      { "Handover" = "reference/handover.md" },
+      { "Quadrupole roll" = "studies/quadrupole-roll.md" },
+      { "Momentum calibration" = "studies/momentum-calibration.md" },
+  ]},
+]
+
+[project.theme]
+language = "en"
+features = [
+  "content.code.copy",
+  "content.tabs.link",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.arithmatex.generic = true
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.inlinehilite = {}
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true

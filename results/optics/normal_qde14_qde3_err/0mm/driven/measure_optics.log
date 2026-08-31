@@ -1,0 +1,111 @@
+   INFO | Calculating optics parameters - code version 0.29.0 | optics_measurements.measure_optics
+   INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane X = 0.16958867586607693 | optics_measurements.phase
+   INFO | Writing phases: 2 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.003915221115284031 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0045535210455333016 | optics_measurements.phase
+   INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
+   INFO |  - RMS beta beat: 10.921% | optics_measurements.beta_from_phase
+   INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane Y = 0.23239135742200004 | optics_measurements.phase
+   INFO | Writing phases: 2 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.003215431668472942 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002872639243985038 | optics_measurements.phase
+   INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
+   INFO |  - RMS beta beat: 5.616% | optics_measurements.beta_from_phase
+   INFO | Calculating coupling | optics_measurements.coupling
+   INFO | |C-| (approx) = 0.00626, tune_sep = 0.056, from Eq.1 in PRSTAB 17,051004 | optics_measurements.coupling
+   INFO | |C-| (exact)  = 0.00544, from Eq.2 w/o i*s*Delta/R in PRSTAB 17,051004 | optics_measurements.coupling
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane X. | optics_measurements.data_models
+   INFO | Detected amplitude unit 'm' for plane Y. | optics_measurements.data_models
+   INFO | DPPS: [1.92659308e-05 1.55634799e-05 2.21521384e-05 3.19426190e-05
+ 2.06781309e-05 2.98261782e-05 1.50076942e-05 3.06526519e-05
+ 2.08336706e-05 1.91925158e-05 1.77190249e-05 1.82038290e-05
+ 3.19249362e-05 1.98037067e-05 3.21291513e-05 1.69610526e-05
+ 1.89581847e-05 9.44245821e-06 4.17219987e-05 1.39489665e-05
+ 2.01756805e-05 3.03097955e-05 2.27432900e-05 2.32855827e-05
+ 1.34197433e-05 1.62052389e-05] | optics_measurements.data_models
+   INFO | DPP_AMPS: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0.] | optics_measurements.data_models
+   INFO | Calculating optics parameters - code version 0.29.0 | optics_measurements.measure_optics
+   INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane X = 0.16958867586607693 | optics_measurements.phase
+   INFO | -- Run phase calculation without compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane X = 0.16958867586607693 | optics_measurements.phase
+   INFO | Writing phases: 4 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.004058720887165823 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.003187916166832257 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.004046121259848669 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0032364145325327214 | optics_measurements.phase
+   INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
+   INFO |  - RMS beta beat: 10.275% | optics_measurements.beta_from_phase
+   INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane Y = 0.23239135742200004 | optics_measurements.phase
+   INFO | -- Run phase calculation without compensation | optics_measurements.phase
+   INFO | Calculating phase advances | optics_measurements.phase
+   INFO | Measured tune in plane Y = 0.23239135742200004 | optics_measurements.phase
+   INFO | Writing phases: 4 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0033628260461688463 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0028486447777908673 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.00336552165802947 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0028763816461423834 | optics_measurements.phase
+   INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
+   INFO |  - RMS beta beat: 6.121% | optics_measurements.beta_from_phase
+   INFO | Calculating coupling | optics_measurements.coupling
+   INFO | |C-| (approx) = 0.00626, tune_sep = 0.056, from Eq.1 in PRSTAB 17,051004 | optics_measurements.coupling
+   INFO | |C-| (exact)  = 0.00545, from Eq.2 w/o i*s*Delta/R in PRSTAB 17,051004 | optics_measurements.coupling

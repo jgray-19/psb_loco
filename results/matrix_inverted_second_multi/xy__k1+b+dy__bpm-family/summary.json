@@ -1,0 +1,83 @@
+{
+  "method": "delta_orbit",
+  "status": "complete",
+  "diagnostics": {
+    "converged": true,
+    "reason": "loss_converged",
+    "iterations": 6,
+    "best_loss": 1.4602931319790092e-08,
+    "gradient_norm": 1.1508915134499477e-08,
+    "damping": 1.5625e-05,
+    "accepted_evaluations": 6
+  },
+  "rf_offsets": [
+    -2.0,
+    0.0,
+    2.0
+  ],
+  "correctors": [
+    "(dispersion)",
+    "(static orbit)",
+    "logical.BR3.DHZ11L4/K",
+    "logical.BR3.DHZ12L4/K",
+    "logical.BR3.DHZ13L4/K",
+    "logical.BR3.DHZ14L1/K",
+    "logical.BR3.DHZ8L1/K",
+    "logical.BR3.DHZ9L1/K",
+    "logical.BR3.DVT12L4/K",
+    "logical.BR3.DVT13L4/K",
+    "logical.BR3.DVT2L4/K",
+    "logical.BR3.DVT6L4/K",
+    "logical.BR3.DVT8L1/K",
+    "logical.BR3.DVT9L1/K"
+  ],
+  "offsets_k": [
+    -0.00015,
+    -7.5e-05,
+    0.0,
+    7.5e-05,
+    0.00015
+  ],
+  "n_settings": 147,
+  "batch_momenta": true,
+  "momentum_source": "chroma",
+  "momentum_values": {
+    "-2": -0.0006607050983665582,
+    "0": 0.0,
+    "2": 0.0006337657048014099
+  },
+  "momentum_calibration": {
+    "-2": {
+      "selected_pt": -0.0006607050983665582,
+      "orbit_pt": -0.0006529831028464627,
+      "chroma_pt": -0.0006607050983665582
+    },
+    "0": {
+      "selected_pt": 0.0,
+      "orbit_pt": -0.0,
+      "chroma_pt": 0.0
+    },
+    "2": {
+      "selected_pt": 0.0006337657048014099,
+      "orbit_pt": 0.0006282263102056706,
+      "chroma_pt": 0.0006337657048014099
+    }
+  },
+  "absolute_planes": [
+    "x",
+    "y"
+  ],
+  "corrector_baseline": "machine",
+  "absolute_error_floor": 0.0001,
+  "optimise_quadrupoles": true,
+  "optimise_bends": true,
+  "optimise_quad_dy": true,
+  "optimise_quad_tilt": false,
+  "group_quadrupoles_by_cell": true,
+  "prior_strength": 0.0001,
+  "prior_strengths": {},
+  "initial_knobs": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/matrix_inverted_second/xy__k1+b+dy__bpm-family/knobs.csv",
+  "zero_step_duplicates": false,
+  "n_fit_knobs": 128,
+  "n_output_knobs": 128
+}
