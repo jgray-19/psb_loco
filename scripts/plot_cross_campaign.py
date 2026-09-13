@@ -32,7 +32,6 @@ from scripts.report_cases import (
     figure_beta_beat_summary,
     figure_benchmark_agreement,
     figure_benchmark_speed,
-    figure_configuration_comparison,
     figure_perturbation_effect,
     figure_perturbation_tunes,
     figure_scenario_knob_diffs,
@@ -74,7 +73,6 @@ def plot_direction(direction: str, page_campaigns: tuple, analysis_root: Path, o
     # the two along-s figures, no positions drops only their BPM markers.
     positions_path = root / "element_positions.json"
     positions = _read_json(positions_path) if positions_path.exists() else {}
-    figure_configuration_comparison(summaries, scenario_output)
     figure_beta_beat_summary(summaries, beats, positions, scenario_output)
     figure_scenario_tunes_chromas(summaries, scenario_output)
     values_path = root / "scenario_optics_values.parquet"

@@ -30,18 +30,17 @@ from psb_md.closed_orbit_fitting import GRADIENT_CONVERGED_VALUE, PRIOR_STRENGTH
 from psb_md.optimisation import write_optimisation_results
 
 from loco_common.campaign import (
-    NORMAL,
     Campaign,
     add_campaign_argument,
     campaign_by_slug,
 )
 from loco_common.measured_response import (
-    apply_error_floor,
     average_orbit_frames,
     cached_orbits,
     cached_scan,
     global_reference_orbit,
     measured_orbits,
+    pooled_intershot_noise,
     subtract_reference,
 )
 from loco_common.model import (
@@ -51,6 +50,7 @@ from loco_common.model import (
 )
 from loco_common.momentum import compare_momentum_calibrations
 from loco_common.naming import lsa_k_to_rad, lsa_to_knob
+from phase_advance_constraint.series import build_phase_series
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -71,6 +71,8 @@ PRIOR_SUFFIXES: dict[str, str] = {
     "bends": "dk0l",
     "quad_dy": "dy",
     "quad_tilt": "tilt",
+    "quad_k0s": "dk0sl",
+    "quad_k1s": "dk1sl",
 }
 
 
@@ -222,16 +224,14 @@ def average_zero_step(
     now they carry signal (the static closed orbit) instead of being zero by
     construction, so they are averaged rather than dropped.
 
-    The caveat HANDOVER.md section 9.5 records applies here too: this averages
-    the error *bars* along with the orbits, so the result is under-weighted by
-    roughly the repeat count. With the absolute error floor dominating those bars
-    it makes little difference, but it is the same bug and it is deliberate.
+    Values are a plain mean, errors the error of the mean. No intershot term is
+    added: each input is already a ``measured_orbits`` average that carries it.
     """
     zero = [frame for (_, offset), frame in orbits.items() if offset == 0.0]
     kept = {key: frame for key, frame in orbits.items() if key[1] != 0.0}
     if not zero:
         return kept
-    kept[(STATIC_ORBIT, 0.0)] = sum(zero) / len(zero)
+    kept[(STATIC_ORBIT, 0.0)] = average_orbit_frames(zero)
     return kept
 
 
@@ -243,20 +243,19 @@ def build_multi_pt_settings(
     dispersion_workers: bool = True,
     zero_step_duplicates: bool = False,
     absolute_planes: tuple[str, ...] = (),
-    error_floor: float = 0.0,
     corrector_baseline: str | None = None,
-    momentum_source: str = "chroma",
-    campaign: Campaign = NORMAL,
+    campaign: Campaign,
     **kwargs,
 ) -> list[CorrectorSetting]:
     """Settings across several RF-steering offsets, each at its calibrated ``pt``.
 
     The five RF settings are five momenta whose Jacobians are genuinely
     independent, which lifts degeneracies a single momentum leaves. What they are
-    not is a momentum in the LOCO log itself. ``momentum_source`` chooses either
-    the older model-dispersion projection or the RF-derived ``Dp/p`` measured by
-    the chroma scan at the same radial plateaus. Both use the nominal-RF orbit as
-    exactly ``pt=0`` and are logged before the fit starts.
+    not is a momentum in the LOCO log itself. The fit always uses the RF-derived
+    ``Dp/p`` measured by the chroma scan at the same radial plateaus; the older
+    model-dispersion projection is computed alongside only as a logged
+    cross-check (``orbit_pt`` on each setting), never as the calibration the fit
+    actually runs on. Both use the nominal-RF orbit as exactly ``pt=0``.
 
     Each non-zero RF setting was acquired untrimmed once *per corrector*: twelve
     recordings of one machine state. They enter as the single averaged
@@ -272,12 +271,17 @@ def build_multi_pt_settings(
     baseline = corrector_baseline or default_corrector_baseline(absolute_planes)
     standing = corrector_baseline_knobs(model, baseline)
     points, orbit_by_path = cached_scan(campaign=campaign)
+    intershot = pooled_intershot_noise(points, orbit_by_path)
     absolute = {}
     for offset in rf_offsets:
         untrimmed = {
             key: frame
             for key, frame in measured_orbits(
-                offset, points=points, orbit_by_path=orbit_by_path, delta=False
+                offset,
+                points=points,
+                orbit_by_path=orbit_by_path,
+                delta=False,
+                intershot=intershot,
             ).items()
             if key[1] == 0.0
         }
@@ -297,25 +301,23 @@ def build_multi_pt_settings(
         kinetic_energy=model.kinetic_energy,
     )
     chroma_momenta = chroma_pt_by_rf_offset(
-        campaign.optics.chroma_file, rf_offsets, momentum_accelerator
+        campaign.chroma_file, rf_offsets, momentum_accelerator
     )
-    if momentum_source == "orbit":
-        momenta = orbit_momenta
-    elif momentum_source == "chroma":
-        momenta = chroma_momenta
-    else:
-        raise ValueError(f"Unknown momentum source {momentum_source!r}")
+    # The fit always runs on the RF/chroma calibration; the orbit projection is
+    # kept only as a logged cross-check (see the docstring above).
+    momenta = chroma_momenta
     differences = compare_momentum_calibrations(chroma_momenta, orbit_momenta)
     logger.warning(
         "Momentum calibration comparison (orbit - RF/chroma): %s",
         ", ".join(f"{offset:+g} mm {delta:+.4e}" for offset, delta in differences.items()),
     )
     logger.info(
-        "Using %s momentum calibration: %s",
-        momentum_source,
-        ", ".join(f"{offset:+g} mm {value:+.4e}" for offset, value in sorted(momenta.items())),
+        "Using chroma momentum calibration: %s",
+        ", ".join(
+            f"{offset:+g} mm {value:+.4e}" for offset, value in sorted(momenta.items())
+        ),
     )
-    reference = global_reference_orbit(points, orbit_by_path)
+    reference = global_reference_orbit(points, orbit_by_path, intershot)
     settings: list[CorrectorSetting] = []
     for offset in rf_offsets:
         orbits = measured_orbits(
@@ -323,7 +325,8 @@ def build_multi_pt_settings(
             points=points,
             orbit_by_path=orbit_by_path,
             absolute_planes=absolute_planes,
-            error_floor=error_floor,
+            reference=reference,
+            intershot=intershot,
         )
         if not zero_step_duplicates:
             orbits = drop_zero_step_duplicates(orbits)
@@ -361,11 +364,7 @@ def build_multi_pt_settings(
                 # baseline's value for this knob, not 0.
                 knob=next(iter(model.corrector_knobs)),
                 offset_k=0.0,
-                orbit=apply_error_floor(
-                    subtract_reference(absolute[offset], reference, absolute_planes),
-                    error_floor,
-                    absolute_planes,
-                ),
+                orbit=subtract_reference(absolute[offset], reference, absolute_planes),
                 dk=0.0,
                 nominal=float(standing.get(next(iter(model.corrector_knobs)), 0.0)),
                 corrector_baseline=baseline,
@@ -451,6 +450,8 @@ def prior_strengths_by_suffix(
     optimise_bends: bool,
     optimise_quad_dy: bool,
     optimise_quad_tilt: bool,
+    optimise_quad_k0s: bool = False,
+    optimise_quad_k1s: bool = False,
 ) -> dict[str, float] | None:
     """Scale priors independently for enabled families with different units."""
     enabled = {
@@ -458,6 +459,8 @@ def prior_strengths_by_suffix(
         "bends": optimise_bends,
         "quad_dy": optimise_quad_dy,
         "quad_tilt": optimise_quad_tilt,
+        "quad_k0s": optimise_quad_k0s,
+        "quad_k1s": optimise_quad_k1s,
     }
     families = [family for family, value in enabled.items() if value]
     if len(families) == 1 and not overrides:
@@ -481,9 +484,12 @@ def run(
     optimise_bends: bool = False,
     optimise_quad_dy: bool = False,
     optimise_quad_tilt: bool = False,
+    optimise_quad_k0s: bool = False,
+    optimise_quad_k1s: bool = False,
     group_quadrupoles_by_cell: bool = False,
     initial_knob_strengths: dict[str, float] | None = None,
     output_path: Path = Path("results/method2"),
+    extra_series: list[ClosedOrbitSeries] | None = None,
 ) -> tuple[dict[str, float], dict[str, float], dict[str, object]]:
     """Run the summed-gradient delta-orbit fit over the selected knob families.
 
@@ -500,7 +506,12 @@ def run(
     and these families belong together.
     """
     if not (
-        optimise_quadrupoles or optimise_bends or optimise_quad_dy or optimise_quad_tilt
+        optimise_quadrupoles
+        or optimise_bends
+        or optimise_quad_dy
+        or optimise_quad_tilt
+        or optimise_quad_k0s
+        or optimise_quad_k1s
     ):
         raise ValueError("No knob family enabled: there is nothing to fit")
     baselines = {setting.corrector_baseline for setting in settings}
@@ -519,6 +530,8 @@ def run(
         optimise_bends=optimise_bends,
         optimise_quad_dy=optimise_quad_dy,
         optimise_quad_tilt=optimise_quad_tilt,
+        optimise_quad_k0s=optimise_quad_k0s,
+        optimise_quad_k1s=optimise_quad_k1s,
         group_quadrupoles_by_cell=group_quadrupoles_by_cell,
     )
     family_priors = prior_strengths_by_suffix(
@@ -528,11 +541,16 @@ def run(
         optimise_bends=optimise_bends,
         optimise_quad_dy=optimise_quad_dy,
         optimise_quad_tilt=optimise_quad_tilt,
+        optimise_quad_k0s=optimise_quad_k0s,
+        optimise_quad_k1s=optimise_quad_k1s,
     )
+    series = closed_orbit_series(settings, batch_momenta=batch_momenta)
+    if extra_series:
+        series += list(extra_series)
     fitter = ClosedOrbitFitter(
         accelerator=accelerator,
         sequence_config=SequenceConfig(magnet_range="$start/$end"),
-        series=closed_orbit_series(settings, batch_momenta=batch_momenta),
+        series=series,
         lm_config=LevenbergMarquardtConfig(
             max_iterations=max_iterations,
             gradient_converged_value=GRADIENT_CONVERGED_VALUE,
@@ -574,13 +592,21 @@ def warn_family_mismatch(absolute_planes: tuple[str, ...], args) -> None:
     the control that measures how much static orbit the gradients absorb, which
     is exactly the effect ``psb_md.closed_orbit_fitting`` warns about.
     """
-    # Tilt sits with dy: a rolled quadrupole is a skew source, so it shows up in
-    # the vertical plane -- and it is the only family here that can make vertical
-    # dispersion without making the vertical orbit that caps it
-    # (docs/studies/quadrupole-roll.md).
-    vertical = args.optimise_quad_dy or args.optimise_quad_tilt
-    for plane, flag, family in (("x", args.optimise_bends, "bends"),
-                                ("y", vertical, "quadrupole dy/tilt")):
+    # Tilt sits with dy, and k1s/k0s (their additive-multipole replacements) sit
+    # with them too: a rolled quadrupole -- or its skew-multipole equivalent --
+    # is a skew source, so it shows up in the vertical plane, and is the only
+    # kind of family here that can make vertical dispersion without making the
+    # vertical orbit that caps it (docs/studies/quadrupole-roll.md).
+    vertical = (
+        args.optimise_quad_dy
+        or args.optimise_quad_tilt
+        or args.optimise_quad_k0s
+        or args.optimise_quad_k1s
+    )
+    for plane, flag, family in (
+        ("x", args.optimise_bends, "bends"),
+        ("y", vertical, "quadrupole dy/tilt/k0s/k1s"),
+    ):
         if flag and plane not in absolute_planes:
             logger.warning(
                 "%s are free but the %s plane is a delta: delta orbits barely "
@@ -608,22 +634,12 @@ def main(argv: list[str] | None = None) -> None:
         default=None,
         help=(
             "Enable the multi-momentum mode over these RF-steering offsets (mm). "
-            "Their pt calibration is selected by --momentum-source; every source "
-            "uses the 0 mm orbit as exactly pt=0."
+            "Their pt calibration is always the RF-derived Dp/p measured by the "
+            "chroma scan at the same radial plateaus, referenced to the 0 mm "
+            "orbit as exactly pt=0."
         ),
     )
     parser.add_argument("--correctors", nargs="+", default=None)
-    parser.add_argument(
-        "--momentum-source",
-        choices=("orbit", "chroma"),
-        default="orbit",
-        help=(
-            "Momentum calibration for --rf-offsets. 'orbit' projects each closed "
-            "orbit onto the starting model dispersion; 'chroma' uses the independent "
-            "RF-derived Dp/p measured at the same radial-orbit plateaus. "
-            "Both are referenced to the 0 mm orbit, which is pt=0."
-        ),
-    )
     parser.add_argument(
         "--no-dispersion-workers",
         action="store_true",
@@ -645,6 +661,28 @@ def main(argv: list[str] | None = None) -> None:
             "setting. They are twelve recordings of the same machine state, so "
             "this weights that orbit twelvefold; it is for comparison, not for "
             "running a fit."
+        ),
+    )
+    parser.add_argument(
+        "--phase-constraint",
+        action="store_true",
+        help=(
+            "Add one plain-twiss, no-corrector series per RF offset, whose residual "
+            "is only the BPM-to-BPM phase advance (mu1/mu2) -- see "
+            "docs/studies/phase-advance-constraint.md and phase_advance_constraint/. "
+            "Requires --rf-offsets and the campaign's optics at each of them "
+            "(scripts/measured_optics.py --optics-folders all)."
+        ),
+    )
+    parser.add_argument(
+        "--phase-weight",
+        type=float,
+        default=1.0,
+        help=(
+            "Multiply the phase constraint's fit weight by this factor (divides "
+            "mu1_var/mu2_var). At 1.0 phase's measurement SNR is far looser than "
+            "the closed orbit's, so it is swamped by the ~140 orbit corrector-trim "
+            "settings with no visible effect; see --phase-constraint's help."
         ),
     )
     parser.add_argument(
@@ -685,18 +723,6 @@ def main(argv: list[str] | None = None) -> None:
         ),
     )
     parser.add_argument(
-        "--absolute-error-floor",
-        type=float,
-        default=1e-4,
-        help=(
-            "Systematic added in quadrature (metres) to the absolute planes' "
-            "error bars. Their acquisition SEM is ~1e-6 m while the uncertainty "
-            "that actually applies is the unfitted BPM zero offset, ~1e-4 m; "
-            "without a floor the absolute planes enter at thousands of sigma and "
-            "the delta planes stop mattering. Scan it before trusting it."
-        ),
-    )
-    parser.add_argument(
         "--no-optimise-quadrupoles",
         dest="optimise_quadrupoles",
         action="store_false",
@@ -724,6 +750,28 @@ def main(argv: list[str] | None = None) -> None:
             "in the fit, and so the only family that can make vertical dispersion "
             "without making the vertical orbit that caps it; constrained by an "
             "absolute y plane. See docs/studies/quadrupole-roll.md."
+        ),
+    )
+    parser.add_argument(
+        "--optimise-quad-k0s",
+        action="store_true",
+        help=(
+            "Free an additive skew dipole error (dk0sl) per quadrupole, in place "
+            "of the geometric dy offset. Unlike dy it does not scale with the "
+            "element's own k1, so it does not share a Jacobian column with the "
+            "gradient fit. Constrained by an absolute y plane."
+        ),
+    )
+    parser.add_argument(
+        "--optimise-quad-k1s",
+        action="store_true",
+        help=(
+            "Free an additive skew gradient error (dk1sl) per quadrupole, in "
+            "place of the geometric tilt. Unlike tilt it does not scale with the "
+            "element's own k1, so it does not share a Jacobian column with the "
+            "gradient fit. A skew source, like tilt: the only families here that "
+            "can make vertical dispersion without making the vertical orbit that "
+            "caps it."
         ),
     )
     parser.add_argument(
@@ -756,6 +804,18 @@ def main(argv: list[str] | None = None) -> None:
         help="Prior strength for the quadrupole dy; defaults to --prior-strength.",
     )
     parser.add_argument(
+        "--prior-strength-quad-k0s",
+        type=float,
+        default=None,
+        help="Prior strength for the quadrupole k0s; defaults to --prior-strength.",
+    )
+    parser.add_argument(
+        "--prior-strength-quad-k1s",
+        type=float,
+        default=None,
+        help="Prior strength for the quadrupole k1s; defaults to --prior-strength.",
+    )
+    parser.add_argument(
         "--corrector-baseline",
         choices=CORRECTOR_BASELINES,
         default=None,
@@ -781,7 +841,6 @@ def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 
     absolute_planes = tuple(dict.fromkeys(args.absolute_planes))
-    error_floor = float(args.absolute_error_floor) if absolute_planes else 0.0
     baseline = args.corrector_baseline or default_corrector_baseline(absolute_planes)
     warn_family_mismatch(absolute_planes, args)
     if absolute_planes and baseline == "zero":
@@ -807,9 +866,7 @@ def main(argv: list[str] | None = None) -> None:
             dispersion_workers=not args.no_dispersion_workers,
             zero_step_duplicates=args.keep_zero_step_duplicates,
             absolute_planes=absolute_planes,
-            error_floor=error_floor,
             corrector_baseline=baseline,
-            momentum_source=args.momentum_source,
             campaign=campaign,
             **subset,
         )
@@ -821,7 +878,6 @@ def main(argv: list[str] | None = None) -> None:
             measured_orbits(
                 args.rf_offset,
                 absolute_planes=absolute_planes,
-                error_floor=error_floor,
                 campaign=campaign,
             )
         )
@@ -843,6 +899,22 @@ def main(argv: list[str] | None = None) -> None:
         )
     if not settings:
         raise SystemExit("No corrector settings selected.")
+
+    extra_series = None
+    if args.phase_constraint:
+        if not args.rf_offsets:
+            raise SystemExit(
+                "--phase-constraint requires --rf-offsets (the multi-momentum mode)"
+            )
+        momenta = {setting.rf_offset: setting.pt for setting in settings}
+        extra_series = build_phase_series(
+            campaign, args.rf_offsets, momenta, phase_weight=args.phase_weight
+        )
+        logger.info(
+            "Phase constraint: %d phase-only series added (weight x%g)",
+            len(extra_series),
+            args.phase_weight,
+        )
 
     if absolute_planes and args.rf_offsets and args.initial_knobs is None:
         raise SystemExit(
@@ -867,6 +939,8 @@ def main(argv: list[str] | None = None) -> None:
         "bends": args.prior_strength_bends,
         "quad_dy": args.prior_strength_quad_dy,
         "quad_tilt": args.prior_strength_quad_tilt,
+        "quad_k0s": args.prior_strength_quad_k0s,
+        "quad_k1s": args.prior_strength_quad_k1s,
     }
     prior_strengths = {k: v for k, v in prior_strengths.items() if v is not None}
 
@@ -881,9 +955,12 @@ def main(argv: list[str] | None = None) -> None:
         optimise_bends=args.optimise_bends,
         optimise_quad_dy=args.optimise_quad_dy,
         optimise_quad_tilt=args.optimise_quad_tilt,
+        optimise_quad_k0s=args.optimise_quad_k0s,
+        optimise_quad_k1s=args.optimise_quad_k1s,
         group_quadrupoles_by_cell=args.group_quadrupoles_by_cell,
         initial_knob_strengths=initial_knob_strengths,
         output_path=args.output,
+        extra_series=extra_series,
     )
 
     knobs, uncertainties = fitted_knobs, fitted_uncertainties
@@ -906,8 +983,11 @@ def main(argv: list[str] | None = None) -> None:
         "correctors": sorted({setting.corrector for setting in settings}),
         "offsets_k": sorted({setting.offset_k for setting in settings}),
         "n_settings": len(settings),
+        "phase_constraint": bool(args.phase_constraint),
+        "phase_weight": float(args.phase_weight),
+        "n_phase_series": len(extra_series) if extra_series else 0,
         "batch_momenta": bool(args.batch_momenta),
-        "momentum_source": args.momentum_source if args.rf_offsets else None,
+        "momentum_source": "chroma" if args.rf_offsets else None,
         "momentum_values": {
             f"{offset:g}": float(
                 next(setting.pt for setting in settings if setting.rf_offset == offset)
@@ -916,16 +996,21 @@ def main(argv: list[str] | None = None) -> None:
         },
         "momentum_calibration": {
             f"{offset:g}": {
-                "selected_pt": float(next(s.pt for s in settings if s.rf_offset == offset)),
-                "orbit_pt": float(next(s.orbit_pt for s in settings if s.rf_offset == offset)),
-                "chroma_pt": float(next(s.chroma_pt for s in settings if s.rf_offset == offset)),
+                "selected_pt": float(
+                    next(s.pt for s in settings if s.rf_offset == offset)
+                ),
+                "orbit_pt": float(
+                    next(s.orbit_pt for s in settings if s.rf_offset == offset)
+                ),
+                "chroma_pt": float(
+                    next(s.chroma_pt for s in settings if s.rf_offset == offset)
+                ),
             }
             for offset in sorted({s.rf_offset for s in settings})
             if next(s for s in settings if s.rf_offset == offset).orbit_pt is not None
         },
         "absolute_planes": list(absolute_planes),
         "corrector_baseline": baseline,
-        "absolute_error_floor": float(error_floor),
         "optimise_quadrupoles": bool(args.optimise_quadrupoles),
         "optimise_bends": bool(args.optimise_bends),
         "optimise_quad_dy": bool(args.optimise_quad_dy),
@@ -933,7 +1018,9 @@ def main(argv: list[str] | None = None) -> None:
         "group_quadrupoles_by_cell": bool(args.group_quadrupoles_by_cell),
         "prior_strength": float(args.prior_strength),
         "prior_strengths": {k: float(v) for k, v in prior_strengths.items()},
-        "initial_knobs": None if args.initial_knobs is None else str(args.initial_knobs),
+        "initial_knobs": None
+        if args.initial_knobs is None
+        else str(args.initial_knobs),
         "zero_step_duplicates": bool(args.keep_zero_step_duplicates),
         "n_fit_knobs": len(fitted_knobs),
         "n_output_knobs": len(knobs),

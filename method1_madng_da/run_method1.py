@@ -223,7 +223,8 @@ def main(argv: list[str] | None = None) -> None:
     write_optimisation_results(
         output / "knobs.csv",
         physical_knobs,
-        dict.fromkeys(physical_knobs, 0.0),
+        # MAD.match gives no covariance, so there is no uncertainty to report.
+        dict.fromkeys(physical_knobs, float("nan")),
         stage_name="loco_method1",
     )
     summary = {

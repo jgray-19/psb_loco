@@ -72,7 +72,7 @@ PSB ring 3 · Inverted tunes, 28th as the unperturbed baseline, against Inverted
 
 ## Fitted gradients against the baseline
 
-=== "Single momentum, gradients only"
+=== "Single momentum, gradients"
 
     <figure markdown>
     ![fitted gradient difference from baseline](../../assets/figures/scenarios/inverted/scenario-comparison/single/none__k1__bpm-family/knob_diffs_dk1l.png)
@@ -91,7 +91,7 @@ PSB ring 3 · Inverted tunes, 28th as the unperturbed baseline, against Inverted
     <figcaption>Fitted roll per magnet, each scenario minus the unperturbed baseline.</figcaption>
     </figure>
 
-=== "Multi momentum, gradients only"
+=== "Multi momentum, gradients"
 
     <figure markdown>
     ![fitted gradient difference from baseline](../../assets/figures/scenarios/inverted/scenario-comparison/multi/none__k1__bpm-family/knob_diffs_dk1l.png)

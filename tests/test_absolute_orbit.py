@@ -12,8 +12,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import pytest
+
 from loco_common.measured_response import (
-    apply_error_floor,
     measured_orbits,
     subtract_reference,
 )
@@ -74,20 +74,6 @@ def test_an_unknown_plane_is_rejected():
         subtract_reference(frame, frame, absolute_planes=("z",))
 
 
-def test_the_error_floor_touches_only_the_named_plane():
-    frame = _frame([1.0, 2.0], [3.0, 4.0], error=3e-5)
-    floored = apply_error_floor(frame, 4e-5, ("y",))
-
-    np.testing.assert_allclose(floored["ERRX"], 3e-5)
-    np.testing.assert_allclose(floored["ERRY"], 5e-5)
-    np.testing.assert_allclose(floored["Y"], frame["Y"])
-
-
-def test_a_zero_floor_is_the_identity():
-    frame = _frame([1.0], [1.0])
-    pd.testing.assert_frame_equal(apply_error_floor(frame, 0.0, ("x", "y")), frame)
-
-
 def test_the_untrimmed_acquisitions_survive_only_in_absolute_mode(fake_scan):
     """They are zero by construction only in a plane that was subtracted."""
     points, orbits = fake_scan({CORRECTOR: SLOPES}, baseline=BASELINE)
@@ -109,7 +95,7 @@ def test_the_delta_plane_is_unchanged_by_the_other_planes_mode(fake_scan):
     points, orbits = fake_scan({CORRECTOR: SLOPES}, baseline=BASELINE, noise=1e-6)
     delta = measured_orbits(0.0, points=points, orbit_by_path=orbits)
     mixed = measured_orbits(
-        0.0, points=points, orbit_by_path=orbits, absolute_planes=("y",), error_floor=1e-4
+        0.0, points=points, orbit_by_path=orbits, absolute_planes=("y",)
     )
     for key, frame in delta.items():
         for column in ("X", "ERRX"):
@@ -196,6 +182,8 @@ def test_knobs_are_sorted_into_families_by_their_suffix():
         "bends": "dk0l",
         "quad_dy": "dy",
         "quad_tilt": "tilt",
+        "quad_k0s": "dk0sl",
+        "quad_k1s": "dk1sl",
     }
 
 
@@ -241,79 +229,7 @@ def test_a_family_with_zero_strength_is_unregularised():
     assert alphas[1] == 0.0
 
 
-# ------------------------------------------------- the machine's own correctors
-
-
-def test_the_horizontal_correctors_are_inverted_and_the_vertical_are_not():
-    """The one conversion that separates an LSA reading from a MAD kick."""
-    from loco_common.model import SCAN_CORRECTOR_SETTINGS_LSA, scan_corrector_knobs
-
-    knobs = scan_corrector_knobs()
-
-    assert knobs["kbr3dhz14l1"] == -SCAN_CORRECTOR_SETTINGS_LSA["logical.BR3.DHZ14L1/K"]
-    assert knobs["kbr3dvt8l1"] == +SCAN_CORRECTOR_SETTINGS_LSA["logical.BR3.DVT8L1/K"]
-    assert len(knobs) == 12
-
-
-def test_every_scanned_corrector_has_a_recorded_setting(fake_scan):
-    """The settings and the scan have to name the same twelve magnets.
-
-    The handover list said DHZ11L1/DHZ12L1/DHZ13L1 where the scan log says L4.
-    If that ever drifts back, the model sits on a corrector the machine did not
-    move, which in absolute mode is indistinguishable from a dipole error.
-    """
-    from loco_common.measured_response import cached_scan
-    from loco_common.model import SCAN_CORRECTOR_SETTINGS_LSA
-
-    points, _ = cached_scan()
-    assert {p.corrector for p in points} == set(SCAN_CORRECTOR_SETTINGS_LSA)
-
-
-@pytest.mark.slow
-def test_the_delta_orbit_cannot_see_the_standing_correctors(sequence_file):
-    """Why the stale corrector file invalidated nothing that came before it.
-
-    A standing corrector setting appears identically on both sides of
-    ``co(k + dk) - co(k)``, so it cancels; what is left is sextupole feed-down.
-    This is also exactly why the absolute mode is the first thing here that can
-    be wrong about it, and why it had to be fixed before that mode is run.
-    """
-    from loco_common.model import build_model
-
-    from tests.madng_helpers import closed_orbit, open_interface, set_knob
-
-    campaign = build_model(sequence_file=sequence_file, scan_correctors=False)
-    scan = build_model(sequence_file=sequence_file)
-    # The correction is not cosmetic: it moves the horizontal orbit by more than
-    # the orbit's own amplitude.
-    assert abs(scan.corrector_knobs["kbr3dhz14l1"] - campaign.corrector_knobs["kbr3dhz14l1"]) > 3e-3
-
-    interface = open_interface(sequence_file)
-    try:
-        def delta(knobs, knob, dk, plane):
-            for name, value in knobs.items():
-                set_knob(interface, name, value)
-            before = closed_orbit(interface)[plane].to_numpy()
-            set_knob(interface, knob, knobs[knob] + dk)
-            return closed_orbit(interface)[plane].to_numpy() - before
-
-        for knob, dk, plane in (("kbr3dhz8l1", -1e-4, "X"), ("kbr3dvt8l1", 1e-4, "Y")):
-            a = delta(campaign.corrector_knobs, knob, dk, plane)
-            b = delta(scan.corrector_knobs, knob, dk, plane)
-            relative = np.abs(b - a).max() / np.abs(a).max()
-            assert relative < 5e-3, f"{knob} delta moved by {relative:.3e}"
-    finally:
-        interface.mad.close()
-
-
-def test_the_quad_circuits_come_from_the_machine_not_a_tune_match():
-    """The start model sits on the machine's currents, trims pinned at zero."""
-    from loco_common.model import SCAN_QUAD_SETTINGS
-
-    assert SCAN_QUAD_SETTINGS["kbrqf"] == pytest.approx(0.7289003149414066, abs=0)
-    assert SCAN_QUAD_SETTINGS["kbrqd"] == pytest.approx(-0.7442765966796879, abs=0)
-    trims = ("kbrqfcorr", "kbrqdcorr", "kbrqd3corr", "kbrqd14corr")
-    assert all(SCAN_QUAD_SETTINGS[name] == 0.0 for name in trims)
+# ------------------------------------------------------ the machine's circuits
 
 
 @pytest.mark.slow
@@ -325,12 +241,12 @@ def test_the_quad_circuit_choice_moves_the_response(sequence_file):
     give different answers, so nothing fitted on a tune-matched start model can
     be compared with something fitted on the machine's currents.
     """
+    from loco_common.campaign import P23_P13_FINAL
     from loco_common.model import build_model
-
     from tests.madng_helpers import closed_orbit, open_interface, set_knob
 
-    matched = build_model(sequence_file=sequence_file, scan_quads=False)
-    machine = build_model(sequence_file=sequence_file)
+    matched = build_model(sequence_file=sequence_file, campaign=P23_P13_FINAL, scan_quads=False)
+    machine = build_model(sequence_file=sequence_file, campaign=P23_P13_FINAL)
     assert matched.tune_knobs != machine.tune_knobs
 
     interface = open_interface(sequence_file)
@@ -352,10 +268,15 @@ def test_the_quad_circuit_choice_moves_the_response(sequence_file):
 
 
 def _model(sequence_file):
-    from loco_common.model import LocoModel, scan_corrector_knobs
+    from psb_md.acd_config import psb_orbit_corrector_strengths
+
+    from loco_common.campaign import P23_P13_FINAL
+    from loco_common.model import LocoModel
 
     return LocoModel(
-        sequence_file=sequence_file, tune_knobs={}, corrector_knobs=scan_corrector_knobs()
+        sequence_file=sequence_file,
+        tune_knobs={},
+        corrector_knobs=psb_orbit_corrector_strengths(P23_P13_FINAL.machine_config),
     )
 
 
@@ -437,7 +358,6 @@ def test_a_delta_orbit_is_the_same_on_either_baseline(sequence_file):
     the pairing in ``CORRECTOR_BASELINES``.
     """
     from method2_delta_orbit.run_method2 import corrector_baseline_knobs
-
     from tests.madng_helpers import closed_orbit, open_interface, set_knob
 
     model = _model(sequence_file)

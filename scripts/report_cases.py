@@ -1,8 +1,7 @@
 """Cross-campaign analysis and figures, for one direction at a time.
 
-The per-page figures this module used to draw now live in :mod:`loco_report`.
-What is left is the part that compares whole campaigns rather than the cases
-within one: the tidy-frame builders :mod:`scripts.analyse_cross_campaign`
+Per-page figures live in :mod:`loco_report`. This module compares whole
+campaigns rather than the cases within one: the tidy-frame builders :mod:`scripts.analyse_cross_campaign`
 persists, and the figures :mod:`scripts.plot_cross_campaign` draws from them.
 Neither has a CLI here; both are driven by those two scripts.
 """
@@ -12,7 +11,6 @@ from __future__ import annotations
 import json
 import logging
 import sys
-from dataclasses import replace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -25,42 +23,20 @@ import numpy as np
 import pandas as pd
 from psb_md.plotting import finalize_figure, style_axis
 
-from loco_common.campaign import (
-    add_campaign_argument,
-    campaign_by_slug,
-)
 from loco_common.case_names import (
-    ALL_PAGES,
     LOCO_OPTICS_CASE,
     LOCO_OPTICS_FITS,
     LOCO_OPTICS_MODE,
-    PAGE_BY_SLUG,
-    PAGES,
-    PER_MAGNET_PAGE,
-    Page,
     case_heading,
 )
 from loco_common.fit_mode import (
-    add_fit_mode_argument,
     fit_mode_by_slug,
-    result_is_valid,
-)
-from loco_common.model import (
-    DEFAULT_SEQUENCE_FILE,
-    build_model,
-    model_element_positions,
 )
 from scripts.plot_knobs import (
     NOMINAL_BEND_ANGLE,
     NOMINAL_K1L,
-    OTHER_COLOUR,
     OVERLAY_COLOURS,
-    QDE_COLOUR,
-    QFO_COLOUR,
-    bar_width,
-    element_colour,
     mark_bpms,
-    read_knobs,
 )
 
 logger = logging.getLogger(__name__)
@@ -86,12 +62,19 @@ RESIDUAL_TARGETS = {
     "absolute": "closed-orbit residual [mm]",
 }
 
-#: The BPM zero-offset systematic, in metres -- ``run_method2``'s
-#: ``--absolute-error-floor`` default. The statistical bar on a measured orbit
-#: is a standard error of the mean and comes out around a micron; what actually
-#: limits how well an absolute orbit is known is this, two orders of magnitude
-#: larger, so it is the line a closed-orbit residual should be read against.
-BPM_ZERO_OFFSET = 1e-4
+
+def _wrap(text: str, width: int = 22) -> str:
+    """Break a case heading over lines so it fits an axis tick."""
+    words, lines, current = text.split(), [], ""
+    for word in words:
+        candidate = f"{current} {word}".strip()
+        if len(candidate) > width and current:
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    lines.append(current)
+    return "\n".join(lines)
 
 
 
@@ -111,43 +94,19 @@ PAGE_OPTICS_REFERENCES = (("loco_model", ""), ("matched_model", "_matched"))
 
 
 
-def _dispersion_uncertainty(predictions_dir: Path) -> pd.Series:
-    """One-sigma bar on each BPM's measured dispersion, indexed by ``(plane, bpm)``.
-
-    The dispersion cache keeps the slope only, so the bar is refitted here from
-    the orbits it came from: the standard error of the slope of the same
-    straight line against ``pt``, from the scatter of the points about it. Taken
-    from the residuals rather than from each orbit's own standard error of the
-    mean, because that one is a micron and the reproducibility between momentum
-    settings is not -- a bar the points visibly do not honour is worse than
-    none. With two momentum points the line has no degrees of freedom left and
-    the bar is ``NaN``, which draws as no bar.
-    """
-    path = predictions_dir / "start-model.absolute.parquet"
-    if not path.exists():
-        return pd.Series(dtype=float, index=pd.MultiIndex.from_tuples([], names=["plane", "bpm"]))
-    frame = pd.read_parquet(path).dropna(subset=["pt", "measured"])
-    bars = {}
-    for key, group in frame.groupby(["plane", "bpm"], sort=False):
-        pt, orbit = group["pt"].to_numpy(), group["measured"].to_numpy()
-        spread = float(np.sum((pt - pt.mean()) ** 2))
-        if len(group) < 3 or spread == 0.0:
-            bars[key] = np.nan
-            continue
-        slope, intercept = np.polyfit(pt, orbit, 1)
-        residual = orbit - (slope * pt + intercept)
-        variance = float(np.sum(residual**2)) / (len(group) - 2)
-        bars[key] = float(np.sqrt(variance / spread))
-    return pd.Series(bars, name="uncertainty").rename_axis(["plane", "bpm"])
-
-
 def measured_dispersion_frame(predictions_dir: Path,
                               positions: dict[str, float]) -> pd.DataFrame:
     """Measured ``d orbit / dpt`` at each BPM, with model ``s`` positions.
 
     Every prediction cache contains the same measured column. The start-model
     cache is used because it exists independently of which fitted cases are
-    valid and makes that invariance explicit.
+    valid and makes that invariance explicit. The uncertainty comes straight
+    from ``measured_error`` in the cache -- written by
+    ``scripts/predict_loco.py`` from
+    ``tmom_recon.physics.closed_orbit.measure_dispersion``, propagating the
+    repeat-acquisition orbit scatter and the chroma pt uncertainty -- rather
+    than refitted here from the handful of RF-steering points, which leaves
+    too few degrees of freedom to be a meaningful residual estimate.
     """
     path = predictions_dir / "start-model.dispersion.parquet"
     if not path.exists():
@@ -155,10 +114,7 @@ def measured_dispersion_frame(predictions_dir: Path,
         return pd.DataFrame(columns=["plane", "bpm", "measured", "uncertainty", "s"])
     frame = pd.read_parquet(path)
     by_name = {name.upper(): s for name, s in positions.items()}
-    frame = frame.copy()
-    frame["uncertainty"] = _dispersion_uncertainty(predictions_dir).reindex(
-        pd.MultiIndex.from_frame(frame[["plane", "bpm"]])
-    ).to_numpy()
+    frame = frame.rename(columns={"measured_error": "uncertainty"}).copy()
     frame["s"] = frame["bpm"].astype(str).str.upper().map(by_name)
     missing = frame["s"].isna()
     if missing.any():
@@ -228,7 +184,6 @@ REFERENCE_LABELS = {key: label for key, _, label, _ in MEASURED_REFERENCES}
 #: against a baseline -- the measured value -- so the bar *is* the error and a
 #: bar of zero length is agreement.
 MEASURED_COLOUR = "#000000"
-MODEL_COLOURS = {"loco_model": "#0072B2", "matched_model": "#009E73"}
 MODEL_NAMES = {
     "loco_model": "model, $k_1$ as sent",
     "matched_model": "model, matched to the tune",
@@ -239,9 +194,6 @@ def _rms(values) -> float:
     values = np.asarray(values, dtype=float)
     values = values[~np.isnan(values)]
     return float(np.sqrt(np.mean(values**2))) if values.size else float("nan")
-
-
-
 
 
 
@@ -360,89 +312,6 @@ def figure_beta_beat_summary(
         "Measured beta-beating along $s$ against each reference model", fontsize=12
     )
     finalize_figure(figure, output / "comparison_beta_beat.png")
-
-
-def figure_configuration_comparison(summaries: list[tuple[object, dict]], output: Path) -> None:
-    """Both machine configurations on one pair of axes, tune and ``dQ/dpt``.
-
-    The page tabs between configurations, so nothing inside a tab can compare
-    them; this is the figure that replaces the side-by-side table.
-
-    ``summaries`` is ``[(campaign, optics_summary(campaign)), ...]``, already
-    filtered to campaigns with a summary -- see
-    ``scripts/analyse_cross_campaign.py``, which persists it.
-    """
-    if len(summaries) < 2:
-        return
-    series = [
-        ("measured", MEASURED_COLOUR,
-         lambda s, key, plane: s["measured"][key][plane]),
-        (MODEL_NAMES["loco_model"], MODEL_COLOURS["loco_model"],
-         lambda s, key, plane: s["loco_model"][
-             "tunes" if key == "natural_tunes" else "dq_dpt"][plane]),
-        (MODEL_NAMES["matched_model"], MODEL_COLOURS["matched_model"],
-         lambda s, key, plane: s.get("matched_model", {}).get(
-             "tunes" if key == "natural_tunes" else "dq_dpt", [np.nan, np.nan])[plane]),
-    ]
-    for key, filename, titles, ylabel, fmt, relative in (
-        ("natural_tunes", "comparison_tunes.png", ("$Q_x$", "$Q_y$"),
-         "tune - measured", "{:.4f}", True),
-        ("dq_dpt", "comparison_chromaticity.png", ("$dq1$", "$dq2$"),
-         "model - measured $dQ/dp_t$", "{:+.3f}", True),
-    ):
-        figure, axes = plt.subplots(1, 2, constrained_layout=True, figsize=(11, 4.4))
-        step = 0.8 / (len(series) - 1 if relative else len(series))
-        for plane, (axis, title) in enumerate(zip(axes, titles, strict=True)):
-            heights: list[float] = []
-            # On the tune chart the measurement is the baseline, so a
-            # "measured" bar would be a zero-height bar and a legend entry for
-            # a line the reader can already see.
-            drawn_series = series[1:] if relative else series
-            for index, (label, colour, getter) in enumerate(drawn_series):
-                values = [getter(s, key, plane) for _, s in summaries]
-                # Same reason as the per-campaign chart: against the measurement
-                # for the tune, absolute for $Q'$, where zero is meaningful.
-                drawn = (
-                    [
-                        value - s["measured"][key][plane]
-                        for value, (_, s) in zip(values, summaries, strict=True)
-                    ]
-                    if relative
-                    else values
-                )
-                heights += [v for v in drawn if not np.isnan(v)]
-                offsets = (
-                    np.arange(len(values))
-                    + (index - (len(drawn_series) - 1) / 2) * step
-                )
-                bars = axis.bar(offsets, drawn, width=step * 0.92, color=colour,
-                                label=label if plane == 0 else None)
-                _bar_labels(axis, bars, values, fmt)
-            axis.set_xticks(range(len(summaries)))
-            axis.set_xticklabels(
-                [
-                    f"{c.label}\nmeasured {s['measured'][key][plane]:.5f}"
-                    if relative else c.label
-                    for c, s in summaries
-                ],
-                fontsize=9,
-            )
-            axis.set_ylabel(ylabel, fontsize=10)
-            axis.set_title(title, fontsize=11)
-            if relative:
-                axis.axhline(0.0, color=MEASURED_COLOUR, linewidth=1.4)
-            if heights:
-                # Room past both ends of the bars for the legend and for the
-                # values printed at their tips, which otherwise land on the
-                # tick labels.
-                low, high = min(0.0, *heights), max(0.0, *heights)
-                span = max(high - low, 1e-9)
-                axis.set_ylim(low - 0.16 * span, high + 0.34 * span)
-            style_axis(axis)
-        axes[0].legend(fontsize=8)
-        figure.suptitle("Both machine configurations, measured against both models",
-                        fontsize=12)
-        finalize_figure(figure, output / filename)
 
 
 def scenario_dispersion_beat(campaign) -> dict[str, float]:
@@ -900,20 +769,28 @@ def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path
         return
     (baseline, base_summary), *scenarios = summaries
     panels = [
-        ("natural_tunes", 0, "$\\Delta Q_x$", "{:+.4f}"),
-        ("natural_tunes", 1, "$\\Delta Q_y$", "{:+.4f}"),
-        ("dq_dpt", 0, "$\\Delta dq1$", "{:+.3f}"),
-        ("dq_dpt", 1, "$\\Delta dq2$", "{:+.3f}"),
+        ("natural_tunes", "natural_tune_spread", 0, "$\\Delta Q_x$", "{:+.4f}"),
+        ("natural_tunes", "natural_tune_spread", 1, "$\\Delta Q_y$", "{:+.4f}"),
+        ("dq_dpt", "dq_dpt_error", 0, "$\\Delta dq1$", "{:+.3f}"),
+        ("dq_dpt", "dq_dpt_error", 1, "$\\Delta dq2$", "{:+.3f}"),
     ]
     figure, axes = plt.subplots(2, 2, constrained_layout=True, figsize=(13, 8))
-    for axis, (key, plane, title, fmt) in zip(axes.flat, panels, strict=True):
+    for axis, (key, error_key, plane, title, fmt) in zip(axes.flat, panels, strict=True):
         values = [
             summary["measured"][key][plane] - base_summary["measured"][key][plane]
             for _, summary in scenarios
         ]
+        # Scenario and baseline are independent measurements, so their errors
+        # add in quadrature.
+        errors = [
+            float(np.hypot(summary["measured"][error_key][plane],
+                            base_summary["measured"][error_key][plane]))
+            for _, summary in scenarios
+        ]
         offsets = np.arange(len(scenarios))
         bars = axis.bar(
-            offsets, values, width=0.6,
+            offsets, values, width=0.6, yerr=errors, capsize=3,
+            error_kw=dict(elinewidth=1.0),
             color=[OVERLAY_COLOURS[i % len(OVERLAY_COLOURS)] for i in range(len(scenarios))],
         )
         _bar_labels(axis, bars, values, fmt)
@@ -921,7 +798,10 @@ def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path
         axis.set_xticks(offsets)
         axis.set_xticklabels([_wrap(c.label, 14) for c, _ in scenarios], fontsize=8)
         axis.set_title(title, fontsize=11)
-        finite = [v for v in values if not np.isnan(v)]
+        finite = [
+            v + sign * e for v, e in zip(values, errors, strict=True)
+            if not np.isnan(v) for sign in (-1, 1)
+        ]
         if finite:
             low, high = min(0.0, *finite), max(0.0, *finite)
             span = max(high - low, 1e-9)
@@ -947,20 +827,25 @@ def figure_scenario_tunes_chromas(summaries: list[tuple[object, dict]], output: 
         ("measured", MEASURED_COLOUR, lambda s, key, plane: s["measured"][key][plane]),
     ]
     panels = [
-        ("natural_tunes", 0, "$Q_x$", "{:.4f}"),
-        ("natural_tunes", 1, "$Q_y$", "{:.4f}"),
-        ("dq_dpt", 0, "$dq1$", "{:+.3f}"),
-        ("dq_dpt", 1, "$dq2$", "{:+.3f}"),
+        ("natural_tunes", "natural_tune_spread", 0, "$Q_x$", "{:.4f}"),
+        ("natural_tunes", "natural_tune_spread", 1, "$Q_y$", "{:.4f}"),
+        ("dq_dpt", "dq_dpt_error", 0, "$dq1$", "{:+.3f}"),
+        ("dq_dpt", "dq_dpt_error", 1, "$dq2$", "{:+.3f}"),
     ]
     figure, axes = plt.subplots(2, 2, constrained_layout=True, figsize=(13, 9))
     width = 0.8 / len(series)
-    for axis, (key, plane, title, fmt) in zip(axes.flat, panels, strict=True):
+    for axis, (key, error_key, plane, title, fmt) in zip(axes.flat, panels, strict=True):
         heights: list[float] = []
         for index, (label, colour, getter) in enumerate(series):
             values = [getter(s, key, plane) for _, s in summaries]
-            heights += [v for v in values if not np.isnan(v)]
+            errors = [s["measured"][error_key][plane] for _, s in summaries]
+            heights += [
+                v + sign * e for v, e in zip(values, errors, strict=True)
+                if not np.isnan(v) for sign in (-1, 1)
+            ]
             offsets = np.arange(len(summaries)) + (index - (len(series) - 1) / 2) * width
             bars = axis.bar(offsets, values, width=width * 0.92, color=colour,
+                            yerr=errors, capsize=3, error_kw=dict(elinewidth=1.0),
                             label=label if axis is axes.flat[0] else None)
             _bar_labels(axis, bars, values, fmt)
         axis.set_xticks(range(len(summaries)))
@@ -1136,11 +1021,3 @@ def figure_benchmark_agreement(records: list[dict], output: Path) -> None:
     figure.suptitle("Do the two methods ask the same magnets for the same thing?",
                     fontsize=12)
     finalize_figure(figure, output / "benchmark_agreement.png")
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()

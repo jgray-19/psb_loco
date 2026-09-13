@@ -15,7 +15,11 @@ from loco_common.campaign import (
 )
 from loco_common.case_names import PLANES_PHRASE
 from loco_common.fit_mode import FitMode, fit_mode_by_slug
-from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_element_positions
+from loco_common.model import (
+    DEFAULT_SEQUENCE_FILE,
+    build_model,
+    model_element_positions,
+)
 from loco_report import figures, render, studies
 from loco_report.data import Results
 from loco_report.pages import PAGE_SPECS, PageSpec
@@ -49,9 +53,10 @@ def draw(results: Results, spec: PageSpec, output: Path) -> list[Path]:
     written: list[Path] = []
     for suffix in FAMILIES:
         written += figures.family_by_s(results, page, suffix, output)
-    for suffix in (".dk1l", ".tilt"):
+    for suffix in (".dk1l", ".tilt", ".dk0sl", ".dk1sl"):
         written += figures.family_significance(results, page, suffix, output)
     written += figures.optics(results, page, output)
+    written += figures.phase_advance(results, page, output)
     written += figures.case_tunes(results, page, output)
     written += figures.case_chromaticity(results, page, output)
     written += figures.residuals(results, page, output)
@@ -167,11 +172,10 @@ def main(argv: list[str] | None = None) -> int:
             method = DOCS / "method.md"
             method.write_text(studies.render_method_page(
                 [(label, DIRECTIONS[key]) for key, label in
-                 (("inverted", "Inverted tunes"), ("normal", "Normal tunes"))],
-                method))
+                 (("inverted", "Inverted tunes"), ("normal", "Normal tunes"))]))
             logger.info("wrote %s", method)
             index = DOCS / f"{args.direction}_tunes" / "reports" / "index.md"
-            index.write_text(render_index(campaigns, modes, specs, index, positions))
+            index.write_text(render_index(campaigns, modes, specs, positions))
             logger.info("wrote %s", index)
     except Exception:
         logger.exception("report generation failed")
@@ -180,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 
-def render_index(campaigns, modes, specs, destination: Path, positions) -> str:
+def render_index(campaigns, modes, specs, positions) -> str:
     """This tree's grid: which fits exist, per page, mode and campaign."""
     blocks: list[str] = []
     for mode in modes:
@@ -237,8 +241,7 @@ def write_studies(direction: str, campaigns, modes) -> None:
 
 
 def page_path(direction: str, mode: FitMode, spec: PageSpec) -> Path:
-    part = "" if mode.slug == "single" else f"{mode.slug}/"
-    return DOCS / f"{direction}_tunes" / "reports" / f"{part}{spec.slug}.md"
+    return DOCS / f"{direction}_tunes" / "reports" / page_path_name(mode, spec)
 
 
 if __name__ == "__main__":

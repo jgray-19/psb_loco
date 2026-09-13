@@ -20,7 +20,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from loco_common.campaign import add_campaign_argument, campaign_by_slug
 from loco_common.measured_response import (
-    RF_STEERING_OFFSETS,
     ScanPoint,
     cached_scan,
     global_reference_orbit,
@@ -120,7 +119,7 @@ def _frame(orbit) -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    add_campaign_argument(parser, default="inverted_second")
+    add_campaign_argument(parser, default="p23_p13_final")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -134,10 +133,8 @@ def main() -> None:
     points, orbit_by_path = cached_scan(campaign=campaign)
     reference = global_reference_orbit(points, orbit_by_path)
     output_stem.parent.mkdir(parents=True, exist_ok=True)
-    for rf_offset in RF_STEERING_OFFSETS:
+    for rf_offset in campaign.rf_offsets:
         rf_points = [point for point in points if point.rf_offset == rf_offset]
-        if not rf_points:
-            continue
         suffix = f"rf_{rf_offset:+g}".replace("+", "p").replace("-", "m")
         for plane in ("x", "y"):
             plot_plane(

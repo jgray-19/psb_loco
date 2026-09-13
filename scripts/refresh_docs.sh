@@ -17,6 +17,12 @@ mkdir -p .logs
 DIRECTION="${1:?usage: $0 <inverted|normal>}"
 TAG="$DIRECTION"
 
+# One interpreter for every stage. A bare `python` resolves to whatever venv the
+# shell has active, and sgd-magnet-tuner's .venv has no psb_md. Override with
+# PYTHON=... if needed.
+PYTHON="${PYTHON:-$(cd .. && pwd)/accpy/bin/python}"
+[ -x "$PYTHON" ] || { echo "no interpreter at $PYTHON" >&2; exit 1; }
+
 run() {
     name="$1"
     shift
@@ -37,7 +43,7 @@ wait_all() {
 
 # The campaigns this direction's pages tab between, from the registry rather
 # than a second hand-maintained list.
-CAMPAIGNS=$(python -c "
+CAMPAIGNS=$("$PYTHON" -c "
 from loco_common.campaign import INVERTED_PAGE_CAMPAIGNS, NORMAL_PAGE_CAMPAIGNS
 groups = {'inverted': INVERTED_PAGE_CAMPAIGNS, 'normal': NORMAL_PAGE_CAMPAIGNS}
 print(' '.join(c.slug for c in groups['$DIRECTION']))
@@ -57,62 +63,71 @@ for campaign in $CAMPAIGNS; do
 done
 rm -rf "docs/assets/figures/scenarios/${DIRECTION}" "results/cross_campaign/${DIRECTION}"
 
-# Stage 1: measured optics, one independent process per campaign -- each
-# writes only under results/optics/<campaign>/, so these can run at once.
+# Stage 1: measured optics, first, one independent process per campaign -- each
+# writes only under results/optics/<campaign>/, so these can run at once. Every
+# RF folder gets the full cleaned harpy/omc3 chain (--optics-folders all, about
+# an hour per folder), because stage 2b's phase constraint reads the optics at
+# every offset. This is also where each campaign's scan cache
+# (data/<campaign>_scan_*.parquet) is rebuilt, before any later stage reads it
+# concurrently.
 pids=""
 for campaign in $CAMPAIGNS; do
-    run "measured_optics_${campaign}" python scripts/measured_optics.py --campaign "$campaign" &
+    run "measured_optics_${campaign}" "$PYTHON" scripts/measured_optics.py --campaign "$campaign" --optics-folders all &
     pids="$pids $!"
 done
 wait_all measured_optics
 
-# Stage 2: the fit pipeline, one independent chain per (campaign, mode) --
-# each chain writes only under results/matrix_<campaign>[_multi]/, so the
-# chains can run at once; each stage inside a chain still waits on the last.
+# Stage 2: the fit pipeline, one chain per campaign, every campaign at once;
+# single for all campaigns first, then multi. The modes are sequential because
+# multi's absolute cases warm-start from single's fits: run side by side, the
+# multi chain found those fits missing and fitted them itself into the same
+# directories, and both chains wrote data/<campaign>_orbits_rfp0.parquet.
 # predict_loco writes scoreboard.shard1of1.csv and only --merge turns that into
 # the scoreboard.csv that loco_report's scores figure reads, so the merge is
 # part of the chain, not optional.
-pids=""
-for campaign in $CAMPAIGNS; do
-    for mode in single multi; do
+for mode in single multi; do
+    pids=""
+    for campaign in $CAMPAIGNS; do
         (
-            run "run_campaign_fits_${campaign}_${mode}" python scripts/run_campaign_fits.py --campaign "$campaign" --momentum-mode "$mode"
-            run "predict_loco_${campaign}_${mode}"      python scripts/predict_loco.py --campaign "$campaign" --momentum-mode "$mode"
-            run "predict_merge_${campaign}_${mode}"     python scripts/predict_loco.py --campaign "$campaign" --momentum-mode "$mode" --merge
-            run "case_optics_${campaign}_${mode}"       python scripts/case_optics.py --campaign "$campaign" --momentum-mode "$mode"
+            run "run_campaign_fits_${campaign}_${mode}" "$PYTHON" scripts/run_campaign_fits.py --campaign "$campaign" --momentum-mode "$mode"
+            run "predict_loco_${campaign}_${mode}"      "$PYTHON" scripts/predict_loco.py --campaign "$campaign" --momentum-mode "$mode"
+            run "predict_merge_${campaign}_${mode}"     "$PYTHON" scripts/predict_loco.py --campaign "$campaign" --momentum-mode "$mode" --merge
+            run "case_optics_${campaign}_${mode}"       "$PYTHON" scripts/case_optics.py --campaign "$campaign" --momentum-mode "$mode"
         ) &
         pids="$pids $!"
     done
+    wait_all "run_campaign_fits/predict_loco/case_optics (${mode})"
 done
-wait_all run_campaign_fits/predict_loco/case_optics
 
-# Stage 3: Method 1, one process per campaign. Its fit lives in
-# results/matrix_<campaign>/method1, which the clear block above removed, so
-# without this the Method 1 page renders as "no fit on this lattice". Single
-# momentum only -- Method 1 fits the nominal-RF response matrix.
+# Stage 2b: the phase-advance-constrained multi-momentum case matrix
+# (docs/studies/phase-advance-constraint.md, implementation in
+# phase_advance_constraint/): every multi-momentum case, with one extra
+# plain-twiss, no-corrector series per RF offset whose residual is only
+# BPM-to-BPM phase advance, added alongside the existing orbit-only
+# corrector-trim settings. The phase is stage 1's cleaned optics under
+# results/optics/<campaign>/<folder>/free; the closed orbits are the LOCO scan.
+# Only the two baseline campaigns run here. Writes to
+# results/matrix_<campaign>_multi_phase/, alongside (not over) the non-phase
+# multi results.
 pids=""
 for campaign in $CAMPAIGNS; do
-    run "run_method1_${campaign}" python -m method1_madng_da.run_method1 \
-        --campaign "$campaign" \
-        --sequence-file models/model_qx0.165000_qy0.227500/psb3_saved.seq &
-    pids="$pids $!"
+    case "$campaign" in
+        p17_p23_final|p23_p13_final)
+            rm -rf "results/matrix_${campaign}_multi_phase"
+            run "run_campaign_fits_${campaign}_multi_phase" "$PYTHON" scripts/run_campaign_fits.py \
+                --campaign "$campaign" --momentum-mode multi --phase-constraint &
+            pids="$pids $!"
+            ;;
+    esac
 done
-wait_all run_method1
+[ -n "$pids" ] && wait_all run_campaign_fits_multi_phase
 
-# Stage 4: the method-against-method benchmark. It runs both methods itself
-# into results/benchmark/<campaign>/ and writes the record the benchmark page
-# and its two figures are drawn from. Serial: the point of the record is a
-# wall-clock and CPU comparison, which parallel campaigns would corrupt.
-for campaign in $CAMPAIGNS; do
-    run "benchmark_${campaign}" python -m scripts.benchmark_methods --campaign "$campaign"
-done
-
-# Stage 5: combine this direction's cross-campaign comparison once (analysis),
+# Stage 3: combine this direction's cross-campaign comparison once (analysis),
 # then draw it once (plotting). --direction keeps the run off the other
 # direction's results, which this script has not refreshed.
-run analyse_cross_campaign python scripts/analyse_cross_campaign.py --direction "$DIRECTION"
-run plot_cross_campaign python scripts/plot_cross_campaign.py --direction "$DIRECTION"
+run analyse_cross_campaign "$PYTHON" scripts/analyse_cross_campaign.py --direction "$DIRECTION"
+run plot_cross_campaign "$PYTHON" scripts/plot_cross_campaign.py --direction "$DIRECTION"
 
-# Stage 6: every figure and every page for this direction, both momentum
+# Stage 4: every figure and every page for this direction, both momentum
 # modes, in one call.
-run report python -m loco_report --direction "$DIRECTION"
+run report "$PYTHON" -m loco_report --direction "$DIRECTION"

@@ -19,46 +19,34 @@ class FitMode:
 
     slug: str
     label: str
-    rf_offsets: tuple[float, ...]
     batch_momenta: bool
 
     def results_root(self, campaign: Campaign) -> Path:
         if self.slug == "single":
             return campaign.results_root
-        suffix = "multi" if self.slug == "multi" else self.slug
-        name = f"matrix_{suffix}" if campaign.slug == "normal" else f"matrix_{campaign.slug}_{suffix}"
-        return REPO_ROOT / "results" / name
+        return REPO_ROOT / "results" / f"matrix_{campaign.slug}_{self.slug}"
 
     def figures_dir(self, campaign: Campaign, root: Path) -> Path:
         base = campaign.figures_dir(root)
         return base if self.slug == "single" else base / self.slug
 
     def rf_offsets_for(self, campaign: Campaign) -> tuple[float, ...]:
-        """This mode's RF offsets, narrowed to what ``campaign``'s scan has.
-
-        ``self.rf_offsets`` is the layout for a campaign with the full
-        five-point scan. A campaign with a coarser scan (e.g. -2/0/+2 mm
-        only) has no untrimmed acquisition at the missing offsets, so
-        MULTI and THREE both fall back to whatever ``available_rf_offsets``
-        reports instead of the fixed list.
-        """
+        """Nominal RF only, the innermost offset either side of it, or every offset."""
+        offsets = campaign.rf_offsets
         if self.slug == "single":
-            return self.rf_offsets
-        from loco_common.measured_response import available_rf_offsets
-
-        available = available_rf_offsets(campaign)
+            return (0.0,)
         if self.slug == "multi":
-            return tuple(available)
-        negative = max((o for o in available if o < 0), default=None)
-        positive = min((o for o in available if o > 0), default=None)
-        return tuple(sorted(o for o in (negative, 0.0, positive) if o is not None))
+            return offsets
+        return (
+            max(offset for offset in offsets if offset < 0),
+            0.0,
+            min(offset for offset in offsets if offset > 0),
+        )
 
 
-SINGLE = FitMode("single", "Single momentum", (0.0,), batch_momenta=False)
-THREE = FitMode("three", "Three momentum", (-1.0, 0.0, 1.0), batch_momenta=True)
-MULTI = FitMode(
-    "multi", "Multi momentum", (-2.0, -1.0, 0.0, 1.0, 2.0), batch_momenta=True
-)
+SINGLE = FitMode("single", "Single momentum", batch_momenta=False)
+THREE = FitMode("three", "Three momentum", batch_momenta=True)
+MULTI = FitMode("multi", "Multi momentum", batch_momenta=True)
 FIT_MODES = {mode.slug: mode for mode in (SINGLE, THREE, MULTI)}
 
 
@@ -74,7 +62,7 @@ def add_fit_mode_argument(parser: argparse.ArgumentParser) -> None:
         "--momentum-mode",
         choices=sorted(FIT_MODES),
         default="single",
-        help="Fit/result scope: nominal only, the central three, or all five momenta.",
+        help="Fit/result scope: nominal only, the innermost RF offset either side, or every one.",
     )
 
 

@@ -37,6 +37,7 @@ import numpy as np
 import pandas as pd
 
 from loco_common.campaign import add_campaign_argument, campaign_by_slug
+from loco_common.case_names import parse_case
 from loco_common.fit_mode import (
     add_fit_mode_argument,
     fit_mode_by_slug,
@@ -53,8 +54,8 @@ TWISS_COLUMNS = ("s", "beta11", "beta22", "mu1", "mu2", "dx", "dy", "x", "y",
                  "f1001", "f1010")
 
 
-def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None = None
-           ) -> pd.DataFrame:
+def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None = None,
+           *, high_order: bool = False) -> pd.DataFrame:
     """One lattice's twiss at every element, with the fitted knobs applied.
 
     Every knob family is created and defaulted to zero before the fit's own
@@ -65,6 +66,12 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
     ``match_to`` moves ``kbrqf``/``kbrqd`` until the lattice sits on that tune,
     the way :mod:`scripts.measured_optics` builds its matched model. It is for
     the reference lattice only -- no fit is ever matched.
+
+    ``high_order`` selects the order-8, 2-slice integrator instead of the
+    production ``method=6`` convention, for the skew-multipole (k0s/k1s) case
+    only. Note this means that case's diff against the start/matched
+    reference (always twissed at method=6) carries an integrator-order
+    difference alongside the physics one.
     """
     interface = open_full_interface(model)
     try:
@@ -76,7 +83,10 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
             interface.match_tunes(*match_to)
         # coupling=True adds the f1001/f1010 columns; a fit given tilts has to
         # be readable against the measured RDTs, not only against beta.
-        table = interface.run_twiss(observe=0, method=6, coupling=True)
+        if high_order:
+            table = interface.run_twiss(observe=0, method=8, nslice=2, coupling=True)
+        else:
+            table = interface.run_twiss(observe=0, method=6, coupling=True)
     finally:
         interface.close()
     present = [c for c in TWISS_COLUMNS if c in table.columns]
@@ -98,7 +108,8 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
     return frame
 
 
-def case_optics(model, knobs_path: Path | None, start: pd.DataFrame) -> pd.DataFrame:
+def case_optics(model, knobs_path: Path | None, start: pd.DataFrame,
+                 *, high_order: bool = False) -> pd.DataFrame:
     """One case's optics, differenced against *start*.
 
     Both twisses come off the same element list, so the difference is taken
@@ -110,7 +121,7 @@ def case_optics(model, knobs_path: Path | None, start: pd.DataFrame) -> pd.DataF
         None if knobs_path is None
         else pd.read_csv(knobs_path).set_index("knob")["value"]
     )
-    frame = _twiss(model, fitted)
+    frame = _twiss(model, fitted, high_order=high_order)
     common = frame.index.intersection(start.index)
     frame, reference = frame.loc[common], start.loc[common]
 
@@ -198,7 +209,10 @@ def main() -> None:
         if option != "method1" and not result_is_valid(args.matrix / option):
             logger.warning("%s: no accepted optimisation step, skipping", option)
             continue
-        optics = case_optics(model, knobs, start)
+        # The skew-multipole families (k0s/k1s) are the only cases scored at the
+        # order-8, 2-slice integrator; every other option keeps method=6.
+        high_order = bool({"k0s", "k1s"} & set(parse_case(option).family_list))
+        optics = case_optics(model, knobs, start, high_order=high_order)
         optics.to_parquet(args.output / f"{option}.optics.parquet")
         logger.info(
             "%-30s beta-beating rms %5.2f%% / %5.2f%%   dQx %+.4f  dQy %+.4f",

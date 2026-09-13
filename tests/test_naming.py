@@ -8,11 +8,9 @@ import pytest
 from loco_common.naming import (
     LSA_K_TO_RAD,
     element_to_knob,
-    knob_to_element,
     lsa_to_element,
     lsa_to_knob,
     plane_of,
-    quad_knob_name,
 )
 
 SCANNED = [
@@ -28,17 +26,11 @@ def test_lsa_element_knob_round_trip(parameter):
     element = lsa_to_element(parameter)
     knob = lsa_to_knob(parameter)
     assert knob == element_to_knob(element)
-    assert knob_to_element(knob) == element
 
 
 @pytest.mark.parametrize("parameter", SCANNED)
 def test_plane_follows_the_corrector_family(parameter):
     assert plane_of(parameter) == ("y" if "DVT" in parameter.upper() else "x")
-
-
-def test_quad_knob_name_matches_the_optimiser_convention():
-    """``k1`` knobs route through ``dknl``, so the knob is named for ``dk1l``."""
-    assert quad_knob_name("BR.QFO11") == "br.qfo11.dk1l"
 
 
 @pytest.mark.slow
@@ -110,10 +102,10 @@ def test_horizontal_lsa_k_is_inverted_in_the_measurement(sequence_file):
     """
     import numpy as np
 
-    from loco_common.measured_response import CACHE_PATH
+    from loco_common.campaign import P23_P13_FINAL
     from loco_common.naming import lsa_k_to_rad
 
-    cache = CACHE_PATH / "response_xy_rfp0.parquet"
+    cache = P23_P13_FINAL.cache_file("response_xy_rfp0.parquet")
     if not cache.exists():
         pytest.skip("needs the cached measured response (build it from the mount)")
 

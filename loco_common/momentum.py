@@ -18,22 +18,13 @@ import logging
 
 import numpy as np
 import pandas as pd
-from tmom_recon import DynamicFrame
-
-# Private: tmom_recon's public estimate_closed_orbit_pt() takes a ModelDetails
-# and rebuilds the twiss itself; this is the lower-level primitive that takes
-# an already-built twiss, matching the old estimate_pt_from_model() contract.
-from tmom_recon.physics.pt_calculation import _estimate_closed_orbit_pt
+from tmom_recon import estimate_pt_from_orbit
 
 logger = logging.getLogger(__name__)
 
 
-def chroma_pt_by_rf_offset(
-    chroma_file,
-    rf_offsets: tuple[float, ...] | list[float],
-    accelerator,
-) -> dict[float, float]:
-    """Return RF-derived ``pt`` for the LOCO plateaus, relative to 0 mm.
+def _chroma_bands(chroma_file, rf_offsets) -> tuple[tuple[float, ...], dict]:
+    """The chroma scan's momentum band of each LOCO plateau, 0 mm required.
 
     XImeter does not write radial-orbit labels. ``psb_md`` recovers them by
     grouping repeated rows into momentum bands and numbering the bands outwards
@@ -48,11 +39,20 @@ def chroma_pt_by_rf_offset(
         raise ValueError("The 0 mm orbit is required as the momentum reference")
     if any(not offset.is_integer() for offset in offsets):
         raise ValueError("The chroma calibration is defined on integer-mm plateaus")
-
     table = load_orbit_tune_table(chroma_file, dpp_per_index=DPP_PER_MM)
     missing = sorted(int(offset) for offset in offsets if int(offset) not in table)
     if missing:
         raise KeyError(f"No chroma Dp/p bands for orbit offsets {missing} mm")
+    return offsets, table
+
+
+def chroma_pt_by_rf_offset(
+    chroma_file,
+    rf_offsets: tuple[float, ...] | list[float],
+    accelerator,
+) -> dict[float, float]:
+    """Return RF-derived ``pt`` for the LOCO plateaus, relative to 0 mm."""
+    offsets, table = _chroma_bands(chroma_file, rf_offsets)
 
     # Dp/p in the chroma export is an absolute machine readback, whereas this
     # fit uses the 0 mm orbit as its reference particle. Rebase momentum first:
@@ -82,6 +82,49 @@ def chroma_pt_by_rf_offset(
     return momenta
 
 
+def chroma_pt_error_by_rf_offset(
+    chroma_file,
+    rf_offsets: tuple[float, ...] | list[float],
+    accelerator,
+) -> dict[float, float]:
+    """One-sigma uncertainty on :func:`chroma_pt_by_rf_offset`'s ``pt``.
+
+    ``psb_md``'s per-band ``dpp_std`` is propagated through the same rebasing
+    arithmetic (both the numerator and the shared reference contribute, since
+    every band is rebased against the same 0 mm plateau) and then through
+    ``dp2pt``'s local slope, taken by central finite difference since
+    ``dp2pt`` is not assumed linear.
+    """
+    offsets, table = _chroma_bands(chroma_file, rf_offsets)
+    reference_dpp = float(table[0].dpp)
+    reference_dpp_std = float(table[0].dpp_std)
+
+    errors = {}
+    for offset in offsets:
+        if offset == 0.0:
+            errors[0.0] = 0.0
+            continue
+        dpp = float(table[int(offset)].dpp)
+        dpp_std = float(table[int(offset)].dpp_std)
+        relative_dpp = (1.0 + dpp) / (1.0 + reference_dpp) - 1.0
+
+        d_relative_d_dpp = 1.0 / (1.0 + reference_dpp)
+        d_relative_d_reference = -(1.0 + dpp) / (1.0 + reference_dpp) ** 2
+        relative_dpp_sigma = np.hypot(
+            d_relative_d_dpp * dpp_std, d_relative_d_reference * reference_dpp_std
+        )
+
+        step = max(abs(relative_dpp), 1.0) * 1e-6
+        d_pt_d_relative = (
+            accelerator.dp2pt(relative_dpp + step) - accelerator.dp2pt(relative_dpp - step)
+        ) / (2.0 * step)
+        errors[offset] = float(abs(d_pt_d_relative) * relative_dpp_sigma)
+
+    for offset in sorted(errors):
+        logger.info("RF offset %+g mm -> chroma pt one-sigma %.4e", offset, errors[offset])
+    return errors
+
+
 def compare_momentum_calibrations(
     reference: dict[float, float], alternative: dict[float, float]
 ) -> dict[float, float]:
@@ -104,28 +147,31 @@ def compare_momentum_calibrations(
     }
 
 
-def frame_from_orbit(orbit: pd.DataFrame, twiss: pd.DataFrame) -> DynamicFrame:
-    """Build the reconstruction frame from the *measured* nominal-RF closed orbit.
+def frame_from_orbit(orbit: pd.DataFrame, twiss: pd.DataFrame) -> pd.DataFrame:
+    """Build the orbit-zero reference from the *measured* nominal-RF closed orbit.
 
     The origin has to be a measured orbit. A dipole error is exactly degenerate
     with the dispersive orbit at a single momentum, so a modelled origin biases
     ``pt`` by tens of percent while looking perfectly reasonable; the
     RF-offset-0 acquisition is the only admissible reference here.
 
-    *twiss* only has to cover the same BPMs as *orbit*; ``DynamicFrame`` requires
-    a reference twiss at construction but ``to_frame`` (what's used below) only
-    ever subtracts the orbit origin, never this twiss's angles.
+    *twiss* is accepted for a stable call signature across callers but is
+    unused: tmom_recon's ``closed_orbit_at_zero`` is a plain x/y DataFrame,
+    not a frame object carrying its own reference twiss.
     """
     orbit_zero = pd.DataFrame({"x": orbit["X"].astype(float)}, index=orbit.index)
     orbit_zero["y"] = orbit["Y"].astype(float) if "Y" in orbit else 0.0
     orbit_zero.index = orbit_zero.index.astype(str)
-    return DynamicFrame(orbit_zero=orbit_zero, reference_twiss=twiss.loc[orbit.index])
+    # normalize_closed_orbit requires a "name" column, or an index named "name"
+    # (case-insensitive); pin the latter rather than depend on orbit's own index name.
+    orbit_zero.index.name = "name"
+    return orbit_zero
 
 
 def estimate_pt(
     orbit: pd.DataFrame,
     twiss: pd.DataFrame,
-    frame: DynamicFrame,
+    frame: pd.DataFrame,
 ) -> float:
     """Estimate this orbit's MAD-NG ``pt`` offset from *frame*'s origin.
 
@@ -138,20 +184,10 @@ def estimate_pt(
     # its case ("NAME" vs "name"), which then propagates into ``twiss.loc[common]``
     # and trips tmom_recon's index-name check; pin it explicitly instead.
     common = orbit.index.intersection(twiss.index).rename("name")
-    # ``estimate_closed_orbit`` requires both planes even though only the
-    # horizontal one carries the dispersive signal.
-    data = pd.DataFrame(
-        {
-            "name": common,
-            "x": orbit.loc[common, "X"].to_numpy(dtype=float),
-            "y": (
-                orbit.loc[common, "Y"].to_numpy(dtype=float)
-                if "Y" in orbit
-                else np.zeros(len(common))
-            ),
-        }
+    measured = pd.DataFrame({"x": orbit.loc[common, "X"].to_numpy(dtype=float)}, index=common)
+    return float(
+        estimate_pt_from_orbit(measured, twiss.loc[common], closed_orbit_at_zero=frame, info=False)
     )
-    return float(_estimate_closed_orbit_pt(data, twiss.loc[common], frame=frame, info=False))
 
 
 def estimate_pt_by_rf_offset(

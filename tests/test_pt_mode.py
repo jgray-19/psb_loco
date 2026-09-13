@@ -153,10 +153,8 @@ def _distance_to_truth(knobs: dict[str, float], truth_errors, psb_line) -> float
     ``k1`` error times its length. Quadrupoles with no installed error count too:
     inventing gradient where there was none is exactly the failure being measured.
     """
-    from loco_common.naming import quad_knob_name
-
     truth = {
-        quad_knob_name(name): error * float(psb_line[name].length)
+        f"{name.lower()}.dk1l": error * float(psb_line[name].length)
         for name, error in truth_errors.items()
     }
     return float(np.linalg.norm([value - truth.get(knob, 0.0) for knob, value in knobs.items()]))

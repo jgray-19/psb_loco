@@ -12,7 +12,7 @@ from loco_common.fit_mode import fit_mode_by_slug
 from loco_report import data
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CAMPAIGN = "inverted_second"
+CAMPAIGN = "p23_p13_final"
 OPTION = "none__k1__bpm-family"
 
 
@@ -198,5 +198,5 @@ def test_family_figures_chunk_past_the_panel_cap():
         page.cases[i:i + MAX_PANELS]
         for i in range(0, len(page.cases), MAX_PANELS)
     ]
-    assert len(chunks) == 2
+    assert len(chunks) == -(-len(page.cases) // MAX_PANELS)
     assert all(len(chunk) <= MAX_PANELS for chunk in chunks)

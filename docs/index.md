@@ -1,8 +1,8 @@
 # PSB ring-3 LOCO
 
 Quadrupole `k1` recovery from measured orbit response on the CERN PS Booster,
-ring 3. Two working points, four machine configurations each, two fitting
-methods, two momentum modes.
+ring 3. Two working points, four machine configurations each, and two momentum
+modes.
 
 <div class="grid cards" markdown>
 
@@ -14,8 +14,8 @@ methods, two momentum modes.
 -   __[Inverted tunes](inverted_tunes/reports/index.md)__
 
     Every fit at the inverted working point: delta, absolute and per-magnet
-    parametrisations, single and multi momentum, Method 1, the measured optics
-    and the error-injection scenarios.
+    parametrisations, single and multi momentum, the measured optics and the
+    error-injection scenarios.
 
 -   __[Normal tunes](normal_tunes/reports/index.md)__
 

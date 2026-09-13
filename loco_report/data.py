@@ -72,6 +72,10 @@ class Results:
         return measured_optics(self.campaign, self.positions)
 
     @cached_property
+    def measured_phase(self) -> pd.DataFrame:
+        return measured_phase(self.campaign, self.positions)
+
+    @cached_property
     def optics_summary(self) -> dict:
         return read_json(self.campaign.optics_dir / "summary.json")
 
@@ -116,7 +120,7 @@ def knob_statistics(frame: pd.DataFrame, suffix: str) -> dict[str, float] | None
         return None
     sigma = family["uncertainty"].abs()
     ratio = (family["value"].abs() / sigma).replace([np.inf, -np.inf], np.nan).dropna()
-    # Method 1 reports no covariance, so significance is empty rather than infinite.
+    # Method 1 reports no covariance (NaN sigma), so its significance is empty.
     if ratio.empty:
         ratio = pd.Series([float("nan")])
     return {
@@ -124,7 +128,7 @@ def knob_statistics(frame: pd.DataFrame, suffix: str) -> dict[str, float] | None
         "magnets": float(len(family)),
         "rms": float((family["value"] ** 2).mean() ** 0.5),
         "max": float(family["value"].abs().max()),
-        "sigma": float("nan") if (sigma == 0).all() else float(sigma.median()),
+        "sigma": float(sigma.median()),
         "median_significance": float(ratio.median()),
         "determined": float("nan") if ratio.isna().all() else float((ratio > 1.0).sum()),
     }
@@ -132,20 +136,11 @@ def knob_statistics(frame: pd.DataFrame, suffix: str) -> dict[str, float] | None
 
 def scoreboard(predictions: Path) -> pd.DataFrame:
     """One row per option, indexed by option, with the ``*_rel`` residuals."""
-    frame = read_parquet_or_csv(predictions / "scoreboard.csv")
-    return frame.set_index("option") if "option" in frame.columns else frame
-
-
-def read_parquet_or_csv(path: Path) -> pd.DataFrame:
+    path = predictions / "scoreboard.csv"
     if not path.exists():
         logger.warning("missing %s", path)
         return pd.DataFrame()
-    return pd.read_csv(path)
-
-
-def residuals(predictions: Path, option: str, target: str) -> pd.DataFrame:
-    """One option's per-BPM predictions for one scored measurement kind."""
-    return read_parquet(predictions / f"{option}.{target}.parquet")
+    return pd.read_csv(path).set_index("option")
 
 
 def measured_optics(campaign: Campaign, positions: dict[str, float]) -> pd.DataFrame:
@@ -158,39 +153,32 @@ def measured_optics(campaign: Campaign, positions: dict[str, float]) -> pd.DataF
     return frame.sort_values("s")
 
 
-def dispersion_uncertainty(predictions: Path) -> pd.Series:
-    """One-sigma on each BPM's measured dispersion, refitted from its orbits."""
-    empty = pd.MultiIndex.from_tuples([], names=["plane", "bpm"])
-    frame = read_parquet(predictions / "start-model.absolute.parquet")
+def measured_phase(campaign: Campaign, positions: dict[str, float]) -> pd.DataFrame:
+    """The measured BPM-to-BPM phase-advance table, at the downstream BPM's ``s``."""
+    frame = read_parquet(campaign.optics_dir / "measured_phase.parquet")
     if frame.empty:
-        return pd.Series(dtype=float, index=empty)
-    frame = frame.dropna(subset=["pt", "measured"])
-    bars = {}
-    for key, group in frame.groupby(["plane", "bpm"], sort=False):
-        pt, orbit = group["pt"].to_numpy(), group["measured"].to_numpy()
-        spread = float(np.sum((pt - pt.mean()) ** 2))
-        # Two momentum points leave the line no degrees of freedom: no bar.
-        if len(group) < 3 or spread == 0.0:
-            bars[key] = np.nan
-            continue
-        slope, intercept = np.polyfit(pt, orbit, 1)
-        residual = orbit - (slope * pt + intercept)
-        variance = float(np.sum(residual**2)) / (len(group) - 2)
-        bars[key] = float(np.sqrt(variance / spread))
-    return pd.Series(bars, name="uncertainty").rename_axis(["plane", "bpm"])
+        return frame
+    by_name = {name.upper(): s for name, s in positions.items()}
+    frame = frame.assign(s=[by_name.get(str(n).upper(), np.nan) for n in frame.index])
+    return frame.sort_values("s")
 
 
 def measured_dispersion(predictions: Path, positions: dict[str, float]) -> pd.DataFrame:
-    """Measured ``d orbit / dpt`` at each BPM, with model ``s`` positions."""
+    """Measured ``d orbit / dpt`` at each BPM, with model ``s`` positions.
+
+    The uncertainty comes straight from ``measured_error`` in the parquet --
+    written by ``scripts/predict_loco.py`` from
+    ``tmom_recon.physics.closed_orbit.measure_dispersion``, propagating the
+    repeat-acquisition orbit scatter and the chroma pt uncertainty -- rather
+    than refitted here from the handful of RF-steering points, which leaves
+    too few degrees of freedom to be a meaningful residual estimate.
+    """
     columns = ["plane", "bpm", "measured", "uncertainty", "s"]
     frame = read_parquet(predictions / "start-model.dispersion.parquet")
     if frame.empty:
         return pd.DataFrame(columns=columns)
     by_name = {name.upper(): s for name, s in positions.items()}
-    frame = frame.copy()
-    frame["uncertainty"] = dispersion_uncertainty(predictions).reindex(
-        pd.MultiIndex.from_frame(frame[["plane", "bpm"]])
-    ).to_numpy()
+    frame = frame.rename(columns={"measured_error": "uncertainty"}).copy()
     frame["s"] = frame["bpm"].astype(str).str.upper().map(by_name)
     return frame.loc[~frame["s"].isna(), columns]
 

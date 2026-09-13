@@ -42,9 +42,9 @@ source ../accpy/bin/activate           # the interpreter with pymadng + the sibl
 # Results now live under results/matrix_<campaign>[_multi]/<case-slug>/; the
 # --output paths below are the layout this section was written against and no
 # longer exist. scripts/refresh_docs.sh <direction> runs the whole pipeline.
-python -m method1_madng_da.run_method1 --campaign inverted_second \
+python -m method1_madng_da.run_method1 --campaign p23_p13_final \
     --sequence-file "$SEQ"
-python -m method2_delta_orbit.run_method2 --campaign inverted_second \
+python -m method2_delta_orbit.run_method2 --campaign p23_p13_final \
     --sequence-file "$SEQ"
 python compare_fits.py                 # every results/*/knobs.csv against the measurement
 python compare_fits.py --bounds 0.05 0.10   # count knobs past other thresholds

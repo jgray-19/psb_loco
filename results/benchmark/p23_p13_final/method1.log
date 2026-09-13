@@ -1,0 +1,965 @@
+INFO pymadng_utils.io.utils: Reading knobs from /afs/cern.ch/work/j/jmgray/private/psb_md/data/xno4l1_off_p23_p13_strengths.txt
+INFO psb_md.acd_config: Read 2 p23-p13-final strengths from xno4l1_off_p23_p13_strengths.txt
+INFO psb_md.modelling: Reusing existing model at /afs/cern.ch/work/j/jmgray/private/psb_md/models/reference/model_qx0.234013_qy0.127497_driven_qx0.230500_qy0.131000_state_tunematch
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Skipping corrector strengths (not provided)
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          6.64372e-02 >
+ 2 q2                       equality     .          1         -1.11638e-01 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.39524e-01  0.00000e+00   .            .         
+ 2 kBRQD                   -7.37759e-01  0.00000e+00   .            .         
+
+ncall=1 [0.0s], fval=9.18611e-02, fstp=-inf, ccnt=2.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1         -3.21640e-04 >
+ 2 q2                       equality     .          1         -3.90793e-04 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34040e-01 -5.48355e-03   .            .         
+ 2 kBRQD                   -7.41117e-01 -3.35873e-03   .            .         
+
+ncall=4 [0.1s], fval=3.57891e-04, fstp=-9.15032e-02, ccnt=2.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1         -1.90638e-09
+ 2 q2                       equality     .          1          2.95909e-08 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01  6.03210e-05   .            .         
+ 2 kBRQD                   -7.41172e-01 -5.45183e-05   .            .         
+
+ncall=7 [0.2s], fval=2.09673e-08, fstp=-3.57870e-04, ccnt=1.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          4.44089e-15
+ 2 q2                       equality     .          1         -2.66454e-15
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01 -8.19458e-10   .            .         
+ 2 kBRQD                   -7.41172e-01  2.11945e-09   .            .         
+
+ncall=10 [0.3s], fval=3.66205e-15, fstp=-2.09673e-08, ccnt=0.
+
+
+ Constraints                Type        Kind        Weight     Penalty Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          4.44089e-15
+ 2 q2                       equality     .          1          2.66454e-15
+
+ Variables                  Final Value  Init. Value  Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01  7.39524e-01   .            .         
+ 2 kBRQD                   -7.41172e-01 -7.37759e-01   .            .         
+
+ncall=10 [0.3s], fbst[10]=3.66205e-15, fstp=-2.09673e-08, status=FMIN.
+
+INFO psb_md.modelling: Tune match for p23-p13-final orbit 0: (0.300450, 0.015859) -> (0.234013, 0.127497), target (0.234013, 0.127497)
+INFO psb_md.modelling: Matched 2 strengths for p23-p13-final orbit 0 (dpp=0.000000e+00, ke=1.600000e-01)
+INFO loco_common.model: Quadrupole circuits from the inverted_second machine, not a tune match: kbrqd -0.7377586523 (matched -0.7411718941, +0.461 %), kbrqf +0.7395237891 (matched +0.7341005632, +0.739 %)
+INFO loco_common.model: Whatever this model twisses to is not matched to the machine's measured tune, by design (scripts/measured_optics.py reads that tune live from /afs/cern.ch/work/j/jmgray/private/psb_md/chroma/p23_p13_final_2026_08_28.txt)
+INFO loco_common.model: Using the scan's own corrector settings; largest disagreement with psb_md's campaign file is 0.000e+00 rad on kbr3dvt9l1
+INFO loco_common.model: Ring-3 model from models/model_qx0.165000_qy0.227500/psb3_saved.seq: 6 tune knobs, 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO __main__: Freeing 32 cell-grouped quadrupole dk1l knobs
+INFO __main__: Response grid: 32 BPM channels x 12 correctors, 384 usable points
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 R_BR3.BPM1L3.x_BR3.DHZ11L4 equality     .          245.88     1.10865e+00 >
+ 2 R_BR3.BPM1L3.x_BR3.DHZ12L4 equality     .          241.23     2.70192e-01 >
+ 3 R_BR3.BPM1L3.x_BR3.DHZ13L4 equality     .          242.61     3.88170e-01 >
+ 4 R_BR3.BPM1L3.x_BR3.DHZ14L1 equality     .          248        1.97391e-01 >
+ 5 R_BR3.BPM1L3.x_BR3.DHZ8L1 equality     .          242.96     2.44550e-01 >
+ 6 R_BR3.BPM1L3.x_BR3.DHZ9L1 equality     .          244.48    -2.58495e-01 >
+ 7 R_BR3.BPM1L3.x_BR3.DVT12L4 equality     .          248.2      2.03697e-01 >
+ 8 R_BR3.BPM1L3.x_BR3.DVT13L4 equality     .          249.91     1.75142e-01 >
+ 9 R_BR3.BPM1L3.x_BR3.DVT2L4 equality     .          248.57    -6.09244e-02 >
+10 R_BR3.BPM1L3.x_BR3.DVT6L4 equality     .          247.25    -2.34100e-01 >
+11 R_BR3.BPM1L3.x_BR3.DVT8L1 equality     .          246.57    -2.29162e-01 >
+12 R_BR3.BPM1L3.x_BR3.DVT9L1 equality     .          246.35     6.19553e-02 >
+13 R_BR3.BPM2L3.x_BR3.DHZ11L4 equality     .          150.26     4.48367e-01 >
+14 R_BR3.BPM2L3.x_BR3.DHZ12L4 equality     .          148.54     9.14668e-01 >
+15 R_BR3.BPM2L3.x_BR3.DHZ13L4 equality     .          147.89     1.06623e+00 >
+16 R_BR3.BPM2L3.x_BR3.DHZ14L1 equality     .          152.26     9.80743e-01 >
+17 R_BR3.BPM2L3.x_BR3.DHZ8L1 equality     .          150.23     3.83156e-01 >
+18 R_BR3.BPM2L3.x_BR3.DHZ9L1 equality     .          149.26    -5.23927e-03 >
+19 R_BR3.BPM2L3.x_BR3.DVT12L4 equality     .          150.31    -6.93237e-02 >
+20 R_BR3.BPM2L3.x_BR3.DVT13L4 equality     .          150.81     5.53449e-02 >
+21 R_BR3.BPM2L3.x_BR3.DVT2L4 equality     .          150.41     2.46363e-01 >
+22 R_BR3.BPM2L3.x_BR3.DVT6L4 equality     .          151.14     8.15740e-02 >
+23 R_BR3.BPM2L3.x_BR3.DVT8L1 equality     .          147.3     -2.26019e-01 >
+24 R_BR3.BPM2L3.x_BR3.DVT9L1 equality     .          151.51    -1.32393e-01 >
+25 R_BR3.BPM3L3.x_BR3.DHZ11L4 equality     .          296.28     2.41870e-01 >
+26 R_BR3.BPM3L3.x_BR3.DHZ12L4 equality     .          285.67     8.77123e-02 >
+27 R_BR3.BPM3L3.x_BR3.DHZ13L4 equality     .          288.31     5.93962e-01 >
+28 R_BR3.BPM3L3.x_BR3.DHZ14L1 equality     .          293.53     3.32492e-01 >
+29 R_BR3.BPM3L3.x_BR3.DHZ8L1 equality     .          295.31     5.60502e-01 >
+30 R_BR3.BPM3L3.x_BR3.DHZ9L1 equality     .          288.23    -1.80968e-01 >
+31 R_BR3.BPM3L3.x_BR3.DVT12L4 equality     .          293.15     6.38315e-03 >
+32 R_BR3.BPM3L3.x_BR3.DVT13L4 equality     .          288.26    -2.42804e-01 >
+33 R_BR3.BPM3L3.x_BR3.DVT2L4 equality     .          292.54     1.88021e-01 >
+34 R_BR3.BPM3L3.x_BR3.DVT6L4 equality     .          292.02     6.04292e-02 >
+35 R_BR3.BPM3L3.x_BR3.DVT8L1 equality     .          282.61     8.59767e-02 >
+36 R_BR3.BPM3L3.x_BR3.DVT9L1 equality     .          286.24    -1.65999e-01 >
+37 R_BR3.BPM4L3.x_BR3.DHZ11L4 equality     .          190.54     1.38339e-01 >
+38 R_BR3.BPM4L3.x_BR3.DHZ12L4 equality     .          192.01    -3.49990e-01 >
+39 R_BR3.BPM4L3.x_BR3.DHZ13L4 equality     .          188.81     8.69648e-01 >
+40 R_BR3.BPM4L3.x_BR3.DHZ14L1 equality     .          192.03     3.55590e-01 >
+41 R_BR3.BPM4L3.x_BR3.DHZ8L1 equality     .          190.31    -3.83253e-01 >
+42 R_BR3.BPM4L3.x_BR3.DHZ9L1 equality     .          191.26    -3.34620e-01 >
+43 R_BR3.BPM4L3.x_BR3.DVT12L4 equality     .          188.5      8.21887e-02 >
+44 R_BR3.BPM4L3.x_BR3.DVT13L4 equality     .          192.02    -1.80009e-01 >
+45 R_BR3.BPM4L3.x_BR3.DVT2L4 equality     .          191.64    -3.61630e-02 >
+46 R_BR3.BPM4L3.x_BR3.DVT6L4 equality     .          189.79    -1.28027e-01 >
+47 R_BR3.BPM4L3.x_BR3.DVT8L1 equality     .          186.43    -3.73679e-02 >
+48 R_BR3.BPM4L3.x_BR3.DVT9L1 equality     .          186.88    -7.11440e-02 >
+49 R_BR3.BPM5L3.x_BR3.DHZ11L4 equality     .          322.45     1.04564e+00 >
+50 R_BR3.BPM5L3.x_BR3.DHZ12L4 equality     .          310.67     1.36178e-01 >
+51 R_BR3.BPM5L3.x_BR3.DHZ13L4 equality     .          316.48     6.09958e-01 >
+52 R_BR3.BPM5L3.x_BR3.DHZ14L1 equality     .          320.23     6.10359e-01 >
+53 R_BR3.BPM5L3.x_BR3.DHZ8L1 equality     .          322.29     2.37056e-01 >
+54 R_BR3.BPM5L3.x_BR3.DHZ9L1 equality     .          322.25    -5.75511e-01 >
+55 R_BR3.BPM5L3.x_BR3.DVT12L4 equality     .          315.73     1.30322e-01 >
+56 R_BR3.BPM5L3.x_BR3.DVT13L4 equality     .          322.52     1.40096e-01 >
+57 R_BR3.BPM5L3.x_BR3.DVT2L4 equality     .          319.49    -8.94729e-02 >
+58 R_BR3.BPM5L3.x_BR3.DVT6L4 equality     .          317.91    -2.11984e-01 >
+59 R_BR3.BPM5L3.x_BR3.DVT8L1 equality     .          314.39    -2.56745e-01 >
+60 R_BR3.BPM5L3.x_BR3.DVT9L1 equality     .          318.15     5.91063e-03 >
+61 R_BR3.BPM6L3.x_BR3.DHZ11L4 equality     .          194.7      6.65423e-01 >
+62 R_BR3.BPM6L3.x_BR3.DHZ12L4 equality     .          184.68     8.38417e-01 >
+63 R_BR3.BPM6L3.x_BR3.DHZ13L4 equality     .          188.68     7.75976e-01 >
+64 R_BR3.BPM6L3.x_BR3.DHZ14L1 equality     .          193.88     7.64854e-01 >
+65 R_BR3.BPM6L3.x_BR3.DHZ8L1 equality     .          192.94     8.00962e-01 >
+66 R_BR3.BPM6L3.x_BR3.DHZ9L1 equality     .          188.71    -4.98427e-02 >
+67 R_BR3.BPM6L3.x_BR3.DVT12L4 equality     .          189.45    -1.33783e-01 >
+68 R_BR3.BPM6L3.x_BR3.DVT13L4 equality     .          192.59     5.11659e-02 >
+69 R_BR3.BPM6L3.x_BR3.DVT2L4 equality     .          191.58     3.28639e-01 >
+70 R_BR3.BPM6L3.x_BR3.DVT6L4 equality     .          192.15     1.75476e-01 >
+71 R_BR3.BPM6L3.x_BR3.DVT8L1 equality     .          187.1     -1.91833e-01 >
+72 R_BR3.BPM6L3.x_BR3.DVT9L1 equality     .          191.77    -2.01557e-01 >
+73 R_BR3.BPM7L3.x_BR3.DHZ11L4 equality     .          214.71    -2.45977e-01 >
+74 R_BR3.BPM7L3.x_BR3.DHZ12L4 equality     .          211.32     4.99725e-01 >
+75 R_BR3.BPM7L3.x_BR3.DHZ13L4 equality     .          215.15     9.64051e-01 >
+76 R_BR3.BPM7L3.x_BR3.DHZ14L1 equality     .          215.66     3.07665e-01 >
+77 R_BR3.BPM7L3.x_BR3.DHZ8L1 equality     .          214.9      8.35655e-02 >
+78 R_BR3.BPM7L3.x_BR3.DHZ9L1 equality     .          211.69     3.75022e-01 >
+79 R_BR3.BPM7L3.x_BR3.DVT12L4 equality     .          215.49     3.51674e-03 >
+80 R_BR3.BPM7L3.x_BR3.DVT13L4 equality     .          217.32    -3.74222e-01 >
+81 R_BR3.BPM7L3.x_BR3.DVT2L4 equality     .          212.67     1.74674e-01 >
+82 R_BR3.BPM7L3.x_BR3.DVT6L4 equality     .          217.9      1.41642e-01 >
+83 R_BR3.BPM7L3.x_BR3.DVT8L1 equality     .          210.47     1.10445e-01 >
+84 R_BR3.BPM7L3.x_BR3.DVT9L1 equality     .          213.9     -1.84346e-01 >
+85 R_BR3.BPM8L3.x_BR3.DHZ11L4 equality     .          322.37     3.21733e-02 >
+86 R_BR3.BPM8L3.x_BR3.DHZ12L4 equality     .          315.93    -2.84066e-01 >
+87 R_BR3.BPM8L3.x_BR3.DHZ13L4 equality     .          322.16     1.05920e+00 >
+88 R_BR3.BPM8L3.x_BR3.DHZ14L1 equality     .          320.07     6.27395e-01 >
+89 R_BR3.BPM8L3.x_BR3.DHZ8L1 equality     .          322.66    -1.13898e-01 >
+90 R_BR3.BPM8L3.x_BR3.DHZ9L1 equality     .          319.02    -3.42325e-01 >
+91 R_BR3.BPM8L3.x_BR3.DVT12L4 equality     .          319.74     6.14267e-02 >
+92 R_BR3.BPM8L3.x_BR3.DVT13L4 equality     .          320.71    -1.85038e-01 >
+93 R_BR3.BPM8L3.x_BR3.DVT2L4 equality     .          318.82     8.14128e-03 >
+94 R_BR3.BPM8L3.x_BR3.DVT6L4 equality     .          322.27    -1.06890e-01 >
+95 R_BR3.BPM8L3.x_BR3.DVT8L1 equality     .          313        3.21255e-02 >
+96 R_BR3.BPM8L3.x_BR3.DVT9L1 equality     .          315.9     -7.70288e-02 >
+97 R_BR3.BPM9L3.x_BR3.DHZ11L4 equality     .          289.18     1.13285e+00 >
+98 R_BR3.BPM9L3.x_BR3.DHZ12L4 equality     .          252.44     8.64142e-02 >
+99 R_BR3.BPM9L3.x_BR3.DHZ13L4 equality     .          281.72     5.38547e-01 >
+100 R_BR3.BPM9L3.x_BR3.DHZ14L1 equality     .          280.65     7.96123e-01 >
+101 R_BR3.BPM9L3.x_BR3.DHZ8L1 equality     .          253.74     8.35570e-01 >
+102 R_BR3.BPM9L3.x_BR3.DHZ9L1 equality     .          285.15    -3.49990e-01 >
+103 R_BR3.BPM9L3.x_BR3.DVT12L4 equality     .          240.18     3.51678e-02 >
+104 R_BR3.BPM9L3.x_BR3.DVT13L4 equality     .          250.87     2.27347e-01 >
+105 R_BR3.BPM9L3.x_BR3.DVT2L4 equality     .          241.52    -1.59777e-01 >
+106 R_BR3.BPM9L3.x_BR3.DVT6L4 equality     .          247.95    -3.02627e-01 >
+107 R_BR3.BPM9L3.x_BR3.DVT8L1 equality     .          247.1     -2.50621e-01 >
+108 R_BR3.BPM9L3.x_BR3.DVT9L1 equality     .          247.87     1.12868e-01 >
+109 R_BR3.BPM10L3.x_BR3.DHZ11L4 equality     .          321.55     7.59031e-01 >
+110 R_BR3.BPM10L3.x_BR3.DHZ12L4 equality     .          306.66     8.87309e-01 >
+111 R_BR3.BPM10L3.x_BR3.DHZ13L4 equality     .          310.95     4.93796e-01 >
+112 R_BR3.BPM10L3.x_BR3.DHZ14L1 equality     .          321.47     3.31576e-01 >
+113 R_BR3.BPM10L3.x_BR3.DHZ8L1 equality     .          317.47     2.33305e-01 >
+114 R_BR3.BPM10L3.x_BR3.DHZ9L1 equality     .          318.85     4.68300e-01 >
+115 R_BR3.BPM10L3.x_BR3.DVT12L4 equality     .          319.69    -7.12378e-02 >
+116 R_BR3.BPM10L3.x_BR3.DVT13L4 equality     .          327.16     1.40533e-03 >
+117 R_BR3.BPM10L3.x_BR3.DVT2L4 equality     .          320.23     2.56953e-01 >
+118 R_BR3.BPM10L3.x_BR3.DVT6L4 equality     .          319.24     1.44722e-01 >
+119 R_BR3.BPM10L3.x_BR3.DVT8L1 equality     .          315.73    -2.66368e-01 >
+120 R_BR3.BPM10L3.x_BR3.DVT9L1 equality     .          320.52    -1.39033e-01 >
+121 R_BR3.BPM11L3.x_BR3.DHZ11L4 equality     .          309.14    -7.29227e-01 >
+122 R_BR3.BPM11L3.x_BR3.DHZ12L4 equality     .          302.71     5.74212e-01 >
+123 R_BR3.BPM11L3.x_BR3.DHZ13L4 equality     .          304.55     1.36773e+00 >
+124 R_BR3.BPM11L3.x_BR3.DHZ14L1 equality     .          310.56     4.34258e-01 >
+125 R_BR3.BPM11L3.x_BR3.DHZ8L1 equality     .          312       -3.41508e-01 >
+126 R_BR3.BPM11L3.x_BR3.DHZ9L1 equality     .          303.08     6.16336e-02 >
+127 R_BR3.BPM11L3.x_BR3.DVT12L4 equality     .          314.5      9.45061e-02 >
+128 R_BR3.BPM11L3.x_BR3.DVT13L4 equality     .          315.23    -3.60982e-01 >
+129 R_BR3.BPM11L3.x_BR3.DVT2L4 equality     .          307.7      1.32018e-01 >
+130 R_BR3.BPM11L3.x_BR3.DVT6L4 equality     .          314.02     7.76389e-02 >
+131 R_BR3.BPM11L3.x_BR3.DVT8L1 equality     .          306.51     6.48247e-02 >
+132 R_BR3.BPM11L3.x_BR3.DVT9L1 equality     .          310.71    -2.27423e-01 >
+133 R_BR3.BPM12L3.x_BR3.DHZ11L4 equality     .          223.88     3.13984e-01 >
+134 R_BR3.BPM12L3.x_BR3.DHZ12L4 equality     .          221       -3.44830e-01 >
+135 R_BR3.BPM12L3.x_BR3.DHZ13L4 equality     .          222.52     1.33405e+00 >
+136 R_BR3.BPM12L3.x_BR3.DHZ14L1 equality     .          225.24     1.00585e+00 >
+137 R_BR3.BPM12L3.x_BR3.DHZ8L1 equality     .          223.05     2.48916e-01 >
+138 R_BR3.BPM12L3.x_BR3.DHZ9L1 equality     .          220.7     -5.29055e-01 >
+139 R_BR3.BPM12L3.x_BR3.DVT12L4 equality     .          223.25     9.89633e-02 >
+140 R_BR3.BPM12L3.x_BR3.DVT13L4 equality     .          227.6     -1.48585e-01 >
+141 R_BR3.BPM12L3.x_BR3.DVT2L4 equality     .          225.13    -1.71448e-02 >
+142 R_BR3.BPM12L3.x_BR3.DVT6L4 equality     .          225.4     -1.27325e-01 >
+143 R_BR3.BPM12L3.x_BR3.DVT8L1 equality     .          220.9      3.50122e-02 >
+144 R_BR3.BPM12L3.x_BR3.DVT9L1 equality     .          223.69    -6.31356e-02 >
+145 R_BR3.BPM13L3.x_BR3.DHZ11L4 equality     .          284.21     1.46762e+00 >
+146 R_BR3.BPM13L3.x_BR3.DHZ12L4 equality     .          276.46    -3.06744e-02 >
+147 R_BR3.BPM13L3.x_BR3.DHZ13L4 equality     .          279.97     1.88378e-01 >
+148 R_BR3.BPM13L3.x_BR3.DHZ14L1 equality     .          280.25     6.07551e-01 >
+149 R_BR3.BPM13L3.x_BR3.DHZ8L1 equality     .          279.64     5.63943e-01 >
+150 R_BR3.BPM13L3.x_BR3.DHZ9L1 equality     .          282.5     -3.77904e-01 >
+151 R_BR3.BPM13L3.x_BR3.DVT12L4 equality     .          279.16     2.34164e-01 >
+152 R_BR3.BPM13L3.x_BR3.DVT13L4 equality     .          286.88     1.76931e-01 >
+153 R_BR3.BPM13L3.x_BR3.DVT2L4 equality     .          283.04    -3.13259e-02 >
+154 R_BR3.BPM13L3.x_BR3.DVT6L4 equality     .          281.25    -2.15924e-01 >
+155 R_BR3.BPM13L3.x_BR3.DVT8L1 equality     .          280.82    -2.28066e-01 >
+156 R_BR3.BPM13L3.x_BR3.DVT9L1 equality     .          282.3      8.49945e-02 >
+157 R_BR3.BPM14L3.x_BR3.DHZ11L4 equality     .          204.73     4.27688e-01 >
+158 R_BR3.BPM14L3.x_BR3.DHZ12L4 equality     .          200.91     9.87597e-01 >
+159 R_BR3.BPM14L3.x_BR3.DHZ13L4 equality     .          203.82     1.10561e+00 >
+160 R_BR3.BPM14L3.x_BR3.DHZ14L1 equality     .          203.42     9.05890e-01 >
+161 R_BR3.BPM14L3.x_BR3.DHZ8L1 equality     .          203.87     1.75787e-01 >
+162 R_BR3.BPM14L3.x_BR3.DHZ9L1 equality     .          204.2      7.67008e-02 >
+163 R_BR3.BPM14L3.x_BR3.DVT12L4 equality     .          205.99    -1.42526e-01 >
+164 R_BR3.BPM14L3.x_BR3.DVT13L4 equality     .          209.19     2.01170e-01 >
+165 R_BR3.BPM14L3.x_BR3.DVT2L4 equality     .          206.52     2.78566e-01 >
+166 R_BR3.BPM14L3.x_BR3.DVT6L4 equality     .          207.55     1.74039e-01 >
+167 R_BR3.BPM14L3.x_BR3.DVT8L1 equality     .          204.91    -2.92606e-01 >
+168 R_BR3.BPM14L3.x_BR3.DVT9L1 equality     .          204.17    -1.65884e-01 >
+169 R_BR3.BPM15L3.x_BR3.DHZ11L4 equality     .          303.81    -3.67164e-01 >
+170 R_BR3.BPM15L3.x_BR3.DHZ12L4 equality     .          300.08     3.47019e-01 >
+171 R_BR3.BPM15L3.x_BR3.DHZ13L4 equality     .          302.93     1.39363e+00 >
+172 R_BR3.BPM15L3.x_BR3.DHZ14L1 equality     .          308.26     1.09707e+00 >
+173 R_BR3.BPM15L3.x_BR3.DHZ8L1 equality     .          303.93     4.66189e-02 >
+174 R_BR3.BPM15L3.x_BR3.DHZ9L1 equality     .          298.77    -1.28696e-01 >
+175 R_BR3.BPM15L3.x_BR3.DVT12L4 equality     .          310.95    -7.01264e-03 >
+176 R_BR3.BPM15L3.x_BR3.DVT13L4 equality     .          313.92    -3.91765e-01 >
+177 R_BR3.BPM15L3.x_BR3.DVT2L4 equality     .          306.4      9.84643e-02 >
+178 R_BR3.BPM15L3.x_BR3.DVT6L4 equality     .          311.37     3.90728e-02 >
+179 R_BR3.BPM15L3.x_BR3.DVT8L1 equality     .          305.18     8.89907e-02 >
+180 R_BR3.BPM15L3.x_BR3.DVT9L1 equality     .          307.29    -1.93871e-01 >
+181 R_BR3.BPM16L3.x_BR3.DHZ11L4 equality     .          324.36     3.33859e-01 >
+182 R_BR3.BPM16L3.x_BR3.DHZ12L4 equality     .          312.05    -3.57764e-01 >
+183 R_BR3.BPM16L3.x_BR3.DHZ13L4 equality     .          318.45     5.03062e-01 >
+184 R_BR3.BPM16L3.x_BR3.DHZ14L1 equality     .          319.58     6.01262e-02 >
+185 R_BR3.BPM16L3.x_BR3.DHZ8L1 equality     .          321.21     7.25234e-02 >
+186 R_BR3.BPM16L3.x_BR3.DHZ9L1 equality     .          316.49    -3.05241e-01 >
+187 R_BR3.BPM16L3.x_BR3.DVT12L4 equality     .          331.85     1.38848e-01 >
+188 R_BR3.BPM16L3.x_BR3.DVT13L4 equality     .          336.04    -1.97924e-01 >
+189 R_BR3.BPM16L3.x_BR3.DVT2L4 equality     .          334.01    -2.47553e-02 >
+190 R_BR3.BPM16L3.x_BR3.DVT6L4 equality     .          335.02    -1.05812e-01 >
+191 R_BR3.BPM16L3.x_BR3.DVT8L1 equality     .          328.19     8.87944e-04 >
+192 R_BR3.BPM16L3.x_BR3.DVT9L1 equality     .          330.9     -1.19269e-02 >
+193 R_BR3.BPM1L3.y_BR3.DHZ11L4 equality     .          245.7     -2.36850e-01 >
+194 R_BR3.BPM1L3.y_BR3.DHZ12L4 equality     .          244.57    -3.95872e-02 >
+195 R_BR3.BPM1L3.y_BR3.DHZ13L4 equality     .          245.23     1.95865e-01 >
+196 R_BR3.BPM1L3.y_BR3.DHZ14L1 equality     .          245.25     1.49929e-01 >
+197 R_BR3.BPM1L3.y_BR3.DHZ8L1 equality     .          245.35    -2.33062e-01 >
+198 R_BR3.BPM1L3.y_BR3.DHZ9L1 equality     .          244.6     -1.98199e-02 >
+199 R_BR3.BPM1L3.y_BR3.DVT12L4 equality     .          248.21     9.12288e+00 >
+200 R_BR3.BPM1L3.y_BR3.DVT13L4 equality     .          242.42     9.75579e+01 >
+201 R_BR3.BPM1L3.y_BR3.DVT2L4 equality     .          244.94    -9.30201e+00 >
+202 R_BR3.BPM1L3.y_BR3.DVT6L4 equality     .          247.1     -9.11535e+00 >
+203 R_BR3.BPM1L3.y_BR3.DVT8L1 equality     .          243.37    -4.65606e+01 >
+204 R_BR3.BPM1L3.y_BR3.DVT9L1 equality     .          244.63     3.72667e+01 >
+205 R_BR3.BPM2L3.y_BR3.DHZ11L4 equality     .          187.2      7.44593e-04 >
+206 R_BR3.BPM2L3.y_BR3.DHZ12L4 equality     .          181.38    -1.18324e-01 >
+207 R_BR3.BPM2L3.y_BR3.DHZ13L4 equality     .          182.53    -9.22945e-02 >
+208 R_BR3.BPM2L3.y_BR3.DHZ14L1 equality     .          187.17    -5.95941e-02 >
+209 R_BR3.BPM2L3.y_BR3.DHZ8L1 equality     .          185.39    -6.97843e-02 >
+210 R_BR3.BPM2L3.y_BR3.DHZ9L1 equality     .          182.62    -2.24581e-01 >
+211 R_BR3.BPM2L3.y_BR3.DVT12L4 equality     .          181.8     -9.65052e+01 >
+212 R_BR3.BPM2L3.y_BR3.DVT13L4 equality     .          185.79     1.17949e+01 >
+213 R_BR3.BPM2L3.y_BR3.DVT2L4 equality     .          181.18     9.78232e+01 >
+214 R_BR3.BPM2L3.y_BR3.DVT6L4 equality     .          183.96     9.69089e+01 >
+215 R_BR3.BPM2L3.y_BR3.DVT8L1 equality     .          183.15    -4.27268e+01 >
+216 R_BR3.BPM2L3.y_BR3.DVT9L1 equality     .          178.33    -5.09610e+01 >
+217 R_BR3.BPM3L3.y_BR3.DHZ11L4 equality     .          293.87     2.56434e-01 >
+218 R_BR3.BPM3L3.y_BR3.DHZ12L4 equality     .          286.34     2.64623e-02 >
+219 R_BR3.BPM3L3.y_BR3.DHZ13L4 equality     .          289.98    -2.94308e-01 >
+220 R_BR3.BPM3L3.y_BR3.DHZ14L1 equality     .          290.3     -2.63825e-01 >
+221 R_BR3.BPM3L3.y_BR3.DHZ8L1 equality     .          292.01     2.59901e-01 >
+222 R_BR3.BPM3L3.y_BR3.DHZ9L1 equality     .          286.25     3.73449e-03 >
+223 R_BR3.BPM3L3.y_BR3.DVT12L4 equality     .          290.32    -9.28727e+00 >
+224 R_BR3.BPM3L3.y_BR3.DVT13L4 equality     .          288.66    -9.76609e+01 >
+225 R_BR3.BPM3L3.y_BR3.DVT2L4 equality     .          290.22     9.65873e+00 >
+226 R_BR3.BPM3L3.y_BR3.DVT6L4 equality     .          288.65     9.20405e+00 >
+227 R_BR3.BPM3L3.y_BR3.DVT8L1 equality     .          283.17     4.67802e+01 >
+228 R_BR3.BPM3L3.y_BR3.DVT9L1 equality     .          288.97    -3.74027e+01 >
+229 R_BR3.BPM4L3.y_BR3.DHZ11L4 equality     .          196.95    -1.05317e-02 >
+230 R_BR3.BPM4L3.y_BR3.DHZ12L4 equality     .          196.83     9.02058e-02 >
+231 R_BR3.BPM4L3.y_BR3.DHZ13L4 equality     .          196.3      1.00253e-01 >
+232 R_BR3.BPM4L3.y_BR3.DHZ14L1 equality     .          197.85     7.32008e-02 >
+233 R_BR3.BPM4L3.y_BR3.DHZ8L1 equality     .          195.08     3.50899e-02 >
+234 R_BR3.BPM4L3.y_BR3.DHZ9L1 equality     .          196.25     2.16475e-01 >
+235 R_BR3.BPM4L3.y_BR3.DVT12L4 equality     .          200.44     9.51327e+01 >
+236 R_BR3.BPM4L3.y_BR3.DVT13L4 equality     .          198.13    -1.16442e+01 >
+237 R_BR3.BPM4L3.y_BR3.DVT2L4 equality     .          201.09    -9.61667e+01 >
+238 R_BR3.BPM4L3.y_BR3.DVT6L4 equality     .          200.73    -9.60120e+01 >
+239 R_BR3.BPM4L3.y_BR3.DVT8L1 equality     .          197.29     4.24355e+01 >
+240 R_BR3.BPM4L3.y_BR3.DVT9L1 equality     .          198.03     5.03959e+01 >
+241 R_BR3.BPM5L3.y_BR3.DHZ11L4 equality     .          286.85    -2.59735e-01 >
+242 R_BR3.BPM5L3.y_BR3.DHZ12L4 equality     .          282.81    -3.15410e-02 >
+243 R_BR3.BPM5L3.y_BR3.DHZ13L4 equality     .          285.53     2.84875e-01 >
+244 R_BR3.BPM5L3.y_BR3.DHZ14L1 equality     .          286.8      2.47062e-01 >
+245 R_BR3.BPM5L3.y_BR3.DHZ8L1 equality     .          285.41    -2.63337e-01 >
+246 R_BR3.BPM5L3.y_BR3.DHZ9L1 equality     .          283.18    -2.30930e-02 >
+247 R_BR3.BPM5L3.y_BR3.DVT12L4 equality     .          287.63     9.39656e+00 >
+248 R_BR3.BPM5L3.y_BR3.DVT13L4 equality     .          288.25     9.76379e+01 >
+249 R_BR3.BPM5L3.y_BR3.DVT2L4 equality     .          282.24    -9.62928e+00 >
+250 R_BR3.BPM5L3.y_BR3.DVT6L4 equality     .          283.61    -9.29435e+00 >
+251 R_BR3.BPM5L3.y_BR3.DVT8L1 equality     .          279.22    -4.70015e+01 >
+252 R_BR3.BPM5L3.y_BR3.DVT9L1 equality     .          281.79     3.74720e+01 >
+253 R_BR3.BPM6L3.y_BR3.DHZ11L4 equality     .          196.02     3.28504e-02 >
+254 R_BR3.BPM6L3.y_BR3.DHZ12L4 equality     .          191.03    -4.13214e-02 >
+255 R_BR3.BPM6L3.y_BR3.DHZ13L4 equality     .          193.43    -1.82259e-01 >
+256 R_BR3.BPM6L3.y_BR3.DHZ14L1 equality     .          196.09    -9.36869e-02 >
+257 R_BR3.BPM6L3.y_BR3.DHZ8L1 equality     .          194.79    -2.37291e-02 >
+258 R_BR3.BPM6L3.y_BR3.DHZ9L1 equality     .          192.13    -1.54514e-01 >
+259 R_BR3.BPM6L3.y_BR3.DVT12L4 equality     .          192.8     -9.54062e+01 >
+260 R_BR3.BPM6L3.y_BR3.DVT13L4 equality     .          196.77     1.17553e+01 >
+261 R_BR3.BPM6L3.y_BR3.DVT2L4 equality     .          191.14     9.60803e+01 >
+262 R_BR3.BPM6L3.y_BR3.DVT6L4 equality     .          190.72     9.67031e+01 >
+263 R_BR3.BPM6L3.y_BR3.DVT8L1 equality     .          191.14    -4.26026e+01 >
+264 R_BR3.BPM6L3.y_BR3.DVT9L1 equality     .          192.13    -5.06894e+01 >
+265 R_BR3.BPM7L3.y_BR3.DHZ11L4 equality     .          237.96     2.44724e-01 >
+266 R_BR3.BPM7L3.y_BR3.DHZ12L4 equality     .          233.08     4.95431e-02 >
+267 R_BR3.BPM7L3.y_BR3.DHZ13L4 equality     .          238.79    -3.40042e-01 >
+268 R_BR3.BPM7L3.y_BR3.DHZ14L1 equality     .          238.82    -2.52194e-01 >
+269 R_BR3.BPM7L3.y_BR3.DHZ8L1 equality     .          237.11     2.61256e-01 >
+270 R_BR3.BPM7L3.y_BR3.DHZ9L1 equality     .          234.03     3.90876e-02 >
+271 R_BR3.BPM7L3.y_BR3.DVT12L4 equality     .          238.44    -9.34754e+00 >
+272 R_BR3.BPM7L3.y_BR3.DVT13L4 equality     .          243.75    -9.71975e+01 >
+273 R_BR3.BPM7L3.y_BR3.DVT2L4 equality     .          237.76     9.30987e+00 >
+274 R_BR3.BPM7L3.y_BR3.DVT6L4 equality     .          243.19     9.13454e+00 >
+275 R_BR3.BPM7L3.y_BR3.DVT8L1 equality     .          238.76     4.69544e+01 >
+276 R_BR3.BPM7L3.y_BR3.DVT9L1 equality     .          239.3     -3.72954e+01 >
+277 R_BR3.BPM8L3.y_BR3.DHZ11L4 equality     .          295.31     3.14778e-02 >
+278 R_BR3.BPM8L3.y_BR3.DHZ12L4 equality     .          289.83     1.22164e-01 >
+279 R_BR3.BPM8L3.y_BR3.DHZ13L4 equality     .          292.85     2.30435e-02 >
+280 R_BR3.BPM8L3.y_BR3.DHZ14L1 equality     .          296.8      5.54202e-03 >
+281 R_BR3.BPM8L3.y_BR3.DHZ8L1 equality     .          294.93     1.47873e-01 >
+282 R_BR3.BPM8L3.y_BR3.DHZ9L1 equality     .          293.29     2.05032e-01 >
+283 R_BR3.BPM8L3.y_BR3.DVT12L4 equality     .          287.71     9.66776e+01 >
+284 R_BR3.BPM8L3.y_BR3.DVT13L4 equality     .          291.07    -1.15591e+01 >
+285 R_BR3.BPM8L3.y_BR3.DVT2L4 equality     .          286.25    -9.69325e+01 >
+286 R_BR3.BPM8L3.y_BR3.DVT6L4 equality     .          291.56    -9.72789e+01 >
+287 R_BR3.BPM8L3.y_BR3.DVT8L1 equality     .          282.94     4.33405e+01 >
+288 R_BR3.BPM8L3.y_BR3.DVT9L1 equality     .          286.11     5.15844e+01 >
+289 R_BR3.BPM9L3.y_BR3.DHZ11L4 equality     .          322.97    -2.51537e-01 >
+290 R_BR3.BPM9L3.y_BR3.DHZ12L4 equality     .          312.99    -5.24935e-02 >
+291 R_BR3.BPM9L3.y_BR3.DHZ13L4 equality     .          319.64     2.76671e-01 >
+292 R_BR3.BPM9L3.y_BR3.DHZ14L1 equality     .          323.03     2.37322e-01 >
+293 R_BR3.BPM9L3.y_BR3.DHZ8L1 equality     .          317.02    -1.68319e-01 >
+294 R_BR3.BPM9L3.y_BR3.DHZ9L1 equality     .          315.91    -3.49348e-02 >
+295 R_BR3.BPM9L3.y_BR3.DVT12L4 equality     .          311.43     9.19822e+00 >
+296 R_BR3.BPM9L3.y_BR3.DVT13L4 equality     .          325.04     9.79817e+01 >
+297 R_BR3.BPM9L3.y_BR3.DVT2L4 equality     .          311.27    -9.44243e+00 >
+298 R_BR3.BPM9L3.y_BR3.DVT6L4 equality     .          319.31    -9.32352e+00 >
+299 R_BR3.BPM9L3.y_BR3.DVT8L1 equality     .          313.68    -4.69134e+01 >
+300 R_BR3.BPM9L3.y_BR3.DVT9L1 equality     .          320.5      3.80870e+01 >
+301 R_BR3.BPM10L3.y_BR3.DHZ11L4 equality     .          349.64     5.43347e-02 >
+302 R_BR3.BPM10L3.y_BR3.DHZ12L4 equality     .          338.4     -1.15844e-01 >
+303 R_BR3.BPM10L3.y_BR3.DHZ13L4 equality     .          344.8     -1.65634e-01 >
+304 R_BR3.BPM10L3.y_BR3.DHZ14L1 equality     .          347.83    -1.05277e-01 >
+305 R_BR3.BPM10L3.y_BR3.DHZ8L1 equality     .          343.09    -1.06688e-01 >
+306 R_BR3.BPM10L3.y_BR3.DHZ9L1 equality     .          342.02    -2.31623e-01 >
+307 R_BR3.BPM10L3.y_BR3.DVT12L4 equality     .          338.65    -9.70969e+01 >
+308 R_BR3.BPM10L3.y_BR3.DVT13L4 equality     .          346.16     1.15602e+01 >
+309 R_BR3.BPM10L3.y_BR3.DVT2L4 equality     .          339.09     9.69372e+01 >
+310 R_BR3.BPM10L3.y_BR3.DVT6L4 equality     .          338.99     9.70256e+01 >
+311 R_BR3.BPM10L3.y_BR3.DVT8L1 equality     .          334.17    -4.32191e+01 >
+312 R_BR3.BPM10L3.y_BR3.DVT9L1 equality     .          342.05    -5.09399e+01 >
+313 R_BR3.BPM11L3.y_BR3.DHZ11L4 equality     .          300.64     2.42783e-01 >
+314 R_BR3.BPM11L3.y_BR3.DHZ12L4 equality     .          292.02     8.48461e-02 >
+315 R_BR3.BPM11L3.y_BR3.DHZ13L4 equality     .          296.9     -2.99780e-01 >
+316 R_BR3.BPM11L3.y_BR3.DHZ14L1 equality     .          299.79    -2.85828e-01 >
+317 R_BR3.BPM11L3.y_BR3.DHZ8L1 equality     .          296.96     2.26404e-01 >
+318 R_BR3.BPM11L3.y_BR3.DHZ9L1 equality     .          297.98     5.50639e-02 >
+319 R_BR3.BPM11L3.y_BR3.DVT12L4 equality     .          306.8     -9.35485e+00 >
+320 R_BR3.BPM11L3.y_BR3.DVT13L4 equality     .          301.99    -9.79369e+01 >
+321 R_BR3.BPM11L3.y_BR3.DVT2L4 equality     .          295.64     9.28697e+00 >
+322 R_BR3.BPM11L3.y_BR3.DVT6L4 equality     .          305.94     9.06771e+00 >
+323 R_BR3.BPM11L3.y_BR3.DVT8L1 equality     .          302.92     4.66499e+01 >
+324 R_BR3.BPM11L3.y_BR3.DVT9L1 equality     .          304.58    -3.76062e+01 >
+325 R_BR3.BPM12L3.y_BR3.DHZ11L4 equality     .          218.46     3.59810e-02 >
+326 R_BR3.BPM12L3.y_BR3.DHZ12L4 equality     .          213.55     1.29914e-01 >
+327 R_BR3.BPM12L3.y_BR3.DHZ13L4 equality     .          217.46     8.16432e-02 >
+328 R_BR3.BPM12L3.y_BR3.DHZ14L1 equality     .          214.51     2.74737e-02 >
+329 R_BR3.BPM12L3.y_BR3.DHZ8L1 equality     .          216.7      1.39839e-01 >
+330 R_BR3.BPM12L3.y_BR3.DHZ9L1 equality     .          215.32     1.84738e-01 >
+331 R_BR3.BPM12L3.y_BR3.DVT12L4 equality     .          224.86     9.67944e+01 >
+332 R_BR3.BPM12L3.y_BR3.DVT13L4 equality     .          222.96    -1.15142e+01 >
+333 R_BR3.BPM12L3.y_BR3.DVT2L4 equality     .          225.34    -9.63293e+01 >
+334 R_BR3.BPM12L3.y_BR3.DVT6L4 equality     .          227.74    -9.61302e+01 >
+335 R_BR3.BPM12L3.y_BR3.DVT8L1 equality     .          219.48     4.26857e+01 >
+336 R_BR3.BPM12L3.y_BR3.DVT9L1 equality     .          223.99     5.06090e+01 >
+337 R_BR3.BPM13L3.y_BR3.DHZ11L4 equality     .          304.62    -1.64994e-01 >
+338 R_BR3.BPM13L3.y_BR3.DHZ12L4 equality     .          298.27    -4.77957e-02 >
+339 R_BR3.BPM13L3.y_BR3.DHZ13L4 equality     .          301.75     2.65644e-01 >
+340 R_BR3.BPM13L3.y_BR3.DHZ14L1 equality     .          300.8      2.51817e-01 >
+341 R_BR3.BPM13L3.y_BR3.DHZ8L1 equality     .          301.57    -1.65208e-01 >
+342 R_BR3.BPM13L3.y_BR3.DHZ9L1 equality     .          297.1     -2.57126e-02 >
+343 R_BR3.BPM13L3.y_BR3.DVT12L4 equality     .          304.71     9.37948e+00 >
+344 R_BR3.BPM13L3.y_BR3.DVT13L4 equality     .          306.7      9.86219e+01 >
+345 R_BR3.BPM13L3.y_BR3.DVT2L4 equality     .          301.45    -9.36873e+00 >
+346 R_BR3.BPM13L3.y_BR3.DVT6L4 equality     .          304.28    -9.17450e+00 >
+347 R_BR3.BPM13L3.y_BR3.DVT8L1 equality     .          301.32    -4.66662e+01 >
+348 R_BR3.BPM13L3.y_BR3.DVT9L1 equality     .          301.13     3.76279e+01 >
+349 R_BR3.BPM14L3.y_BR3.DHZ11L4 equality     .          234.86    -7.80953e-03 >
+350 R_BR3.BPM14L3.y_BR3.DHZ12L4 equality     .          229.86    -8.30246e-02 >
+351 R_BR3.BPM14L3.y_BR3.DHZ13L4 equality     .          233.14    -3.37886e-02 >
+352 R_BR3.BPM14L3.y_BR3.DHZ14L1 equality     .          233.35    -3.17670e-02 >
+353 R_BR3.BPM14L3.y_BR3.DHZ8L1 equality     .          233.18    -1.00415e-01 >
+354 R_BR3.BPM14L3.y_BR3.DHZ9L1 equality     .          231.77    -1.98746e-01 >
+355 R_BR3.BPM14L3.y_BR3.DVT12L4 equality     .          229.21    -9.67707e+01 >
+356 R_BR3.BPM14L3.y_BR3.DVT13L4 equality     .          234.04     1.22251e+01 >
+357 R_BR3.BPM14L3.y_BR3.DVT2L4 equality     .          227.39     9.69476e+01 >
+358 R_BR3.BPM14L3.y_BR3.DVT6L4 equality     .          230.77     9.64951e+01 >
+359 R_BR3.BPM14L3.y_BR3.DVT8L1 equality     .          230.18    -4.28146e+01 >
+360 R_BR3.BPM14L3.y_BR3.DVT9L1 equality     .          232.35    -5.07417e+01 >
+361 R_BR3.BPM15L3.y_BR3.DHZ11L4 equality     .          321.54     1.94318e-01 >
+362 R_BR3.BPM15L3.y_BR3.DHZ12L4 equality     .          313.61     9.45031e-02 >
+363 R_BR3.BPM15L3.y_BR3.DHZ13L4 equality     .          316.63    -2.65633e-01 >
+364 R_BR3.BPM15L3.y_BR3.DHZ14L1 equality     .          319.28    -2.12416e-01 >
+365 R_BR3.BPM15L3.y_BR3.DHZ8L1 equality     .          318.11     2.21764e-01 >
+366 R_BR3.BPM15L3.y_BR3.DHZ9L1 equality     .          317.1      7.76022e-02 >
+367 R_BR3.BPM15L3.y_BR3.DVT12L4 equality     .          320.58    -9.56064e+00 >
+368 R_BR3.BPM15L3.y_BR3.DVT13L4 equality     .          319.98    -9.82583e+01 >
+369 R_BR3.BPM15L3.y_BR3.DVT2L4 equality     .          320.95     9.48250e+00 >
+370 R_BR3.BPM15L3.y_BR3.DVT6L4 equality     .          319.56     9.36248e+00 >
+371 R_BR3.BPM15L3.y_BR3.DVT8L1 equality     .          316.14     4.66663e+01 >
+372 R_BR3.BPM15L3.y_BR3.DVT9L1 equality     .          317.91    -3.76760e+01 >
+373 R_BR3.BPM16L3.y_BR3.DHZ11L4 equality     .          354.75     4.34434e-02 >
+374 R_BR3.BPM16L3.y_BR3.DHZ12L4 equality     .          348.98     1.26555e-01 >
+375 R_BR3.BPM16L3.y_BR3.DHZ13L4 equality     .          349.55     1.84505e-02 >
+376 R_BR3.BPM16L3.y_BR3.DHZ14L1 equality     .          352.76     9.80752e-03 >
+377 R_BR3.BPM16L3.y_BR3.DHZ8L1 equality     .          352.81     1.24342e-01 >
+378 R_BR3.BPM16L3.y_BR3.DHZ9L1 equality     .          348.31     2.12350e-01 >
+379 R_BR3.BPM16L3.y_BR3.DVT12L4 equality     .          350.4      9.66815e+01 >
+380 R_BR3.BPM16L3.y_BR3.DVT13L4 equality     .          352.63    -1.19400e+01 >
+381 R_BR3.BPM16L3.y_BR3.DVT2L4 equality     .          350.22    -9.74077e+01 >
+382 R_BR3.BPM16L3.y_BR3.DVT6L4 equality     .          348.18    -9.67395e+01 >
+383 R_BR3.BPM16L3.y_BR3.DVT8L1 equality     .          346.16     4.27671e+01 >
+384 R_BR3.BPM16L3.y_BR3.DVT9L1 equality     .          348.37     5.09164e+01 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 BR.QFOCELL1.dk1l         0.00000e+00  0.00000e+00   .            .         
+ 2 BR.QDE1.dk1l             0.00000e+00  0.00000e+00   .            .         
+ 3 BR.QFOCELL2.dk1l         0.00000e+00  0.00000e+00   .            .         
+ 4 BR.QDE2.dk1l             0.00000e+00  0.00000e+00   .            .         
+ 5 BR.QFOCELL3.dk1l         0.00000e+00  0.00000e+00   .            .         
+ 6 BR.QDE3.dk1l             0.00000e+00  0.00000e+00   .            .         
+ 7 BR.QFOCELL4.dk1l         0.00000e+00  0.00000e+00   .            .         
+ 8 BR.QDE4.dk1l             0.00000e+00  0.00000e+00   .            .         
+ 9 BR.QFOCELL5.dk1l         0.00000e+00  0.00000e+00   .            .         
+10 BR.QDE5.dk1l             0.00000e+00  0.00000e+00   .            .         
+11 BR.QFOCELL6.dk1l         0.00000e+00  0.00000e+00   .            .         
+12 BR.QDE6.dk1l             0.00000e+00  0.00000e+00   .            .         
+13 BR.QFOCELL7.dk1l         0.00000e+00  0.00000e+00   .            .         
+14 BR.QDE7.dk1l             0.00000e+00  0.00000e+00   .            .         
+15 BR.QFOCELL8.dk1l         0.00000e+00  0.00000e+00   .            .         
+16 BR.QDE8.dk1l             0.00000e+00  0.00000e+00   .            .         
+17 BR.QFOCELL9.dk1l         0.00000e+00  0.00000e+00   .            .         
+18 BR.QDE9.dk1l             0.00000e+00  0.00000e+00   .            .         
+19 BR.QFOCELL10.dk1l        0.00000e+00  0.00000e+00   .            .         
+20 BR.QDE10.dk1l            0.00000e+00  0.00000e+00   .            .         
+21 BR.QFOCELL11.dk1l        0.00000e+00  0.00000e+00   .            .         
+22 BR.QDE11.dk1l            0.00000e+00  0.00000e+00   .            .         
+23 BR.QFOCELL12.dk1l        0.00000e+00  0.00000e+00   .            .         
+24 BR.QDE12.dk1l            0.00000e+00  0.00000e+00   .            .         
+25 BR.QFOCELL13.dk1l        0.00000e+00  0.00000e+00   .            .         
+26 BR.QDE13.dk1l            0.00000e+00  0.00000e+00   .            .         
+27 BR.QFOCELL14.dk1l        0.00000e+00  0.00000e+00   .            .         
+28 BR.QDE14.dk1l            0.00000e+00  0.00000e+00   .            .         
+29 BR.QFOCELL15.dk1l        0.00000e+00  0.00000e+00   .            .         
+30 BR.QDE15.dk1l            0.00000e+00  0.00000e+00   .            .         
+31 BR.QFOCELL16.dk1l        0.00000e+00  0.00000e+00   .            .         
+32 BR.QDE16.dk1l            0.00000e+00  0.00000e+00   .            .         
+
+ncall=1 [0.1s], fval=3.07917e+01, fstp=-inf, ccnt=384.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 R_BR3.BPM1L3.x_BR3.DHZ11L4 equality     .          245.88     7.19400e-01 >
+ 2 R_BR3.BPM1L3.x_BR3.DHZ12L4 equality     .          241.23     5.79700e-01 >
+ 3 R_BR3.BPM1L3.x_BR3.DHZ13L4 equality     .          242.61     5.93335e-01 >
+ 4 R_BR3.BPM1L3.x_BR3.DHZ14L1 equality     .          248        2.46408e-01 >
+ 5 R_BR3.BPM1L3.x_BR3.DHZ8L1 equality     .          242.96     4.58337e-02 >
+ 6 R_BR3.BPM1L3.x_BR3.DHZ9L1 equality     .          244.48     3.29537e-02 >
+ 7 R_BR3.BPM1L3.x_BR3.DVT12L4 equality     .          248.2      1.92526e-01 >
+ 8 R_BR3.BPM1L3.x_BR3.DVT13L4 equality     .          249.91     2.09699e-01 >
+ 9 R_BR3.BPM1L3.x_BR3.DVT2L4 equality     .          248.57    -4.89251e-02 >
+10 R_BR3.BPM1L3.x_BR3.DVT6L4 equality     .          247.25    -2.22995e-01 >
+11 R_BR3.BPM1L3.x_BR3.DVT8L1 equality     .          246.57    -2.51530e-01 >
+12 R_BR3.BPM1L3.x_BR3.DVT9L1 equality     .          246.35     6.67914e-02 >
+13 R_BR3.BPM2L3.x_BR3.DHZ11L4 equality     .          150.26     5.83851e-01 >
+14 R_BR3.BPM2L3.x_BR3.DHZ12L4 equality     .          148.54     6.03311e-01 >
+15 R_BR3.BPM2L3.x_BR3.DHZ13L4 equality     .          147.89     1.21964e+00 >
+16 R_BR3.BPM2L3.x_BR3.DHZ14L1 equality     .          152.26     1.28017e+00 >
+17 R_BR3.BPM2L3.x_BR3.DHZ8L1 equality     .          150.23    -1.00982e-01 >
+18 R_BR3.BPM2L3.x_BR3.DHZ9L1 equality     .          149.26    -1.95862e-01 >
+19 R_BR3.BPM2L3.x_BR3.DVT12L4 equality     .          150.31    -3.49457e-02 >
+20 R_BR3.BPM2L3.x_BR3.DVT13L4 equality     .          150.81     4.03035e-02 >
+21 R_BR3.BPM2L3.x_BR3.DVT2L4 equality     .          150.41     2.12295e-01 >
+22 R_BR3.BPM2L3.x_BR3.DVT6L4 equality     .          151.14     4.76761e-02 >
+23 R_BR3.BPM2L3.x_BR3.DVT8L1 equality     .          147.3     -2.05274e-01 >
+24 R_BR3.BPM2L3.x_BR3.DVT9L1 equality     .          151.51    -1.17203e-01 >
+25 R_BR3.BPM3L3.x_BR3.DHZ11L4 equality     .          296.28     5.79214e-01 >
+26 R_BR3.BPM3L3.x_BR3.DHZ12L4 equality     .          285.67    -1.93719e-01 >
+27 R_BR3.BPM3L3.x_BR3.DHZ13L4 equality     .          288.31     3.86455e-01 >
+28 R_BR3.BPM3L3.x_BR3.DHZ14L1 equality     .          293.53     2.63111e-01 >
+29 R_BR3.BPM3L3.x_BR3.DHZ8L1 equality     .          295.31     8.39364e-01 >
+30 R_BR3.BPM3L3.x_BR3.DHZ9L1 equality     .          288.23    -4.70640e-01 >
+31 R_BR3.BPM3L3.x_BR3.DVT12L4 equality     .          293.15    -1.09285e-03 >
+32 R_BR3.BPM3L3.x_BR3.DVT13L4 equality     .          288.26    -2.06928e-01 >
+33 R_BR3.BPM3L3.x_BR3.DVT2L4 equality     .          292.54     1.95889e-01 >
+34 R_BR3.BPM3L3.x_BR3.DVT6L4 equality     .          292.02     6.95322e-02 >
+35 R_BR3.BPM3L3.x_BR3.DVT8L1 equality     .          282.61     6.46488e-02 >
+36 R_BR3.BPM3L3.x_BR3.DVT9L1 equality     .          286.24    -1.59063e-01 >
+37 R_BR3.BPM4L3.x_BR3.DHZ11L4 equality     .          190.54     4.33149e-02 >
+38 R_BR3.BPM4L3.x_BR3.DHZ12L4 equality     .          192.01    -2.16747e-02 >
+39 R_BR3.BPM4L3.x_BR3.DHZ13L4 equality     .          188.81     6.58222e-01 >
+40 R_BR3.BPM4L3.x_BR3.DHZ14L1 equality     .          192.03     5.05241e-03 >
+41 R_BR3.BPM4L3.x_BR3.DHZ8L1 equality     .          190.31     1.50950e-01 >
+42 R_BR3.BPM4L3.x_BR3.DHZ9L1 equality     .          191.26    -1.28708e-01 >
+43 R_BR3.BPM4L3.x_BR3.DVT12L4 equality     .          188.5      1.19420e-01 >
+44 R_BR3.BPM4L3.x_BR3.DVT13L4 equality     .          192.02    -1.97745e-01 >
+45 R_BR3.BPM4L3.x_BR3.DVT2L4 equality     .          191.64    -7.32949e-02 >
+46 R_BR3.BPM4L3.x_BR3.DVT6L4 equality     .          189.79    -1.66832e-01 >
+47 R_BR3.BPM4L3.x_BR3.DVT8L1 equality     .          186.43    -1.45687e-02 >
+48 R_BR3.BPM4L3.x_BR3.DVT9L1 equality     .          186.88    -5.61990e-02 >
+49 R_BR3.BPM5L3.x_BR3.DHZ11L4 equality     .          322.45     7.44558e-01 >
+50 R_BR3.BPM5L3.x_BR3.DHZ12L4 equality     .          310.67     3.76649e-01 >
+51 R_BR3.BPM5L3.x_BR3.DHZ13L4 equality     .          316.48     8.42372e-01 >
+52 R_BR3.BPM5L3.x_BR3.DHZ14L1 equality     .          320.23     7.23993e-01 >
+53 R_BR3.BPM5L3.x_BR3.DHZ8L1 equality     .          322.29    -1.43065e-01 >
+54 R_BR3.BPM5L3.x_BR3.DHZ9L1 equality     .          322.25    -2.99558e-01 >
+55 R_BR3.BPM5L3.x_BR3.DVT12L4 equality     .          315.73     1.20448e-01 >
+56 R_BR3.BPM5L3.x_BR3.DVT13L4 equality     .          322.52     1.78135e-01 >
+57 R_BR3.BPM5L3.x_BR3.DVT2L4 equality     .          319.49    -8.16877e-02 >
+58 R_BR3.BPM5L3.x_BR3.DVT6L4 equality     .          317.91    -2.01637e-01 >
+59 R_BR3.BPM5L3.x_BR3.DVT8L1 equality     .          314.39    -2.80331e-01 >
+60 R_BR3.BPM5L3.x_BR3.DVT9L1 equality     .          318.15     1.28452e-02 >
+61 R_BR3.BPM6L3.x_BR3.DHZ11L4 equality     .          194.7      6.73969e-01 >
+62 R_BR3.BPM6L3.x_BR3.DHZ12L4 equality     .          184.68     4.88524e-01 >
+63 R_BR3.BPM6L3.x_BR3.DHZ13L4 equality     .          188.68     1.08182e+00 >
+64 R_BR3.BPM6L3.x_BR3.DHZ14L1 equality     .          193.88     1.19868e+00 >
+65 R_BR3.BPM6L3.x_BR3.DHZ8L1 equality     .          192.94     1.96472e-01 >
+66 R_BR3.BPM6L3.x_BR3.DHZ9L1 equality     .          188.71    -2.80087e-01 >
+67 R_BR3.BPM6L3.x_BR3.DVT12L4 equality     .          189.45    -9.80784e-02 >
+68 R_BR3.BPM6L3.x_BR3.DVT13L4 equality     .          192.59     3.67234e-02 >
+69 R_BR3.BPM6L3.x_BR3.DVT2L4 equality     .          191.58     2.93877e-01 >
+70 R_BR3.BPM6L3.x_BR3.DVT6L4 equality     .          192.15     1.40631e-01 >
+71 R_BR3.BPM6L3.x_BR3.DVT8L1 equality     .          187.1     -1.70838e-01 >
+72 R_BR3.BPM6L3.x_BR3.DVT9L1 equality     .          191.77    -1.85612e-01 >
+73 R_BR3.BPM7L3.x_BR3.DHZ11L4 equality     .          214.71     2.15235e-03 >
+74 R_BR3.BPM7L3.x_BR3.DHZ12L4 equality     .          211.32     4.55733e-01 >
+75 R_BR3.BPM7L3.x_BR3.DHZ13L4 equality     .          215.15     6.77330e-01 >
+76 R_BR3.BPM7L3.x_BR3.DHZ14L1 equality     .          215.66     5.29560e-02 >
+77 R_BR3.BPM7L3.x_BR3.DHZ8L1 equality     .          214.9      5.81744e-01 >
+78 R_BR3.BPM7L3.x_BR3.DHZ9L1 equality     .          211.69     2.66314e-01 >
+79 R_BR3.BPM7L3.x_BR3.DVT12L4 equality     .          215.49    -4.64663e-03 >
+80 R_BR3.BPM7L3.x_BR3.DVT13L4 equality     .          217.32    -3.40344e-01 >
+81 R_BR3.BPM7L3.x_BR3.DVT2L4 equality     .          212.67     1.83101e-01 >
+82 R_BR3.BPM7L3.x_BR3.DVT6L4 equality     .          217.9      1.49367e-01 >
+83 R_BR3.BPM7L3.x_BR3.DVT8L1 equality     .          210.47     8.97689e-02 >
+84 R_BR3.BPM7L3.x_BR3.DVT9L1 equality     .          213.9     -1.78619e-01 >
+85 R_BR3.BPM8L3.x_BR3.DHZ11L4 equality     .          322.37     6.51604e-02 >
+86 R_BR3.BPM8L3.x_BR3.DHZ12L4 equality     .          315.93     1.42087e-01 >
+87 R_BR3.BPM8L3.x_BR3.DHZ13L4 equality     .          322.16     6.99945e-01 >
+88 R_BR3.BPM8L3.x_BR3.DHZ14L1 equality     .          320.07     1.19655e-01 >
+89 R_BR3.BPM8L3.x_BR3.DHZ8L1 equality     .          322.66     5.12277e-01 >
+90 R_BR3.BPM8L3.x_BR3.DHZ9L1 equality     .          319.02    -2.65576e-02 >
+91 R_BR3.BPM8L3.x_BR3.DVT12L4 equality     .          319.74     9.61753e-02 >
+92 R_BR3.BPM8L3.x_BR3.DVT13L4 equality     .          320.71    -2.01086e-01 >
+93 R_BR3.BPM8L3.x_BR3.DVT2L4 equality     .          318.82    -2.71511e-02 >
+94 R_BR3.BPM8L3.x_BR3.DVT6L4 equality     .          322.27    -1.41514e-01 >
+95 R_BR3.BPM8L3.x_BR3.DVT8L1 equality     .          313        5.41786e-02 >
+96 R_BR3.BPM8L3.x_BR3.DVT9L1 equality     .          315.9     -6.27075e-02 >
+97 R_BR3.BPM9L3.x_BR3.DHZ11L4 equality     .          289.18     8.16965e-01 >
+98 R_BR3.BPM9L3.x_BR3.DHZ12L4 equality     .          252.44     2.89812e-01 >
+99 R_BR3.BPM9L3.x_BR3.DHZ13L4 equality     .          281.72     8.93374e-01 >
+100 R_BR3.BPM9L3.x_BR3.DHZ14L1 equality     .          280.65     1.03348e+00 >
+101 R_BR3.BPM9L3.x_BR3.DHZ8L1 equality     .          253.74     4.80633e-01 >
+102 R_BR3.BPM9L3.x_BR3.DHZ9L1 equality     .          285.15    -6.55927e-02 >
+103 R_BR3.BPM9L3.x_BR3.DVT12L4 equality     .          240.18     2.61518e-02 >
+104 R_BR3.BPM9L3.x_BR3.DVT13L4 equality     .          250.87     2.64081e-01 >
+105 R_BR3.BPM9L3.x_BR3.DVT2L4 equality     .          241.52    -1.52538e-01 >
+106 R_BR3.BPM9L3.x_BR3.DVT6L4 equality     .          247.95    -2.95993e-01 >
+107 R_BR3.BPM9L3.x_BR3.DVT8L1 equality     .          247.1     -2.72981e-01 >
+108 R_BR3.BPM9L3.x_BR3.DVT9L1 equality     .          247.87     1.20561e-01 >
+109 R_BR3.BPM10L3.x_BR3.DHZ11L4 equality     .          321.55     8.13233e-01 >
+110 R_BR3.BPM10L3.x_BR3.DHZ12L4 equality     .          306.66     4.53266e-01 >
+111 R_BR3.BPM10L3.x_BR3.DHZ13L4 equality     .          310.95     7.44675e-01 >
+112 R_BR3.BPM10L3.x_BR3.DHZ14L1 equality     .          321.47     7.43400e-01 >
+113 R_BR3.BPM10L3.x_BR3.DHZ8L1 equality     .          317.47    -2.70891e-01 >
+114 R_BR3.BPM10L3.x_BR3.DHZ9L1 equality     .          318.85     9.09500e-02 >
+115 R_BR3.BPM10L3.x_BR3.DVT12L4 equality     .          319.69    -4.29681e-02 >
+116 R_BR3.BPM10L3.x_BR3.DVT13L4 equality     .          327.16    -1.17964e-02 >
+117 R_BR3.BPM10L3.x_BR3.DVT2L4 equality     .          320.23     2.30126e-01 >
+118 R_BR3.BPM10L3.x_BR3.DVT6L4 equality     .          319.24     1.17777e-01 >
+119 R_BR3.BPM10L3.x_BR3.DVT8L1 equality     .          315.73    -2.48321e-01 >
+120 R_BR3.BPM10L3.x_BR3.DVT9L1 equality     .          320.52    -1.28982e-01 >
+121 R_BR3.BPM11L3.x_BR3.DHZ11L4 equality     .          309.14    -1.66638e-01 >
+122 R_BR3.BPM11L3.x_BR3.DHZ12L4 equality     .          302.71     8.48725e-02 >
+123 R_BR3.BPM11L3.x_BR3.DHZ13L4 equality     .          304.55     8.06208e-01 >
+124 R_BR3.BPM11L3.x_BR3.DHZ14L1 equality     .          310.56     1.58321e-01 >
+125 R_BR3.BPM11L3.x_BR3.DHZ8L1 equality     .          312       -2.97146e-01 >
+126 R_BR3.BPM11L3.x_BR3.DHZ9L1 equality     .          303.08    -2.66797e-01 >
+127 R_BR3.BPM11L3.x_BR3.DVT12L4 equality     .          314.5      8.74282e-02 >
+128 R_BR3.BPM11L3.x_BR3.DVT13L4 equality     .          315.23    -3.28508e-01 >
+129 R_BR3.BPM11L3.x_BR3.DVT2L4 equality     .          307.7      1.38665e-01 >
+130 R_BR3.BPM11L3.x_BR3.DVT6L4 equality     .          314.02     8.38305e-02 >
+131 R_BR3.BPM11L3.x_BR3.DVT8L1 equality     .          306.51     4.62718e-02 >
+132 R_BR3.BPM11L3.x_BR3.DVT9L1 equality     .          310.71    -2.18903e-01 >
+133 R_BR3.BPM12L3.x_BR3.DHZ11L4 equality     .          223.88     2.20989e-01 >
+134 R_BR3.BPM12L3.x_BR3.DHZ12L4 equality     .          221        1.19021e-01 >
+135 R_BR3.BPM12L3.x_BR3.DHZ13L4 equality     .          222.52     1.12538e+00 >
+136 R_BR3.BPM12L3.x_BR3.DHZ14L1 equality     .          225.24     6.22983e-01 >
+137 R_BR3.BPM12L3.x_BR3.DHZ8L1 equality     .          223.05     6.39813e-01 >
+138 R_BR3.BPM12L3.x_BR3.DHZ9L1 equality     .          220.7     -1.60502e-01 >
+139 R_BR3.BPM12L3.x_BR3.DVT12L4 equality     .          223.25     1.32754e-01 >
+140 R_BR3.BPM12L3.x_BR3.DVT13L4 equality     .          227.6     -1.61608e-01 >
+141 R_BR3.BPM12L3.x_BR3.DVT2L4 equality     .          225.13    -5.18750e-02 >
+142 R_BR3.BPM12L3.x_BR3.DVT6L4 equality     .          225.4     -1.61430e-01 >
+143 R_BR3.BPM12L3.x_BR3.DVT8L1 equality     .          220.9      5.49434e-02 >
+144 R_BR3.BPM12L3.x_BR3.DVT9L1 equality     .          223.69    -4.91067e-02 >
+145 R_BR3.BPM13L3.x_BR3.DHZ11L4 equality     .          284.21     7.64108e-01 >
+146 R_BR3.BPM13L3.x_BR3.DHZ12L4 equality     .          276.46     1.48461e-01 >
+147 R_BR3.BPM13L3.x_BR3.DHZ13L4 equality     .          279.97     6.77548e-01 >
+148 R_BR3.BPM13L3.x_BR3.DHZ14L1 equality     .          280.25     9.56019e-01 >
+149 R_BR3.BPM13L3.x_BR3.DHZ8L1 equality     .          279.64     2.20297e-01 >
+150 R_BR3.BPM13L3.x_BR3.DHZ9L1 equality     .          282.5     -2.49798e-01 >
+151 R_BR3.BPM13L3.x_BR3.DVT12L4 equality     .          279.16     2.26351e-01 >
+152 R_BR3.BPM13L3.x_BR3.DVT13L4 equality     .          286.88     2.11930e-01 >
+153 R_BR3.BPM13L3.x_BR3.DVT2L4 equality     .          283.04    -2.30998e-02 >
+154 R_BR3.BPM13L3.x_BR3.DVT6L4 equality     .          281.25    -2.08465e-01 >
+155 R_BR3.BPM13L3.x_BR3.DVT8L1 equality     .          280.82    -2.49552e-01 >
+156 R_BR3.BPM13L3.x_BR3.DVT9L1 equality     .          282.3      9.15817e-02 >
+157 R_BR3.BPM14L3.x_BR3.DHZ11L4 equality     .          204.73     5.95277e-01 >
+158 R_BR3.BPM14L3.x_BR3.DHZ12L4 equality     .          200.91     4.99767e-01 >
+159 R_BR3.BPM14L3.x_BR3.DHZ13L4 equality     .          203.82     1.22341e+00 >
+160 R_BR3.BPM14L3.x_BR3.DHZ14L1 equality     .          203.42     1.26712e+00 >
+161 R_BR3.BPM14L3.x_BR3.DHZ8L1 equality     .          203.87    -2.28234e-01 >
+162 R_BR3.BPM14L3.x_BR3.DHZ9L1 equality     .          204.2     -3.05057e-01 >
+163 R_BR3.BPM14L3.x_BR3.DVT12L4 equality     .          205.99    -1.10003e-01 >
+164 R_BR3.BPM14L3.x_BR3.DVT13L4 equality     .          209.19     1.84532e-01 >
+165 R_BR3.BPM14L3.x_BR3.DVT2L4 equality     .          206.52     2.45753e-01 >
+166 R_BR3.BPM14L3.x_BR3.DVT6L4 equality     .          207.55     1.41275e-01 >
+167 R_BR3.BPM14L3.x_BR3.DVT8L1 equality     .          204.91    -2.71872e-01 >
+168 R_BR3.BPM14L3.x_BR3.DVT9L1 equality     .          204.17    -1.52189e-01 >
+169 R_BR3.BPM15L3.x_BR3.DHZ11L4 equality     .          303.81     2.52155e-01 >
+170 R_BR3.BPM15L3.x_BR3.DHZ12L4 equality     .          300.08     2.25520e-01 >
+171 R_BR3.BPM15L3.x_BR3.DHZ13L4 equality     .          302.93     9.40531e-01 >
+172 R_BR3.BPM15L3.x_BR3.DHZ14L1 equality     .          308.26     7.54886e-01 >
+173 R_BR3.BPM15L3.x_BR3.DHZ8L1 equality     .          303.93     4.21864e-01 >
+174 R_BR3.BPM15L3.x_BR3.DHZ9L1 equality     .          298.77    -2.20672e-01 >
+175 R_BR3.BPM15L3.x_BR3.DVT12L4 equality     .          310.95    -1.44468e-02 >
+176 R_BR3.BPM15L3.x_BR3.DVT13L4 equality     .          313.92    -3.57650e-01 >
+177 R_BR3.BPM15L3.x_BR3.DVT2L4 equality     .          306.4      1.08352e-01 >
+178 R_BR3.BPM15L3.x_BR3.DVT6L4 equality     .          311.37     4.86089e-02 >
+179 R_BR3.BPM15L3.x_BR3.DVT8L1 equality     .          305.18     6.87581e-02 >
+180 R_BR3.BPM15L3.x_BR3.DVT9L1 equality     .          307.29    -1.87227e-01 >
+181 R_BR3.BPM16L3.x_BR3.DHZ11L4 equality     .          324.36     2.51182e-01 >
+182 R_BR3.BPM16L3.x_BR3.DHZ12L4 equality     .          312.05    -8.39386e-03 >
+183 R_BR3.BPM16L3.x_BR3.DHZ13L4 equality     .          318.45     3.07741e-01 >
+184 R_BR3.BPM16L3.x_BR3.DHZ14L1 equality     .          319.58    -2.97928e-01 >
+185 R_BR3.BPM16L3.x_BR3.DHZ8L1 equality     .          321.21     5.91502e-01 >
+186 R_BR3.BPM16L3.x_BR3.DHZ9L1 equality     .          316.49    -7.38306e-02 >
+187 R_BR3.BPM16L3.x_BR3.DVT12L4 equality     .          331.85     1.77078e-01 >
+188 R_BR3.BPM16L3.x_BR3.DVT13L4 equality     .          336.04    -2.13366e-01 >
+189 R_BR3.BPM16L3.x_BR3.DVT2L4 equality     .          334.01    -6.44711e-02 >
+190 R_BR3.BPM16L3.x_BR3.DVT6L4 equality     .          335.02    -1.45032e-01 >
+191 R_BR3.BPM16L3.x_BR3.DVT8L1 equality     .          328.19     2.29500e-02 >
+192 R_BR3.BPM16L3.x_BR3.DVT9L1 equality     .          330.9      4.19336e-03 >
+193 R_BR3.BPM1L3.y_BR3.DHZ11L4 equality     .          245.7     -2.09424e-01 >
+194 R_BR3.BPM1L3.y_BR3.DHZ12L4 equality     .          244.57    -4.46621e-02 >
+195 R_BR3.BPM1L3.y_BR3.DHZ13L4 equality     .          245.23     2.24575e-01 >
+196 R_BR3.BPM1L3.y_BR3.DHZ14L1 equality     .          245.25     1.41781e-01 >
+197 R_BR3.BPM1L3.y_BR3.DHZ8L1 equality     .          245.35    -2.45449e-01 >
+198 R_BR3.BPM1L3.y_BR3.DHZ9L1 equality     .          244.6     -3.11412e-03 >
+199 R_BR3.BPM1L3.y_BR3.DVT12L4 equality     .          248.21     4.05936e+00 >
+200 R_BR3.BPM1L3.y_BR3.DVT13L4 equality     .          242.42     4.43892e+01 >
+201 R_BR3.BPM1L3.y_BR3.DVT2L4 equality     .          244.94    -4.21377e+00 >
+202 R_BR3.BPM1L3.y_BR3.DVT6L4 equality     .          247.1     -4.13059e+00 >
+203 R_BR3.BPM1L3.y_BR3.DVT8L1 equality     .          243.37    -2.11600e+01 >
+204 R_BR3.BPM1L3.y_BR3.DVT9L1 equality     .          244.63     1.71105e+01 >
+205 R_BR3.BPM2L3.y_BR3.DHZ11L4 equality     .          187.2      1.34615e-02 >
+206 R_BR3.BPM2L3.y_BR3.DHZ12L4 equality     .          181.38    -1.57728e-01 >
+207 R_BR3.BPM2L3.y_BR3.DHZ13L4 equality     .          182.53    -7.53452e-02 >
+208 R_BR3.BPM2L3.y_BR3.DHZ14L1 equality     .          187.17    -4.70842e-02 >
+209 R_BR3.BPM2L3.y_BR3.DHZ8L1 equality     .          185.39    -6.25912e-02 >
+210 R_BR3.BPM2L3.y_BR3.DHZ9L1 equality     .          182.62    -2.47066e-01 >
+211 R_BR3.BPM2L3.y_BR3.DVT12L4 equality     .          181.8     -4.33074e+01 >
+212 R_BR3.BPM2L3.y_BR3.DVT13L4 equality     .          185.79     6.53971e+00 >
+213 R_BR3.BPM2L3.y_BR3.DVT2L4 equality     .          181.18     4.43170e+01 >
+214 R_BR3.BPM2L3.y_BR3.DVT6L4 equality     .          183.96     4.36552e+01 >
+215 R_BR3.BPM2L3.y_BR3.DVT8L1 equality     .          183.15    -1.94895e+01 >
+216 R_BR3.BPM2L3.y_BR3.DVT9L1 equality     .          178.33    -2.29236e+01 >
+217 R_BR3.BPM3L3.y_BR3.DHZ11L4 equality     .          293.87     2.29243e-01 >
+218 R_BR3.BPM3L3.y_BR3.DHZ12L4 equality     .          286.34     3.05534e-02 >
+219 R_BR3.BPM3L3.y_BR3.DHZ13L4 equality     .          289.98    -3.23299e-01 >
+220 R_BR3.BPM3L3.y_BR3.DHZ14L1 equality     .          290.3     -2.55290e-01 >
+221 R_BR3.BPM3L3.y_BR3.DHZ8L1 equality     .          292.01     2.72692e-01 >
+222 R_BR3.BPM3L3.y_BR3.DHZ9L1 equality     .          286.25    -1.41882e-02 >
+223 R_BR3.BPM3L3.y_BR3.DVT12L4 equality     .          290.32    -3.97379e+00 >
+224 R_BR3.BPM3L3.y_BR3.DVT13L4 equality     .          288.66    -4.45101e+01 >
+225 R_BR3.BPM3L3.y_BR3.DVT2L4 equality     .          290.22     4.31571e+00 >
+226 R_BR3.BPM3L3.y_BR3.DVT6L4 equality     .          288.65     3.96959e+00 >
+227 R_BR3.BPM3L3.y_BR3.DVT8L1 equality     .          283.17     2.14382e+01 >
+228 R_BR3.BPM3L3.y_BR3.DVT9L1 equality     .          288.97    -1.70939e+01 >
+229 R_BR3.BPM4L3.y_BR3.DHZ11L4 equality     .          196.95    -2.30523e-02 >
+230 R_BR3.BPM4L3.y_BR3.DHZ12L4 equality     .          196.83     1.28480e-01 >
+231 R_BR3.BPM4L3.y_BR3.DHZ13L4 equality     .          196.3      8.27417e-02 >
+232 R_BR3.BPM4L3.y_BR3.DHZ14L1 equality     .          197.85     6.10380e-02 >
+233 R_BR3.BPM4L3.y_BR3.DHZ8L1 equality     .          195.08     2.86064e-02 >
+234 R_BR3.BPM4L3.y_BR3.DHZ9L1 equality     .          196.25     2.37635e-01 >
+235 R_BR3.BPM4L3.y_BR3.DVT12L4 equality     .          200.44     4.20902e+01 >
+236 R_BR3.BPM4L3.y_BR3.DVT13L4 equality     .          198.13    -3.57540e+00 >
+237 R_BR3.BPM4L3.y_BR3.DVT2L4 equality     .          201.09    -4.30698e+01 >
+238 R_BR3.BPM4L3.y_BR3.DVT6L4 equality     .          200.73    -4.26663e+01 >
+239 R_BR3.BPM4L3.y_BR3.DVT8L1 equality     .          197.29     1.77317e+01 >
+240 R_BR3.BPM4L3.y_BR3.DVT9L1 equality     .          198.03     2.32906e+01 >
+241 R_BR3.BPM5L3.y_BR3.DHZ11L4 equality     .          286.85    -2.31682e-01 >
+242 R_BR3.BPM5L3.y_BR3.DHZ12L4 equality     .          282.81    -3.70188e-02 >
+243 R_BR3.BPM5L3.y_BR3.DHZ13L4 equality     .          285.53     3.13403e-01 >
+244 R_BR3.BPM5L3.y_BR3.DHZ14L1 equality     .          286.8      2.38630e-01 >
+245 R_BR3.BPM5L3.y_BR3.DHZ8L1 equality     .          285.41    -2.75238e-01 >
+246 R_BR3.BPM5L3.y_BR3.DHZ9L1 equality     .          283.18    -6.45126e-03 >
+247 R_BR3.BPM5L3.y_BR3.DVT12L4 equality     .          287.63     4.10351e+00 >
+248 R_BR3.BPM5L3.y_BR3.DVT13L4 equality     .          288.25     4.45195e+01 >
+249 R_BR3.BPM5L3.y_BR3.DVT2L4 equality     .          282.24    -4.31846e+00 >
+250 R_BR3.BPM5L3.y_BR3.DVT6L4 equality     .          283.61    -4.07872e+00 >
+251 R_BR3.BPM5L3.y_BR3.DVT8L1 equality     .          279.22    -2.16359e+01 >
+252 R_BR3.BPM5L3.y_BR3.DVT9L1 equality     .          281.79     1.71715e+01 >
+253 R_BR3.BPM6L3.y_BR3.DHZ11L4 equality     .          196.02     4.53577e-02 >
+254 R_BR3.BPM6L3.y_BR3.DHZ12L4 equality     .          191.03    -8.03825e-02 >
+255 R_BR3.BPM6L3.y_BR3.DHZ13L4 equality     .          193.43    -1.66087e-01 >
+256 R_BR3.BPM6L3.y_BR3.DHZ14L1 equality     .          196.09    -8.13810e-02 >
+257 R_BR3.BPM6L3.y_BR3.DHZ8L1 equality     .          194.79    -1.61179e-02 >
+258 R_BR3.BPM6L3.y_BR3.DHZ9L1 equality     .          192.13    -1.77056e-01 >
+259 R_BR3.BPM6L3.y_BR3.DVT12L4 equality     .          192.8     -4.23923e+01 >
+260 R_BR3.BPM6L3.y_BR3.DVT13L4 equality     .          196.77     6.39937e+00 >
+261 R_BR3.BPM6L3.y_BR3.DVT2L4 equality     .          191.14     4.28631e+01 >
+262 R_BR3.BPM6L3.y_BR3.DVT6L4 equality     .          190.72     4.35304e+01 >
+263 R_BR3.BPM6L3.y_BR3.DVT8L1 equality     .          191.14    -1.93408e+01 >
+264 R_BR3.BPM6L3.y_BR3.DVT9L1 equality     .          192.13    -2.27614e+01 >
+265 R_BR3.BPM7L3.y_BR3.DHZ11L4 equality     .          237.96     2.17558e-01 >
+266 R_BR3.BPM7L3.y_BR3.DHZ12L4 equality     .          233.08     5.44382e-02 >
+267 R_BR3.BPM7L3.y_BR3.DHZ13L4 equality     .          238.79    -3.69579e-01 >
+268 R_BR3.BPM7L3.y_BR3.DHZ14L1 equality     .          238.82    -2.44159e-01 >
+269 R_BR3.BPM7L3.y_BR3.DHZ8L1 equality     .          237.11     2.74166e-01 >
+270 R_BR3.BPM7L3.y_BR3.DHZ9L1 equality     .          234.03     2.16343e-02 >
+271 R_BR3.BPM7L3.y_BR3.DVT12L4 equality     .          238.44    -3.80674e+00 >
+272 R_BR3.BPM7L3.y_BR3.DVT13L4 equality     .          243.75    -4.40246e+01 >
+273 R_BR3.BPM7L3.y_BR3.DVT2L4 equality     .          237.76     3.75739e+00 >
+274 R_BR3.BPM7L3.y_BR3.DVT6L4 equality     .          243.19     3.68158e+00 >
+275 R_BR3.BPM7L3.y_BR3.DVT8L1 equality     .          238.76     2.16077e+01 >
+276 R_BR3.BPM7L3.y_BR3.DVT9L1 equality     .          239.3     -1.68218e+01 >
+277 R_BR3.BPM8L3.y_BR3.DHZ11L4 equality     .          295.31     2.02064e-02 >
+278 R_BR3.BPM8L3.y_BR3.DHZ12L4 equality     .          289.83     1.60317e-01 >
+279 R_BR3.BPM8L3.y_BR3.DHZ13L4 equality     .          292.85     6.23396e-03 >
+280 R_BR3.BPM8L3.y_BR3.DHZ14L1 equality     .          296.8     -7.13792e-03 >
+281 R_BR3.BPM8L3.y_BR3.DHZ8L1 equality     .          294.93     1.40686e-01 >
+282 R_BR3.BPM8L3.y_BR3.DHZ9L1 equality     .          293.29     2.26805e-01 >
+283 R_BR3.BPM8L3.y_BR3.DVT12L4 equality     .          287.71     4.33524e+01 >
+284 R_BR3.BPM8L3.y_BR3.DVT13L4 equality     .          291.07    -6.20737e+00 >
+285 R_BR3.BPM8L3.y_BR3.DVT2L4 equality     .          286.25    -4.34532e+01 >
+286 R_BR3.BPM8L3.y_BR3.DVT6L4 equality     .          291.56    -4.38813e+01 >
+287 R_BR3.BPM8L3.y_BR3.DVT8L1 equality     .          282.94     1.99464e+01 >
+288 R_BR3.BPM8L3.y_BR3.DVT9L1 equality     .          286.11     2.34618e+01 >
+289 R_BR3.BPM9L3.y_BR3.DHZ11L4 equality     .          322.97    -2.22985e-01 >
+290 R_BR3.BPM9L3.y_BR3.DHZ12L4 equality     .          312.99    -5.84467e-02 >
+291 R_BR3.BPM9L3.y_BR3.DHZ13L4 equality     .          319.64     3.05150e-01 >
+292 R_BR3.BPM9L3.y_BR3.DHZ14L1 equality     .          323.03     2.28789e-01 >
+293 R_BR3.BPM9L3.y_BR3.DHZ8L1 equality     .          317.02    -1.81833e-01 >
+294 R_BR3.BPM9L3.y_BR3.DHZ9L1 equality     .          315.91    -1.71721e-02 >
+295 R_BR3.BPM9L3.y_BR3.DVT12L4 equality     .          311.43     3.54861e+00 >
+296 R_BR3.BPM9L3.y_BR3.DVT13L4 equality     .          325.04     4.49660e+01 >
+297 R_BR3.BPM9L3.y_BR3.DVT2L4 equality     .          311.27    -3.80095e+00 >
+298 R_BR3.BPM9L3.y_BR3.DVT6L4 equality     .          319.31    -3.79163e+00 >
+299 R_BR3.BPM9L3.y_BR3.DVT8L1 equality     .          313.68    -2.17210e+01 >
+300 R_BR3.BPM9L3.y_BR3.DVT9L1 equality     .          320.5      1.75910e+01 >
+301 R_BR3.BPM10L3.y_BR3.DHZ11L4 equality     .          349.64     6.67088e-02 >
+302 R_BR3.BPM10L3.y_BR3.DHZ12L4 equality     .          338.4     -1.54700e-01 >
+303 R_BR3.BPM10L3.y_BR3.DHZ13L4 equality     .          344.8     -1.49875e-01 >
+304 R_BR3.BPM10L3.y_BR3.DHZ14L1 equality     .          347.83    -9.30728e-02 >
+305 R_BR3.BPM10L3.y_BR3.DHZ8L1 equality     .          343.09    -1.00595e-01 >
+306 R_BR3.BPM10L3.y_BR3.DHZ9L1 equality     .          342.02    -2.53074e-01 >
+307 R_BR3.BPM10L3.y_BR3.DVT12L4 equality     .          338.65    -4.35522e+01 >
+308 R_BR3.BPM10L3.y_BR3.DVT13L4 equality     .          346.16     5.13026e+00 >
+309 R_BR3.BPM10L3.y_BR3.DVT2L4 equality     .          339.09     4.33673e+01 >
+310 R_BR3.BPM10L3.y_BR3.DVT6L4 equality     .          338.99     4.36274e+01 >
+311 R_BR3.BPM10L3.y_BR3.DVT8L1 equality     .          334.17    -1.92844e+01 >
+312 R_BR3.BPM10L3.y_BR3.DVT9L1 equality     .          342.05    -2.32051e+01 >
+313 R_BR3.BPM11L3.y_BR3.DHZ11L4 equality     .          300.64     2.15471e-01 >
+314 R_BR3.BPM11L3.y_BR3.DHZ12L4 equality     .          292.02     9.07573e-02 >
+315 R_BR3.BPM11L3.y_BR3.DHZ13L4 equality     .          296.9     -3.29702e-01 >
+316 R_BR3.BPM11L3.y_BR3.DHZ14L1 equality     .          299.79    -2.78263e-01 >
+317 R_BR3.BPM11L3.y_BR3.DHZ8L1 equality     .          296.96     2.38810e-01 >
+318 R_BR3.BPM11L3.y_BR3.DHZ9L1 equality     .          297.98     3.64823e-02 >
+319 R_BR3.BPM11L3.y_BR3.DVT12L4 equality     .          306.8     -4.01284e+00 >
+320 R_BR3.BPM11L3.y_BR3.DVT13L4 equality     .          301.99    -4.48572e+01 >
+321 R_BR3.BPM11L3.y_BR3.DVT2L4 equality     .          295.64     3.95597e+00 >
+322 R_BR3.BPM11L3.y_BR3.DVT6L4 equality     .          305.94     3.84528e+00 >
+323 R_BR3.BPM11L3.y_BR3.DVT8L1 equality     .          302.92     2.13235e+01 >
+324 R_BR3.BPM11L3.y_BR3.DVT9L1 equality     .          304.58    -1.72797e+01 >
+325 R_BR3.BPM12L3.y_BR3.DHZ11L4 equality     .          218.46     2.22665e-02 >
+326 R_BR3.BPM12L3.y_BR3.DHZ12L4 equality     .          213.55     1.68228e-01 >
+327 R_BR3.BPM12L3.y_BR3.DHZ13L4 equality     .          217.46     6.52847e-02 >
+328 R_BR3.BPM12L3.y_BR3.DHZ14L1 equality     .          214.51     1.44451e-02 >
+329 R_BR3.BPM12L3.y_BR3.DHZ8L1 equality     .          216.7      1.32724e-01 >
+330 R_BR3.BPM12L3.y_BR3.DHZ9L1 equality     .          215.32     2.05503e-01 >
+331 R_BR3.BPM12L3.y_BR3.DVT12L4 equality     .          224.86     4.37164e+01 >
+332 R_BR3.BPM12L3.y_BR3.DVT13L4 equality     .          222.96    -6.22692e+00 >
+333 R_BR3.BPM12L3.y_BR3.DVT2L4 equality     .          225.34    -4.31891e+01 >
+334 R_BR3.BPM12L3.y_BR3.DVT6L4 equality     .          227.74    -4.31381e+01 >
+335 R_BR3.BPM12L3.y_BR3.DVT8L1 equality     .          219.48     1.95170e+01 >
+336 R_BR3.BPM12L3.y_BR3.DVT9L1 equality     .          223.99     2.26965e+01 >
+337 R_BR3.BPM13L3.y_BR3.DHZ11L4 equality     .          304.62    -1.38236e-01 >
+338 R_BR3.BPM13L3.y_BR3.DHZ12L4 equality     .          298.27    -5.17616e-02 >
+339 R_BR3.BPM13L3.y_BR3.DHZ13L4 equality     .          301.75     2.94288e-01 >
+340 R_BR3.BPM13L3.y_BR3.DHZ14L1 equality     .          300.8      2.43106e-01 >
+341 R_BR3.BPM13L3.y_BR3.DHZ8L1 equality     .          301.57    -1.78083e-01 >
+342 R_BR3.BPM13L3.y_BR3.DHZ9L1 equality     .          297.1     -8.30215e-03 >
+343 R_BR3.BPM13L3.y_BR3.DVT12L4 equality     .          304.71     3.21477e+00 >
+344 R_BR3.BPM13L3.y_BR3.DVT13L4 equality     .          306.7      4.54526e+01 >
+345 R_BR3.BPM13L3.y_BR3.DVT2L4 equality     .          301.45    -3.18467e+00 >
+346 R_BR3.BPM13L3.y_BR3.DVT6L4 equality     .          304.28    -3.09565e+00 >
+347 R_BR3.BPM13L3.y_BR3.DVT8L1 equality     .          301.32    -2.17010e+01 >
+348 R_BR3.BPM13L3.y_BR3.DVT9L1 equality     .          301.13     1.68636e+01 >
+349 R_BR3.BPM14L3.y_BR3.DHZ11L4 equality     .          234.86     5.43578e-03 >
+350 R_BR3.BPM14L3.y_BR3.DHZ12L4 equality     .          229.86    -1.22593e-01 >
+351 R_BR3.BPM14L3.y_BR3.DHZ13L4 equality     .          233.14    -1.56006e-02 >
+352 R_BR3.BPM14L3.y_BR3.DHZ14L1 equality     .          233.35    -1.92155e-02 >
+353 R_BR3.BPM14L3.y_BR3.DHZ8L1 equality     .          233.18    -9.39520e-02 >
+354 R_BR3.BPM14L3.y_BR3.DHZ9L1 equality     .          231.77    -2.20730e-01 >
+355 R_BR3.BPM14L3.y_BR3.DVT12L4 equality     .          229.21    -4.37605e+01 >
+356 R_BR3.BPM14L3.y_BR3.DVT13L4 equality     .          234.04     4.67121e+00 >
+357 R_BR3.BPM14L3.y_BR3.DVT2L4 equality     .          227.39     4.35147e+01 >
+358 R_BR3.BPM14L3.y_BR3.DVT6L4 equality     .          230.77     4.33596e+01 >
+359 R_BR3.BPM14L3.y_BR3.DVT8L1 equality     .          230.18    -1.84466e+01 >
+360 R_BR3.BPM14L3.y_BR3.DVT9L1 equality     .          232.35    -2.35385e+01 >
+361 R_BR3.BPM15L3.y_BR3.DHZ11L4 equality     .          321.54     1.67004e-01 >
+362 R_BR3.BPM15L3.y_BR3.DHZ12L4 equality     .          313.61     9.77042e-02 >
+363 R_BR3.BPM15L3.y_BR3.DHZ13L4 equality     .          316.63    -2.93921e-01 >
+364 R_BR3.BPM15L3.y_BR3.DHZ14L1 equality     .          319.28    -2.03231e-01 >
+365 R_BR3.BPM15L3.y_BR3.DHZ8L1 equality     .          318.11     2.34282e-01 >
+366 R_BR3.BPM15L3.y_BR3.DHZ9L1 equality     .          317.1      5.91549e-02 >
+367 R_BR3.BPM15L3.y_BR3.DVT12L4 equality     .          320.58    -4.10171e+00 >
+368 R_BR3.BPM15L3.y_BR3.DVT13L4 equality     .          319.98    -4.50031e+01 >
+369 R_BR3.BPM15L3.y_BR3.DVT2L4 equality     .          320.95     4.00994e+00 >
+370 R_BR3.BPM15L3.y_BR3.DVT6L4 equality     .          319.56     3.99129e+00 >
+371 R_BR3.BPM15L3.y_BR3.DVT8L1 equality     .          316.14     2.13852e+01 >
+372 R_BR3.BPM15L3.y_BR3.DVT9L1 equality     .          317.91    -1.72790e+01 >
+373 R_BR3.BPM16L3.y_BR3.DHZ11L4 equality     .          354.75     3.02958e-02 >
+374 R_BR3.BPM16L3.y_BR3.DHZ12L4 equality     .          348.98     1.64900e-01 >
+375 R_BR3.BPM16L3.y_BR3.DHZ13L4 equality     .          349.55     1.15980e-03 >
+376 R_BR3.BPM16L3.y_BR3.DHZ14L1 equality     .          352.76    -1.91308e-03 >
+377 R_BR3.BPM16L3.y_BR3.DHZ8L1 equality     .          352.81     1.17497e-01 >
+378 R_BR3.BPM16L3.y_BR3.DHZ9L1 equality     .          348.31     2.33360e-01 >
+379 R_BR3.BPM16L3.y_BR3.DVT12L4 equality     .          350.4      4.33476e+01 >
+380 R_BR3.BPM16L3.y_BR3.DVT13L4 equality     .          352.63    -5.44539e+00 >
+381 R_BR3.BPM16L3.y_BR3.DVT2L4 equality     .          350.22    -4.37005e+01 >
+382 R_BR3.BPM16L3.y_BR3.DVT6L4 equality     .          348.18    -4.33098e+01 >
+383 R_BR3.BPM16L3.y_BR3.DVT8L1 equality     .          346.16     1.88388e+01 >
+384 R_BR3.BPM16L3.y_BR3.DVT9L1 equality     .          348.37     2.31910e+01 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 BR.QFOCELL1.dk1l        -1.64217e-03 -1.64217e-03   .            .         
+ 2 BR.QDE1.dk1l             2.19198e-03  2.19198e-03   .            .         
+ 3 BR.QFOCELL2.dk1l        -8.84153e-04 -8.84153e-04   .            .         
+ 4 BR.QDE2.dk1l            -2.08316e-04 -2.08316e-04   .            .         
+ 5 BR.QFOCELL3.dk1l        -1.72528e-03 -1.72528e-03   .            .         
+ 6 BR.QDE3.dk1l            -2.21834e-03 -2.21834e-03   .            .         
+ 7 BR.QFOCELL4.dk1l        -6.64079e-04 -6.64079e-04   .            .         
+ 8 BR.QDE4.dk1l            -8.97636e-05 -8.97636e-05   .            .         
+***pymad.run: madl_match.mad:370: interrupted!
+stack traceback:
+	madl_pymad.mad:338: in function <madl_pymad.mad:336>
+	madl_match.mad:370: in function 'disp_summ'
+	madl_match.mad:666: in function 'fun'
+	madl_lsopt.mad:72: in function 'eval_fun'
+	madl_lsopt.mad:514: in function 'lsoptrun'
+	madl_match.mad:890: in function 'run_match'
+	[string "py:send({run_match(4000, 1.000000000000000e-1..."]:1: in main chunk
+	[C]: in function 'xpcall'
+	madl_pymad.mad:359: in function 'run'
+	madl_pymad.mad:370: in function '__ini'
+	(command line):1: in main chunk
+	[C]: at 0x004702b0
+Traceback (most recent call last):
+  File "/afs/cern.ch/work/j/jmgray/private/psb_loco/method1_madng_da/run_method1.py", line 148, in run
+    status, final_objective, ncall = mad.recv()
+                                     ^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_object.py", line 164, in recv
+    return self.__process.recv(varname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 284, in recv
+    typ = self.mad_read_stream.read(4).decode("utf-8")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 148, in delete_process
+    self.close()
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 357, in close
+    close_msg = self.recv("closing")
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 284, in recv
+    typ = self.mad_read_stream.read(4).decode("utf-8")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/afs/cern.ch/work/j/jmgray/private/psb_loco/method1_madng_da/run_method1.py", line 257, in <module>
+    main()
+  File "/afs/cern.ch/work/j/jmgray/private/psb_loco/method1_madng_da/run_method1.py", line 209, in main
+    result = run(
+             ^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/psb_loco/method1_madng_da/run_method1.py", line 156, in run
+    interface.close()
+  File "/afs/cern.ch/work/j/jmgray/private/pymadng-utils/src/pymadng_utils/mad/accelerator_mad_interface.py", line 844, in close
+    self.mad.close()
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_object.py", line 500, in close
+    self.__process.close()
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 357, in close
+    close_msg = self.recv("closing")
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 287, in recv
+    return type_fun[typ]["recv"](self)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/afs/cern.ch/work/j/jmgray/private/MAD-NG.py/src/pymadng/madp_pymad.py", line 975, in recv_err
+    raise RuntimeError("MAD Errored (see the MAD error output)")
+RuntimeError: MAD Errored (see the MAD error output)

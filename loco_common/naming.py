@@ -62,18 +62,6 @@ def lsa_to_knob(parameter: str) -> str:
     return element_to_knob(lsa_to_element(parameter))
 
 
-def knob_to_element(knob: str, ring: int = 3) -> str:
-    """``kbr3dhz8l1`` -> ``BR3.DHZ8L1``. Inverse of :func:`element_to_knob`."""
-    body = knob.lower()
-    if not body.startswith("k"):
-        raise ValueError(f"Not a corrector knob name: {knob!r}")
-    body = body[1:]
-    prefix = f"br{ring}"
-    if not body.startswith(prefix):
-        raise ValueError(f"Knob {knob!r} does not belong to ring {ring}")
-    return normalise_element_name(f"{prefix}.{body[len(prefix):]}")
-
-
 def plane_of(parameter: str) -> str:
     """``"x"`` for a DHZ corrector, ``"y"`` for a DVT one."""
     element = lsa_to_element(parameter)
@@ -82,6 +70,8 @@ def plane_of(parameter: str) -> str:
     if ".DVT" in element:
         return "y"
     raise ValueError(f"Cannot infer a plane from {parameter!r}")
+
+
 def lsa_k_to_rad(parameter: str) -> float:
     """Signed conversion from this corrector's LSA ``/K`` to a MAD kick, in rad.
 
@@ -90,13 +80,3 @@ def lsa_k_to_rad(parameter: str) -> float:
     into the model, since the two planes do not share a sign.
     """
     return LSA_K_SIGN[plane_of(parameter)] * LSA_K_TO_RAD
-
-
-def quad_knob_name(element: str) -> str:
-    """``BR.QFO11`` -> ``br.qfo11.dk1l``, the optimisation knob ``aba_optimiser`` builds.
-
-    ``k1`` knobs route through the element's ``dknl`` table so the base strength
-    is never mutated (``optimising_mad_interface._build_attr_block``), which is
-    why the knob is named after ``dk1l`` and not ``k1``.
-    """
-    return f"{normalise_element_name(element).lower()}.dk1l"

@@ -1,15 +1,15 @@
 [
   {
-    "campaign": "normal_second",
+    "campaign": "p17_p23_final",
     "label": "Normal tunes, 29th",
     "case": "none__k1__bpm-family",
     "method1": {
-      "command": "-m method1_madng_da.run_method1 --campaign normal_second --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/normal_second/method1",
+      "command": "-m method1_madng_da.run_method1 --campaign p17_p23_final --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/p17_p23_final/method1",
       "returncode": 0,
-      "wall_s": 11.672134831547737,
-      "cpu_s": 22.640143,
-      "max_rss_mb": 259.93359375,
-      "log": "results/benchmark/normal_second/method1.log",
+      "wall_s": 12.3232277110219,
+      "cpu_s": 23.142825000000002,
+      "max_rss_mb": 252.10546875,
+      "log": "results/benchmark/p17_p23_final/method1.log",
       "summary": {
         "method": "madng_da",
         "rf_offset": 0.0,
@@ -48,24 +48,24 @@
         "n_quadrupole_knobs": 32,
         "n_output_knobs": 48,
         "status": "XTOL",
-        "fmin": 0.2836397674043638,
+        "fmin": 0.28363976740479313,
         "ncall": 298,
         "max_call": 4000,
         "objective_fmin": 1e-12,
         "variable_tol": 0.0,
         "variable_rtol": 0.003,
-        "residual_rms_before": 116.97111624926578,
-        "residual_rms_after": 80.14627194424602
+        "residual_rms_before": 116.97111624926595,
+        "residual_rms_after": 80.14627194436736
       },
       "processes": 1
     },
     "method2": {
-      "command": "-m method2_delta_orbit.run_method2 --campaign normal_second --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/normal_second/method2",
+      "command": "-m method2_delta_orbit.run_method2 --campaign p17_p23_final --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/p17_p23_final/method2",
       "returncode": 0,
-      "wall_s": 5.333599153906107,
-      "cpu_s": 24.56744,
-      "max_rss_mb": 266.75390625,
-      "log": "results/benchmark/normal_second/method2.log",
+      "wall_s": 5.223573766648769,
+      "cpu_s": 23.319197,
+      "max_rss_mb": 269.0,
+      "log": "results/benchmark/p17_p23_final/method2.log",
       "summary": {
         "method": "delta_orbit",
         "status": "complete",
@@ -73,8 +73,8 @@
           "converged": true,
           "reason": "loss_converged",
           "iterations": 4,
-          "best_loss": 7.351396867737943e-10,
-          "gradient_norm": 1.77815765189563e-10,
+          "best_loss": 7.351396867738611e-10,
+          "gradient_norm": 1.7781576519005712e-10,
           "damping": 6.25e-05,
           "accepted_evaluations": 4
         },
@@ -129,24 +129,24 @@
       "magnets": 48,
       "distinct_method1": 32,
       "distinct_method2": 32,
-      "correlation": 0.9997658363369621,
-      "rms_difference_pct": 0.06737637984352053,
-      "max_difference_pct": 0.13738144210363712,
-      "rms_method1_pct": 2.3636089626645487,
-      "rms_method2_pct": 2.319184041132304
+      "correlation": 0.9997658667394637,
+      "rms_difference_pct": 0.06737428703475454,
+      "max_difference_pct": 0.13737057826004656,
+      "rms_method1_pct": 2.363609519880122,
+      "rms_method2_pct": 2.3191840411409146
     }
   },
   {
-    "campaign": "normal_qde14_err",
+    "campaign": "p17_p23_final_qde14",
     "label": "Normal tunes, QDE14 error",
     "case": "none__k1__bpm-family",
     "method1": {
-      "command": "-m method1_madng_da.run_method1 --campaign normal_qde14_err --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/normal_qde14_err/method1",
+      "command": "-m method1_madng_da.run_method1 --campaign p17_p23_final_qde14 --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/p17_p23_final_qde14/method1",
       "returncode": 0,
-      "wall_s": 10.671944063156843,
-      "cpu_s": 21.676133,
-      "max_rss_mb": 254.11328125,
-      "log": "results/benchmark/normal_qde14_err/method1.log",
+      "wall_s": 9.3673525005579,
+      "cpu_s": 20.018663999999998,
+      "max_rss_mb": 252.890625,
+      "log": "results/benchmark/p17_p23_final_qde14/method1.log",
       "summary": {
         "method": "madng_da",
         "rf_offset": 0.0,
@@ -185,24 +185,24 @@
         "n_quadrupole_knobs": 32,
         "n_output_knobs": 48,
         "status": "XTOL",
-        "fmin": 0.2840931882758115,
+        "fmin": 0.2840931882753281,
         "ncall": 265,
         "max_call": 4000,
         "objective_fmin": 1e-12,
         "variable_tol": 0.0,
         "variable_rtol": 0.003,
-        "residual_rms_before": 118.87825036890005,
-        "residual_rms_after": 80.23649704644747
+        "residual_rms_before": 118.87825036890027,
+        "residual_rms_after": 80.23649704631094
       },
       "processes": 1
     },
     "method2": {
-      "command": "-m method2_delta_orbit.run_method2 --campaign normal_qde14_err --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/normal_qde14_err/method2",
+      "command": "-m method2_delta_orbit.run_method2 --campaign p17_p23_final_qde14 --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/p17_p23_final_qde14/method2",
       "returncode": 0,
-      "wall_s": 20.101565089076757,
-      "cpu_s": 22.818108000000002,
-      "max_rss_mb": 268.17578125,
-      "log": "results/benchmark/normal_qde14_err/method2.log",
+      "wall_s": 5.115842510014772,
+      "cpu_s": 24.637841,
+      "max_rss_mb": 268.34375,
+      "log": "results/benchmark/p17_p23_final_qde14/method2.log",
       "summary": {
         "method": "delta_orbit",
         "status": "complete",
@@ -210,8 +210,8 @@
           "converged": true,
           "reason": "loss_converged",
           "iterations": 5,
-          "best_loss": 7.144657717139275e-10,
-          "gradient_norm": 1.0205288402851046e-10,
+          "best_loss": 7.144657717131183e-10,
+          "gradient_norm": 1.0205288418463717e-10,
           "damping": 3.125e-05,
           "accepted_evaluations": 5
         },
@@ -266,24 +266,24 @@
       "magnets": 48,
       "distinct_method1": 32,
       "distinct_method2": 32,
-      "correlation": 0.9999442099190488,
-      "rms_difference_pct": 0.05129867625400203,
-      "max_difference_pct": 0.1024073809089493,
-      "rms_method1_pct": 3.072288242975688,
-      "rms_method2_pct": 3.032396064852581
+      "correlation": 0.9999442097074775,
+      "rms_difference_pct": 0.05129760696847465,
+      "max_difference_pct": 0.10240622801059761,
+      "rms_method1_pct": 3.072286827043922,
+      "rms_method2_pct": 3.0323960648491917
     }
   },
   {
-    "campaign": "normal_qde14_qde3_err",
+    "campaign": "p17_p23_final_qde14_qde3",
     "label": "Normal tunes, QDE14+QDE3 error",
     "case": "none__k1__bpm-family",
     "method1": {
-      "command": "-m method1_madng_da.run_method1 --campaign normal_qde14_qde3_err --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/normal_qde14_qde3_err/method1",
+      "command": "-m method1_madng_da.run_method1 --campaign p17_p23_final_qde14_qde3 --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/p17_p23_final_qde14_qde3/method1",
       "returncode": 0,
-      "wall_s": 13.885909780859947,
-      "cpu_s": 24.823962,
-      "max_rss_mb": 255.3203125,
-      "log": "results/benchmark/normal_qde14_qde3_err/method1.log",
+      "wall_s": 11.088322460651398,
+      "cpu_s": 21.893915,
+      "max_rss_mb": 257.79296875,
+      "log": "results/benchmark/p17_p23_final_qde14_qde3/method1.log",
       "summary": {
         "method": "madng_da",
         "rf_offset": 0.0,
@@ -322,24 +322,24 @@
         "n_quadrupole_knobs": 32,
         "n_output_knobs": 48,
         "status": "XTOL",
-        "fmin": 0.27438746252823715,
-        "ncall": 369,
+        "fmin": 0.2743874625276544,
+        "ncall": 331,
         "max_call": 4000,
         "objective_fmin": 1e-12,
         "variable_tol": 0.0,
         "variable_rtol": 0.003,
-        "residual_rms_before": 114.72451438498706,
-        "residual_rms_after": 77.27068952530502
+        "residual_rms_before": 114.72451438498727,
+        "residual_rms_after": 77.27068952514094
       },
       "processes": 1
     },
     "method2": {
-      "command": "-m method2_delta_orbit.run_method2 --campaign normal_qde14_qde3_err --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/normal_qde14_qde3_err/method2",
+      "command": "-m method2_delta_orbit.run_method2 --campaign p17_p23_final_qde14_qde3 --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/p17_p23_final_qde14_qde3/method2",
       "returncode": 0,
-      "wall_s": 4.708434037864208,
-      "cpu_s": 22.367568,
-      "max_rss_mb": 264.68359375,
-      "log": "results/benchmark/normal_qde14_qde3_err/method2.log",
+      "wall_s": 4.869565304368734,
+      "cpu_s": 24.510886000000003,
+      "max_rss_mb": 268.3046875,
+      "log": "results/benchmark/p17_p23_final_qde14_qde3/method2.log",
       "summary": {
         "method": "delta_orbit",
         "status": "complete",
@@ -347,8 +347,8 @@
           "converged": true,
           "reason": "loss_converged",
           "iterations": 4,
-          "best_loss": 7.273253582783104e-10,
-          "gradient_norm": 2.0482195661449716e-10,
+          "best_loss": 7.273253582777658e-10,
+          "gradient_norm": 2.0482195652714456e-10,
           "damping": 6.25e-05,
           "accepted_evaluations": 4
         },
@@ -403,24 +403,24 @@
       "magnets": 48,
       "distinct_method1": 32,
       "distinct_method2": 32,
-      "correlation": 0.9997637597459393,
-      "rms_difference_pct": 0.0845237989970781,
-      "max_difference_pct": 0.1975989477622937,
-      "rms_method1_pct": 2.6364308970241965,
-      "rms_method2_pct": 2.573708228354927
+      "correlation": 0.9997635445167203,
+      "rms_difference_pct": 0.08453972509593319,
+      "max_difference_pct": 0.197657601986895,
+      "rms_method1_pct": 2.636429151998048,
+      "rms_method2_pct": 2.573708228365529
     }
   },
   {
-    "campaign": "normal_sexts_on",
+    "campaign": "p17_p23_final_sexts_on",
     "label": "Normal tunes, sextupoles on",
     "case": "none__k1__bpm-family",
     "method1": {
-      "command": "-m method1_madng_da.run_method1 --campaign normal_sexts_on --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/normal_sexts_on/method1",
+      "command": "-m method1_madng_da.run_method1 --campaign p17_p23_final_sexts_on --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --max-call 4000 --output results/benchmark/p17_p23_final_sexts_on/method1",
       "returncode": 0,
-      "wall_s": 9.69476955384016,
-      "cpu_s": 20.649614,
-      "max_rss_mb": 256.74609375,
-      "log": "results/benchmark/normal_sexts_on/method1.log",
+      "wall_s": 9.792063608765602,
+      "cpu_s": 20.625376,
+      "max_rss_mb": 264.99609375,
+      "log": "results/benchmark/p17_p23_final_sexts_on/method1.log",
       "summary": {
         "method": "madng_da",
         "rf_offset": 0.0,
@@ -459,24 +459,24 @@
         "n_quadrupole_knobs": 32,
         "n_output_knobs": 48,
         "status": "XTOL",
-        "fmin": 0.28415980612827424,
+        "fmin": 0.28415980612752484,
         "ncall": 232,
         "max_call": 4000,
         "objective_fmin": 1e-12,
         "variable_tol": 0.0,
         "variable_rtol": 0.003,
-        "residual_rms_before": 118.33512337259782,
-        "residual_rms_after": 79.94962234222162
+        "residual_rms_before": 118.33512337259803,
+        "residual_rms_after": 79.94962234201078
       },
       "processes": 1
     },
     "method2": {
-      "command": "-m method2_delta_orbit.run_method2 --campaign normal_sexts_on --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/normal_sexts_on/method2",
+      "command": "-m method2_delta_orbit.run_method2 --campaign p17_p23_final_sexts_on --sequence-file /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq --group-quadrupoles-by-cell --output results/benchmark/p17_p23_final_sexts_on/method2",
       "returncode": 0,
-      "wall_s": 4.852120507508516,
-      "cpu_s": 24.550790999999997,
-      "max_rss_mb": 269.2890625,
-      "log": "results/benchmark/normal_sexts_on/method2.log",
+      "wall_s": 5.416615005582571,
+      "cpu_s": 24.349094,
+      "max_rss_mb": 266.640625,
+      "log": "results/benchmark/p17_p23_final_sexts_on/method2.log",
       "summary": {
         "method": "delta_orbit",
         "status": "complete",
@@ -484,8 +484,8 @@
           "converged": true,
           "reason": "gradient_converged",
           "iterations": 5,
-          "best_loss": 7.371398976337975e-10,
-          "gradient_norm": 9.177211550005651e-11,
+          "best_loss": 7.371398976337694e-10,
+          "gradient_norm": 9.177211543332001e-11,
           "damping": 3.125e-05,
           "accepted_evaluations": 5
         },
@@ -540,11 +540,11 @@
       "magnets": 48,
       "distinct_method1": 32,
       "distinct_method2": 32,
-      "correlation": 0.9999584584598438,
-      "rms_difference_pct": 0.033156161061835936,
-      "max_difference_pct": 0.06377253641416708,
-      "rms_method1_pct": 3.054324472879665,
-      "rms_method2_pct": 3.036156229866241
+      "correlation": 0.9999584595931,
+      "rms_difference_pct": 0.033155969575690884,
+      "max_difference_pct": 0.06377257057716941,
+      "rms_method1_pct": 3.054324698718636,
+      "rms_method2_pct": 3.0361562298549227
     }
   }
 ]

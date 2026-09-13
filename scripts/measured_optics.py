@@ -2,7 +2,7 @@
 
 The LOCO fits start from a model whose quadrupole circuits are the machine's own
 LSA readings and whose tune is therefore *wrong on purpose* -- nothing in the fit
-path matches (``loco_common.model.SCAN_QUAD_SETTINGS``). That is the right thing
+path matches (``loco_common.model.build_model``). That is the right thing
 to do, because a tune match absorbs the very gradient error the fit exists to
 measure into the two main circuits, but it leaves an obvious question unanswered:
 by how much is it wrong, and in what?
@@ -68,13 +68,19 @@ from loco_common.measured_response import (
     measured_orbits,
 )
 from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_twiss
-from loco_common.optics_reproducibility import REPLICAS, apply_bootstrap_errors
 from loco_common.momentum import estimate_pt_by_rf_offset
+from loco_common.optics_reproducibility import REPLICAS, apply_bootstrap_errors
 
 logger = logging.getLogger(__name__)
 
-from psb_md.acd_config import orbit_driven_tune_and_dpp, orbit_natural_tunes  # noqa: E402
-from psb_md.defaults import folder_to_orbit_map  # noqa: E402
+from psb_md.acd_config import (  # noqa: E402
+    orbit_driven_tune_and_dpp,
+    orbit_natural_tunes,
+)
+from psb_md.defaults import (  # noqa: E402
+    default_blank_acd_measurement_dir,
+    folder_to_orbit_map,
+)
 from psb_md.preprocessing import TbtPreprocessing  # noqa: E402
 
 #: The AC-dipole preprocessing chain ``psb_md``'s
@@ -119,7 +125,7 @@ def campaign_natural_tune(
     campaign: Campaign, sequence_file: Path = DEFAULT_SEQUENCE_FILE
 ) -> tuple[float, float]:
     """The campaign's natural tune, fitted live from its chroma export."""
-    chroma = read_chroma_summary(campaign.optics.chroma_file, build_accelerator(sequence_file))
+    chroma = read_chroma_summary(campaign.chroma_file, build_accelerator(sequence_file))
     return (chroma["QH"], chroma["QV"])
 
 
@@ -187,8 +193,7 @@ def closed_orbit_calibrated_chromaticity(
     from psb_md.defaults import DPP_PER_MM
     from psb_md.tune_measurements import load_orbit_tune_table
 
-    # The campaign's own RF offsets, not the fixed RF_STEERING_OFFSETS.
-    campaign_offsets = tuple(sorted({0.0, *campaign.rf_scan_logs}))
+    campaign_offsets = campaign.rf_offsets
     points, orbit_by_path = cached_scan(campaign=campaign)
     absolute = {}
     for offset in campaign_offsets:
@@ -202,7 +207,7 @@ def closed_orbit_calibrated_chromaticity(
         absolute[offset] = average_orbit_frames(list(untrimmed.values()))
     pt = estimate_pt_by_rf_offset(absolute, model_twiss(model, chrom=True))
     table = load_orbit_tune_table(
-        campaign.optics.chroma_file, dpp_per_index=DPP_PER_MM
+        campaign.chroma_file, dpp_per_index=DPP_PER_MM
     )
     offsets = np.asarray(campaign_offsets)
     momentum = np.asarray([pt[offset] for offset in offsets])[:, None]
@@ -408,11 +413,9 @@ def check_acd_folder_momenta(campaign: Campaign, model, *, limit: int | None = N
     """
     from psb_md.measurements import compute_closed_orbit_dataframe  # noqa: PLC0415
 
-    if campaign.machine_config is None:
-        return
     orbits: dict[float, pd.DataFrame] = {}
     expected_dpp: dict[float, float] = {}
-    for name, folder in campaign.optics.acd_dirs.items():
+    for name, folder in campaign.acd_dirs.items():
         orbit_mm = float(folder_to_orbit_map()[name])
         _, expected_dpp[orbit_mm] = orbit_driven_tune_and_dpp(
             int(orbit_mm), campaign.machine_config
@@ -464,7 +467,6 @@ def analyse_folder(
     folder: Path,
     args: argparse.Namespace,
     *,
-    natural: tuple[float, float],
     optics: bool,
 ) -> dict[str, object]:
     """One driven-tune setting: the drive always, the full optics chain if asked.
@@ -476,7 +478,9 @@ def analyse_folder(
     all`` for both). The two folders differ in how close the drive sits to the
     tune, not in what lattice was being driven.
     """
-    from psb_md.driven_tune_measurement import measure_folder_driven_tunes  # noqa: PLC0415
+    from psb_md.driven_tune_measurement import (
+        measure_folder_driven_tunes,  # noqa: PLC0415
+    )
     from psb_md.hio_analysis import (  # noqa: PLC0415
         create_omc3_model,
         infer_ac_dipole_window,
@@ -492,19 +496,9 @@ def analyse_folder(
     # moves ~2e-3 per mm of orbit through the chromaticity, so a campaign-wide
     # natural tune plus a constant offset hands every off-momentum folder a drive
     # several 1e-3 out; both tunes must come from the same per-orbit point.
-    if campaign.machine_config is not None:
-        orbit = folder_to_orbit_map()[name]
-        natural = orbit_natural_tunes(orbit, campaign.machine_config)
-        configured, _ = orbit_driven_tune_and_dpp(orbit, campaign.machine_config)
-    elif name in campaign.optics.legacy_driven:
-        # Retired campaigns predate psb_md's MachineConfig; their drive is pinned.
-        natural = (natural[0] % 1.0, natural[1] % 1.0)
-        configured = campaign.optics.legacy_driven[name]
-    else:
-        raise ValueError(
-            f"{campaign.slug}/{name}: no machine_config and no legacy_driven entry, "
-            "so the configured drive cannot be resolved"
-        )
+    orbit = folder_to_orbit_map()[name]
+    natural = orbit_natural_tunes(orbit, campaign.machine_config)
+    configured, _ = orbit_driven_tune_and_dpp(orbit, campaign.machine_config)
     # Built with the configured guess purely to locate the AC-dipole BPM
     # window -- structural, not tune-dependent -- so the drive measurement can
     # be cleaned before it is fitted. Rebuilt below, on the measured drive,
@@ -513,6 +507,8 @@ def analyse_folder(
     _, first_bpm_after_acd = infer_ac_dipole_window(model_dir, "BR3.DES3L1")
     drive = measure_folder_driven_tunes(
         folder, configured,
+        machine_config=campaign.machine_config,
+        orbit=orbit,
         first_bpm_after_acd=first_bpm_after_acd,
         preprocessing=preprocessing_for(args),
         limit=args.limit,
@@ -534,6 +530,8 @@ def analyse_folder(
             files,
             model_dir,
             driven_dir,
+            machine_config=campaign.machine_config,
+            orbit=orbit,
             nat_tunes=natural,
             drv_tunes=measured_drive,
             start_turn=args.start_turn,
@@ -546,18 +544,15 @@ def analyse_folder(
     else:
         logger.info("%s/%s: compensated optics already present, reusing", campaign.slug, name)
 
-    from psb_md.measurements import find_blank_acquisitions_dir  # noqa: PLC0415
-
-    blanks = find_blank_acquisitions_dir(folder)
+    blanks = default_blank_acd_measurement_dir(campaign.machine_config, orbit)
     analysed = (free_dir / "beta_phase_x.tfs").exists()
     return {
         "folder": str(folder),
         "drive": drive,
         "optics": analysed,
         "preprocessing": preprocessing_for(args).describe(),
-        # The dispersive-ripple and interference removals are fitted from
-        # AC-dipole-off blanks and skip themselves without a blank set.
-        "blank_acquisitions": str(blanks) if blanks else None,
+        # The dispersive-ripple and interference removals are fitted from these.
+        "blank_acquisitions": str(blanks),
         **({"harpy_tunes": measured_tunes(free_dir)} if analysed else {}),
         **(phase_advance_frame(free_dir) if analysed else {}),
         "free_dir": str(free_dir),
@@ -636,7 +631,7 @@ def phase_beat_frame(free_dir: Path, bpms_by_model: dict[str, pd.DataFrame]) -> 
 
 def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, object]:
     accelerator = build_accelerator(args.sequence_file)
-    chroma = read_chroma_summary(campaign.optics.chroma_file, accelerator)
+    chroma = read_chroma_summary(campaign.chroma_file, accelerator)
     measured_natural = (chroma["QH"], chroma["QV"])
     measured_chroma = (chroma["QPH"], chroma["QPV"])
 
@@ -646,13 +641,13 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
     # compensate away -- so it is named, or the folder with the most acquisitions.
     files_per_folder = {
         name: len(sorted(folder.glob("*.sdds")))
-        for name, folder in campaign.optics.acd_dirs.items()
+        for name, folder in campaign.acd_dirs.items()
     }
     reference = args.reference or max(files_per_folder, key=files_per_folder.get)
-    if reference not in campaign.optics.acd_dirs:
+    if reference not in campaign.acd_dirs:
         raise SystemExit(
             f"--reference {reference!r} is not a folder of the {campaign.slug} campaign; "
-            f"expected one of {sorted(campaign.optics.acd_dirs)}"
+            f"expected one of {sorted(campaign.acd_dirs)}"
         )
     # Before any model is built: a folder at the wrong orbit invalidates
     # everything downstream of it.
@@ -661,10 +656,9 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
     folders = {
         name: analyse_folder(
             campaign, name, folder, args,
-            natural=measured_natural,
             optics=args.optics_folders == "all" or name == reference,
         )
-        for name, folder in campaign.optics.acd_dirs.items()
+        for name, folder in campaign.acd_dirs.items()
     }
 
     # Two lattices, same sequence and same circuits: the one the fits start from,

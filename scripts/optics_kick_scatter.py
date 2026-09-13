@@ -18,7 +18,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from loco_common.campaign import campaign_by_slug  # noqa: E402
+from loco_common.campaign import add_campaign_argument, campaign_by_slug  # noqa: E402
 from loco_common.optics_reproducibility import REPLICAS, bootstrap_frames  # noqa: E402
 from scripts.measured_optics import measured_frame  # noqa: E402
 
@@ -55,7 +55,7 @@ def summarise(replicas: pd.DataFrame, pooled: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--campaign", required=True)
+    add_campaign_argument(parser)
     parser.add_argument("--folder", required=True)
     parser.add_argument("--replicas", type=int, default=REPLICAS)
     parser.add_argument("--seed", type=int, default=0)

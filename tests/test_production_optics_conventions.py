@@ -14,20 +14,47 @@ def production_python_files():
         yield from (ROOT / directory).rglob("*.py")
 
 
-def test_every_production_run_twiss_explicitly_uses_method_6():
+#: The two integration orders a production ``run_twiss`` call may pin. 8 exists
+#: only for the skew-multipole (k0s/k1s) case and must be paired with
+#: ``nslice=2`` -- see :func:`test_every_production_method_8_call_pins_nslice_2`.
+ALLOWED_METHODS = (6, 8)
+
+
+def _run_twiss_calls(tree: ast.AST):
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        function = node.func
+        if not isinstance(function, ast.Attribute) or function.attr != "run_twiss":
+            continue
+        yield node
+
+
+def test_every_production_run_twiss_explicitly_pins_its_method():
     missing = []
     for path in production_python_files():
         tree = ast.parse(path.read_text(), filename=str(path))
-        for node in ast.walk(tree):
-            if not isinstance(node, ast.Call):
-                continue
-            function = node.func
-            if not isinstance(function, ast.Attribute) or function.attr != "run_twiss":
-                continue
+        for node in _run_twiss_calls(tree):
             method = next((kw.value for kw in node.keywords if kw.arg == "method"), None)
-            if not isinstance(method, ast.Constant) or method.value != 6:
+            if not isinstance(method, ast.Constant) or method.value not in ALLOWED_METHODS:
                 missing.append(f"{path.relative_to(ROOT)}:{node.lineno}")
-    assert not missing, f"Production run_twiss calls without method=6: {missing}"
+    assert not missing, (
+        f"Production run_twiss calls without a literal method in {ALLOWED_METHODS}: {missing}"
+    )
+
+
+def test_every_production_method_8_call_pins_nslice_2():
+    wrong = []
+    for path in production_python_files():
+        tree = ast.parse(path.read_text(), filename=str(path))
+        for node in _run_twiss_calls(tree):
+            method = next((kw.value for kw in node.keywords if kw.arg == "method"), None)
+            if not (isinstance(method, ast.Constant) and method.value == 8):
+                continue
+            nslice = next((kw.value for kw in node.keywords if kw.arg == "nslice"), None)
+            if not isinstance(nslice, ast.Constant) or nslice.value != 2:
+                wrong.append(f"{path.relative_to(ROOT)}:{node.lineno}")
+    assert not wrong, f"Production method=8 run_twiss calls without nslice=2: {wrong}"
 
 
 def test_xtrack_is_not_imported_by_production_code():

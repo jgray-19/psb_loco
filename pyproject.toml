@@ -11,8 +11,6 @@ license = "MIT"
 authors = [{ name = "Joshua Gray" }]
 dependencies = [
     "aba_optimiser",
-    # psb_md.modelling imports cpymad at module scope (make_madx_sequence).
-    "cpymad",
     "matplotlib",
     "numpy",
     "pandas",
@@ -30,7 +28,7 @@ test = ["markdown", "pymdown-extensions", "pytest", "xsuite", "xtrack-tools"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["loco_common*", "loco_report*", "method1_madng_da*", "method2_delta_orbit*"]
+include = ["loco_common*", "loco_report*", "method1_madng_da*", "method2_delta_orbit*", "phase_advance_constraint*"]
 
 [tool.uv]
 package = true
@@ -43,6 +41,9 @@ tmom-recon = { path = "../tmom-recon", editable = true }
 xtrack-tools = { path = "../xtrack-tools", editable = true }
 
 [tool.pytest.ini_options]
-markers = ["slow: spawns MAD-NG or tracks with xsuite"]
+markers = [
+    "slow: spawns MAD-NG or tracks with xsuite",
+    "serial: must not run under pytest-xdist",
+]
 addopts = "-m 'not slow'"
 testpaths = ["tests"]

@@ -8,19 +8,19 @@ Statements only. What was measured, what was modelled, what was fitted. The conv
 
 | configuration | measured $Q_x$ / $Q_y$ | QFO / QDE circuit, MAD $k_1$ | what it is |
 |---|---|---|---|
-| Inverted tunes, 28th | 4.2340 / 4.1276 | 0.7395238 / -0.7377587 | QFO raised and QDE lowered until the tunes swap sides: Qx = 4.233 above Qy = 4.128. The correctors were left where they were, so this is the same measurement of a different lattice. |
-| Inverted tunes, QDE14 error | 4.2331 / 4.1277 | 0.7395238 / -0.7377587 | The 28th's inverted lattice again, with QDE14 (kbrqd14corr = +0.0073775865) deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find the error. |
-| Inverted tunes, QDE14+QDE3 error | 4.2329 / 4.1276 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find both errors. |
-| Inverted tunes, sextupoles on | 4.2333 / 4.1283 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with the ring sextupoles powered instead of off. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits. |
+| Inverted tunes, 28th | — | — | The 28th's inverted-tunes lattice, Qx above Qy, with nothing mis-trimmed: the baseline the other inverted-tunes configurations are compared against. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics. |
+| Inverted tunes, QDE14 error | — | — | The 28th's inverted lattice again, with QDE14 (kbrqd14corr = +0.0073775865) deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find the error. |
+| Inverted tunes, QDE14+QDE3 error | — | — | The 28th's inverted lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find both errors. |
+| Inverted tunes, sextupoles on | — | — | The 28th's inverted lattice with the ring sextupoles powered instead of off. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits. |
 
 ### Normal tunes
 
 | configuration | measured $Q_x$ / $Q_y$ | QFO / QDE circuit, MAD $k_1$ | what it is |
 |---|---|---|---|
-| Normal tunes, 29th | 4.1730 / 4.2293 | 0.7289003 / -0.7442766 | The 29th's repeat of the normal-tunes lattice, at the new P17/P23 tune point and orbit-corrector set. The LOCO scan (all three RF offsets) and chroma were retaken from scratch, same layout as the 28th's inverted-tunes campaign. |
-| Normal tunes, QDE14 error | 4.1731 / 4.2299 | 0.7289003 / -0.7442766 | The 29th's normal lattice again, with QDE14 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, same as INVERTED_QDE14_ERR. |
-| Normal tunes, QDE14+QDE3 error | 4.1731 / 4.2288 | 0.7289003 / -0.7442766 | The 29th's normal lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, same as INVERTED_QDE14_QDE3_ERR. |
-| Normal tunes, sextupoles on | 4.1735 / 4.2294 | 0.7289003 / -0.7442766 | The normal lattice with the ring sextupoles powered instead of off, taken on the 30th after the 29th ran out of time. The LOCO scan (all three RF offsets), the chroma and this campaign's own driven-tune optics were all retaken; unlike every other campaign here it also has AC-dipole-off blanks, so the dispersive-ripple and per-BPM interference removals do run. |
+| Normal tunes, 29th | 4.1730 / 4.2293 | 0.7289003 / -0.7442766 | The 29th's normal-tunes lattice, at the P17/P23 tune point and orbit-corrector set. The LOCO scan (all three RF offsets) and chroma were taken with the same layout as the 28th's inverted-tunes campaign. |
+| Normal tunes, QDE14 error | 4.1731 / 4.2299 | 0.7289003 / -0.7442766 | The 29th's normal lattice again, with QDE14 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, as for the inverted-tunes QDE14 error. |
+| Normal tunes, QDE14+QDE3 error | 4.1731 / 4.2288 | 0.7289003 / -0.7442766 | The 29th's normal lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets) and this campaign's own driven-tune optics were retaken, as for the inverted-tunes QDE14+QDE3 error. |
+| Normal tunes, sextupoles on | 4.1735 / 4.2294 | 0.7289003 / -0.7442766 | The normal lattice with the ring sextupoles powered instead of off, taken on the 30th after the 29th ran out of time. The LOCO scan (all three RF offsets), the chroma and this campaign's own driven-tune optics were all retaken. |
 
 ## Vocabulary
 

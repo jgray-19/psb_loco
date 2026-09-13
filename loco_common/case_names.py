@@ -18,54 +18,42 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 #: What each free-family letter lets the fit move, as the word the reports use.
-FAMILY_WORD = {"k1": "gradients", "b": "bends", "dy": "offsets", "t": "rolls"}
-
-#: The magnet quantity behind each family, for captions that need to be precise.
-FAMILY_QUANTITY = {
-    "k1": "quadrupole k1",
-    "b": "dipole k0",
-    "dy": "quadrupole dy",
-    "t": "quadrupole tilt",
+FAMILY_WORD = {
+    "k1": "gradients",
+    "b": "bends",
+    "dy": "offsets",
+    "t": "rolls",
+    "k0s": "skew dipole errors",
+    "k1s": "skew gradient errors",
 }
 
 #: The orbit-matching mode, in words. ``none`` subtracts a reference orbit from
-#: both planes; the others keep the machine's own closed orbit in the named
-#: plane, which is the only thing a bend or a quadrupole offset can be fitted
-#: against.
+#: both planes; ``xy`` keeps the machine's own closed orbit in both, which is the
+#: only thing a bend or a quadrupole offset can be fitted against.
 PLANES_PHRASE = {
     "none": "both planes as delta orbits",
-    "x": "horizontal absolute, vertical delta",
-    "y": "vertical absolute, horizontal delta",
     "xy": "both planes absolute",
 }
 
 #: Short form of the same, for a figure title that has no room for the long one.
 PLANES_SHORT = {
     "none": "delta orbit",
-    "x": "mixed orbit",
-    "y": "vertical-absolute orbit",
     "xy": "absolute orbit",
 }
 
 #: How the per-magnet families were parametrised. ``none`` is one knob per
-#: magnet; ``bpm-family`` ties them by lattice cell and QFO/QDE family, and
-#: ``bpm`` by cell alone. The counts are for the 48 ring quadrupoles: 16 cells,
-#: each one QDE between two QFO, one BPM per cell.
+#: magnet; ``bpm-family`` ties them by lattice cell and QFO/QDE family. The
+#: counts are for the 48 ring quadrupoles: 16 cells, each one QDE between two
+#: QFO, one BPM per cell.
 LUMP_PHRASE = {
     "none": "one knob per magnet",
     "bpm-family": "lumped to 32 knobs by cell",
-    "bpm": "lumped to 16 knobs by cell",
-    "k1only": "gradients lumped to 32, everything else per magnet",
-    "dy32-t32-k1free": "offsets and rolls lumped to 32, gradients per magnet",
 }
 
 #: Knob count per per-magnet family, as a bare number for a narrow table column.
 LUMP_COUNT = {
     "none": "48",
     "bpm-family": "32",
-    "bpm": "16",
-    "k1only": "32 gradients, 48 offsets and rolls",
-    "dy32-t32-k1free": "32 offsets and rolls, 48 gradients",
 }
 
 
@@ -138,9 +126,6 @@ def parse_case(slug: str) -> Case:
 #: table reads it exactly as it reads a case -- only its name comes from here.
 OTHER_OPTIONS = {
     "method1": "Method 1, lumped to 32 knobs by cell",
-    "start": "start model",
-    "start_model": "start model",
-    "start model": "start model",
     "start-model": "start model",
 }
 
@@ -204,7 +189,7 @@ class Page:
 
 
 def _cases(planes: str, families: tuple[str, ...]) -> tuple[str, ...]:
-    """The two cases of a page: gradients lumped to 32, then rolls beside them.
+    """The cases of a page: gradients lumped to 32, then further families beside them.
 
     The lumping arm is ``bpm-family`` throughout, which ties *every* free
     per-magnet family to 32 -- so a page's rolls are always lumped to whatever
@@ -270,7 +255,7 @@ PER_MAGNET_PAGE = Page(
     title="One knob per magnet",
     lede=(
         "Every gradient free, one knob per quadrupole: 48 parameters against 16 "
-        "BPMs per plane. The three options here are the same parametrisation in "
+        "BPMs per plane. The two options here are the same parametrisation in "
         "the two orbit-matching modes, kept off the results pages and shown "
         "together instead."
     ),
@@ -297,14 +282,13 @@ METHOD1_PAGE = Page(
     cases=(METHOD1_OPTION, "none__k1__bpm-family"),
 )
 
-#: The three orbit-matching modes, in nav order. Method 2 throughout, two cases
-#: each: these are the pages ``run_campaign_fits`` fits.
+#: The two orbit-matching modes, in nav order. Method 2 throughout: these are
+#: the pages ``run_campaign_fits`` fits.
 PAGES = (DELTA_PAGE, ABSOLUTE_PAGE)
 
 #: Every page that gets rendered, including the two that only re-show options
 #: fitted for the pages above.
 ALL_PAGES = (*PAGES, PER_MAGNET_PAGE, METHOD1_PAGE)
-PAGE_BY_SLUG = {page.slug: page for page in ALL_PAGES}
 
 
 def every_page_case() -> list[str]:

@@ -43,9 +43,9 @@ centred on zero rather than on that initial lattice.
 
 Steps 2, 3 and 4 take `--campaign <slug>`; run them once per tab. Results,
 prediction caches and figures are namespaced by campaign and momentum mode
-(`results/matrix_inverted_second/`, `results/matrix_inverted_second_multi/`,
-`docs/assets/figures/inverted_second/`,
-`docs/assets/figures/inverted_second/multi/`). Cross-campaign figures are not
+(`results/matrix_p23_p13_final/`, `results/matrix_p23_p13_final_multi/`,
+`docs/assets/figures/p23_p13_final/`,
+`docs/assets/figures/p23_p13_final/multi/`). Cross-campaign figures are not
 per-campaign: they go under `docs/assets/figures/scenarios/<direction>/`, since
 `normal` and `inverted` are campaign slugs and own those folders already.
 

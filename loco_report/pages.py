@@ -59,6 +59,14 @@ KNOBS = SectionSpec("Fitted knobs", (
             "Fitted quadrupole roll per magnet, where rolls were free."),
     _figure("tilt_significance", "roll over its own error bar",
             "The same rolls as |value| / sigma, log scale."),
+    _figure("dk0sl_by_s", "skew dipole error per magnet against s",
+            "Fitted skew dipole error per magnet, where k0s was free."),
+    _figure("dk0sl_significance", "skew dipole error over its own error bar",
+            "The same skew dipole errors as |value| / sigma, log scale."),
+    _figure("dk1sl_by_s", "skew gradient error per magnet against s",
+            "Fitted skew gradient error per magnet, where k1s was free."),
+    _figure("dk1sl_significance", "skew gradient error over its own error bar",
+            "The same skew gradient errors as |value| / sigma, log scale."),
 ))
 
 LATTICE = SectionSpec("Fitted lattice, against the tune-matched model", (
@@ -67,6 +75,9 @@ LATTICE = SectionSpec("Fitted lattice, against the tune-matched model", (
             "points; the machine-knob model is the dotted curve."),
     _figure("phase_error_matched", "phase error against the matched model",
             "Phase error, referred to the lattice matched to the measured tune."),
+    _figure("phase_advance_matched", "BPM-to-BPM phase advance against the matched model",
+            "Phase advance between adjacent BPMs, computed from each fitted lattice, "
+            "the matched model and the measured points."),
     _figure("dispersion_matched", "dispersion against the matched model",
             "Dispersion, referred to the lattice matched to the measured tune."),
     _figure("coupling_matched", "coupling against the matched model",
@@ -94,12 +105,4 @@ SECTIONS = (KNOB_TABLE, KNOBS, LATTICE, TUNE, RESIDUALS)
 
 #: Every rendered page, one per case_names Page.
 PAGE_SPECS = tuple(PageSpec(page=page, sections=SECTIONS) for page in ALL_PAGES)
-PAGE_SPEC_BY_SLUG = {spec.slug: spec for spec in PAGE_SPECS}
 
-
-def every_figure_stem() -> list[str]:
-    """Every figure stem any page declares, deduplicated."""
-    return list(dict.fromkeys(
-        figure.stem for spec in PAGE_SPECS
-        for section in spec.sections for figure in section.figures
-    ))

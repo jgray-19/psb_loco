@@ -25,14 +25,10 @@ PREFIT_COLOUR = "0.6"
 NOMINAL_K1L = 0.36705
 NOMINAL_BEND_ANGLE = 0.19635
 
-# run_method2's --absolute-error-floor default: the BPM zero-offset systematic.
-BPM_ZERO_OFFSET = 1e-4
-
 # Two panels is the cap; a page-width figure taller than this is unreadable.
 MAX_PANELS = 2
 FIGURE_WIDTH = 8.0
 PANEL_HEIGHT = 2.4
-DPI = 200
 
 
 @dataclass(frozen=True)
@@ -57,6 +53,14 @@ FAMILIES: dict[str, Family] = {
     ),
     ".dy": Family("offsets", "mm", "quadrupole offset $dy$ [mm]", 1e3),
     ".tilt": Family("rolls", "mrad", "quadrupole roll [mrad]", 1e3),
+    ".dk0sl": Family(
+        "skew dipole errors", "mrad",
+        "quadrupole skew dipole error $\\Delta k_{0s} L$ [mrad]", 1e3,
+    ),
+    ".dk1sl": Family(
+        "skew gradient errors", "m$^{-1}$",
+        "quadrupole skew gradient error $\\Delta k_{1s} L$ [m$^{-1}$]", 1.0,
+    ),
 }
 
 

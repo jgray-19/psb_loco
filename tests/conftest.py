@@ -33,6 +33,15 @@ def _require(module: str):
     return pytest.importorskip(module, reason=f"{module} is needed for the fake-data fixtures")
 
 
+def pytest_runtest_setup(item: pytest.Item) -> None:
+    """Prevent serial tests from running inside pytest-xdist workers."""
+    if (
+        item.get_closest_marker("serial")
+        and getattr(item.config, "workerinput", None) is not None
+    ):
+        pytest.fail(f"{item.nodeid} is marked serial and cannot run under pytest-xdist")
+
+
 @pytest.fixture(scope="session")
 def sequence_file() -> Path:
     if not SEQUENCE_FILE.exists():
@@ -197,9 +206,13 @@ def fake_scan():
     Stands in for the SDDS side of a real scan without writing SDDS: the loaders
     that read the files are exercised separately, and everything downstream of
     them takes exactly this pair. Each BPM's orbit is linear in ``offset_k`` with
-    a known slope, so the fitted slope has an exact right answer.
+    a known slope, so the fitted slope has an exact right answer. As in the real
+    scan, each corrector ends with a ``reset`` to zero, so the untrimmed machine
+    is acquired more than once.
     """
-    from loco_common.measured_response import DELTA_K, ScanPoint  # noqa: PLC0415
+    from loco_common.measured_response import ScanPoint  # noqa: PLC0415
+
+    delta_k = 7.5e-5  # psb_md/scan_psb_loco.py's corrector step
 
     def _scan(
         slopes: dict[str, dict[str, float]],
@@ -215,9 +228,10 @@ def fake_scan():
         for corrector, per_bpm in slopes.items():
             plane = "y" if "DVT" in corrector.upper() else "x"
             bpms = list(per_bpm)
-            for step in offsets:
-                offset_k = step * DELTA_K
-                path = Path(f"/fake/{corrector}_{step:+g}_{rf_offset:+g}.sdds")
+            steps = [*offsets, "reset"] if 0 in offsets else list(offsets)
+            for step in steps:
+                offset_k = 0.0 if step == "reset" else step * delta_k
+                path = Path(f"/fake/{corrector}_{step}_{rf_offset:+g}.sdds")
                 orbit = {}
                 for label in ("X", "Y"):
                     # A static, corrector-independent baseline orbit: the

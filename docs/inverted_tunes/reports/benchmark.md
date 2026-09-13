@@ -8,29 +8,29 @@ PSB ring 3 · both methods, same 32 cell-grouped knobs, same delta orbits. Wall 
 
     | method | wall [s] | CPU [s] | peak RSS [MB] | processes |
     |---|---|---|---|---|
-    | Method 1 | 16.7 | 25.0 | 259 | 1 |
-    | Method 2 | 6.2 | 25.1 | 270 | 48 |
+    | Method 1 | 13.2 | 24.2 | 254 | 1 |
+    | Method 2 | 5.6 | 25.8 | 265 | 48 |
 
 === "Inverted tunes, QDE14 error"
 
     | method | wall [s] | CPU [s] | peak RSS [MB] | processes |
     |---|---|---|---|---|
-    | Method 1 | 17.5 | 28.4 | 263 | 1 |
-    | Method 2 | 5.8 | 26.3 | 267 | 48 |
+    | Method 1 | 18.1 | 28.8 | 257 | 1 |
+    | Method 2 | 6.0 | 26.1 | 269 | 48 |
 
 === "Inverted tunes, QDE14+QDE3 error"
 
     | method | wall [s] | CPU [s] | peak RSS [MB] | processes |
     |---|---|---|---|---|
-    | Method 1 | 16.7 | 27.7 | 258 | 1 |
-    | Method 2 | 5.4 | 26.1 | 269 | 48 |
+    | Method 1 | 13.7 | 24.6 | 258 | 1 |
+    | Method 2 | 6.2 | 26.5 | 270 | 48 |
 
 === "Inverted tunes, sextupoles on"
 
     | method | wall [s] | CPU [s] | peak RSS [MB] | processes |
     |---|---|---|---|---|
-    | Method 1 | 17.1 | 28.0 | 259 | 1 |
-    | Method 2 | 5.7 | 26.5 | 270 | 48 |
+    | Method 1 | 16.5 | 27.5 | 254 | 1 |
+    | Method 2 | 5.6 | 25.9 | 266 | 48 |
 
 ## Agreement
 

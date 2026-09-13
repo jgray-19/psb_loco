@@ -2,79 +2,96 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
-from loco_common.campaign import Campaign
+from loco_common.case_names import DELTA_PAGE, LOCO_OPTICS_FITS, parse_case
 from loco_report import render
-from loco_report.data import Results, benchmark, read_json
+from loco_report.data import benchmark, read_json
 from loco_report.style import FAMILIES
 
-#: The two reference lattices, as (summary key, file suffix, tab word, how).
-MODELS = (
-    ("loco_model", "", "nominal",
-     "stood up on the currents the machine ran at, read from LSA and applied "
-     "unchanged"),
-    ("matched_model", "_matched", "matched",
-     "those same currents, then `kbrqf` and `kbrqd` moved until the model sits "
-     "on the measured tune"),
-)
+if TYPE_CHECKING:
+    from pathlib import Path
 
-#: Figures the measured-optics page shows per (configuration, model) tab.
+    from loco_common.campaign import Campaign
+
+#: Figures the measured-optics page shows per configuration tab, against the
+#: tune-matched model.
 OPTICS_FIGURES = (
-    ("measured_beta", "measured beta against the model",
-     "Measured beta from phase and from amplitude, with the reference lattice."),
-    ("measured_beat", "measured beta-beating against the model",
-     "Measured beta-beating against the reference lattice, both planes."),
-    ("measured_coupling", "measured coupling amplitudes",
-     "Measured |f1001| and |f1010| against the reference lattice."),
+    (
+        "measured_beta",
+        "measured beta against the matched model",
+        "Measured beta from phase and from amplitude, against the tune-matched model.",
+    ),
+    (
+        "measured_beat",
+        "measured beta-beating against the matched model",
+        "Measured beta-beating against the tune-matched model, both planes.",
+    ),
+    (
+        "measured_coupling",
+        "measured coupling amplitudes",
+        "Measured |f1001| and |f1010| against the tune-matched model.",
+    ),
+    (
+        "measured_phase",
+        "measured phase advance against the matched model",
+        "Measured phase advance between adjacent BPMs against the tune-matched model, "
+        "both planes.",
+    ),
 )
 
 #: Cross-campaign figures, drawn once for a whole direction.
 COMPARISON_FIGURES = (
-    ("comparison_tunes.png", "model tune against measurement",
-     "Each model's tune against the measured tune, every configuration."),
-    ("comparison_chromaticity.png", "model chromaticity against measurement",
-     "Model Q'H / Q'V error against the measurement, every configuration."),
-    ("comparison_beta_beat.png", "measured beta-beating against each model",
-     "Measured beta-beating along s against each reference model, from phase "
-     "(filled) and from amplitude (open)."),
+    (
+        "comparison_beta_beat.png",
+        "measured beta-beating against each model",
+        "Measured beta-beating along s against each reference model, from phase "
+        "(filled) and from amplitude (open).",
+    ),
 )
 
 
-def qprime(summary: dict) -> tuple[list[float], list[float]]:
-    """Measured Q'H / Q'V and its bar, from the summary's own conversion."""
-    measured = summary["measured"]
-    model = summary["loco_model"]
-    ratios = [q / dq for q, dq in zip(model["qprime"], model["dq_dpt"]) if dq]
-    beta = sum(ratios) / len(ratios) if ratios else 1.0
-    return (
-        [beta * value for value in measured["dq_dpt"]],
-        [beta * value for value in measured["dq_dpt_error"]],
-    )
+def tune_and_chroma_table(campaigns) -> str:
+    """Natural tune and chromaticity, one row per configuration.
 
-
-def machine_table(campaign: Campaign) -> str:
-    """What the machine was measured to be, for one configuration."""
-    summary = read_json(campaign.optics_dir / "summary.json")
-    if not summary:
-        return f"_Not analysed: run `scripts/measured_optics.py --campaign {campaign.slug}`._"
-    measured = summary["measured"]
-    values, error = qprime(summary)
+    Chromaticity is against the matched model and both Dp/p calibrations, so
+    a reader gets the tune and the chroma comparison without switching tabs.
+    """
+    rows = []
+    for campaign in campaigns:
+        summary = read_json(campaign.optics_dir / "summary.json")
+        if not summary:
+            rows.append([campaign.label, "_not analysed_", "", "", "", ""])
+            continue
+        measured, model = summary["measured"], summary["matched_model"]
+        beta = [
+            q / dq for q, dq in zip(model["qprime"], model["dq_dpt"], strict=True) if dq
+        ]
+        beta = sum(beta) / len(beta) if beta else 1.0
+        orbit = [beta * v for v in measured["dq_dpt_closed_orbit"]]
+        orbit_error = [beta * v for v in measured["dq_dpt_closed_orbit_error"]]
+        rows.append(
+            [
+                campaign.label,
+                f"{measured['natural_tunes'][0]:.5f} ± {measured['natural_tune_spread'][0]:.5f}",
+                f"{measured['natural_tunes'][1]:.5f} ± {measured['natural_tune_spread'][1]:.5f}",
+                f"{model['qprime'][0]:.3f} / {model['qprime'][1]:.3f}",
+                f"{measured['qprime'][0]:.3f} ± {measured['qprime_error'][0]:.3f} / "
+                f"{measured['qprime'][1]:.3f} ± {measured['qprime_error'][1]:.3f}",
+                f"{orbit[0]:.3f} ± {orbit_error[0]:.3f} / "
+                f"{orbit[1]:.3f} ± {orbit_error[1]:.3f}",
+            ]
+        )
     return render.table(
-        ["quantity", "value", "spread across the flat bottom"],
         [
-            ["natural tune $Q_x$ / $Q_y$",
-             f"{measured['natural_tunes'][0]:.5f} / {measured['natural_tunes'][1]:.5f}",
-             f"{measured['natural_tune_spread'][0]:.1e} / "
-             f"{measured['natural_tune_spread'][1]:.1e}"],
-            ["$Q'_H$ / $Q'_V$",
-             f"{values[0]:+.3f} / {values[1]:+.3f}",
-             f"{error[0]:.3f} / {error[1]:.3f} (fit $1\\sigma$)"],
-            ["QFO / QDE circuit, MAD $k_1$",
-             f"{summary['quad_settings']['kbrqf']:.10f} / "
-             f"{summary['quad_settings']['kbrqd']:.10f}",
-             "sent to the magnets"],
+            "configuration",
+            "natural $Q_x$",
+            "natural $Q_y$",
+            "model $Q'_H$ / $Q'_V$",
+            "measured $Q'_H$ / $Q'_V$ (XImeter)",
+            "measured $Q'_H$ / $Q'_V$ (closed-orbit)",
         ],
+        rows,
     )
 
 
@@ -102,25 +119,20 @@ def drive_table(campaign: Campaign) -> str:
 
 def render_optics_page(campaigns, figure_root: Path, scenario_root: Path,
                        destination: Path) -> str:
-    """Measured optics: each configuration against each reference lattice."""
+    """Measured optics: each configuration against the tune-matched model."""
     prefix = render.prefix(figure_root, destination)
     scenario_prefix = render.prefix(scenario_root, destination)
-    variants = [
-        (f"{campaign.label}, {word}", campaign, key, how)
-        for campaign in campaigns for key, _, word, how in MODELS
-    ]
-    suffix = {key: file_suffix for key, file_suffix, _, _ in MODELS}
 
     def tabs(builder) -> str:
-        return render.tabbed({
-            label: builder(campaign, key, how) for label, campaign, key, how in variants
-        })
+        return render.tabbed(
+            {campaign.label: builder(campaign) for campaign in campaigns}
+        )
 
     blocks = [
-        render.heading("The machine"),
-        tabs(lambda campaign, key, how: machine_table(campaign)),
-        render.heading("AC-dipole drive"),
-        tabs(lambda campaign, key, how: drive_table(campaign)),
+        render.heading("Measured tunes"),
+        tune_and_chroma_table(campaigns),
+        render.heading("ACDipole config"),
+        tabs(drive_table),
     ]
 
     comparison = [
@@ -131,24 +143,27 @@ def render_optics_page(campaigns, figure_root: Path, scenario_root: Path,
     if comparison:
         blocks += [render.heading("Across configurations"), "\n\n".join(comparison)]
 
-    def model_figures(campaign: Campaign, key: str, how: str) -> str:
+    def model_figures(campaign: Campaign) -> str:
         directory = campaign.figures_dir(figure_root)
         found = [
             render.figure(
-                str((directory / f"{stem}{suffix[key]}.png").relative_to(figure_root)),
-                alt, caption, prefix,
+                str((directory / f"{stem}.png").relative_to(figure_root)),
+                alt,
+                caption,
+                prefix,
             )
             for stem, alt, caption in OPTICS_FIGURES
-            if (directory / f"{stem}{suffix[key]}.png").exists()
+            if (directory / f"{stem}.png").exists()
         ]
-        return "\n\n".join([f"This tab's model is {how}.", *found])
+        return "\n\n".join(found)
 
     blocks += [render.heading("Measured against the model"), tabs(model_figures)]
     statement = (
         "PSB ring 3 · AC-dipole turn-by-turn and the tune/chroma scan · "
-        f"{len(campaigns)} machine configurations, each against two reference "
-        "lattices. Every beta bar is omc3's propagated error added in quadrature "
-        "to a bootstrap over the folder's AC-dipole kicks."
+        f"{len(campaigns)} machine configurations, each against the same "
+        "lattice tune-matched to the measurement. Every beta bar is omc3's "
+        "propagated error added in quadrature to a bootstrap over the "
+        "folder's AC-dipole kicks."
     )
     return render.page("Measured optics", statement, blocks)
 
@@ -237,12 +252,6 @@ def render_benchmark_page(campaigns, benchmark_root: Path, scenario_root: Path,
     return render.page("Method 1 against Method 2", statement, blocks)
 
 
-#: The two fits the scenario perturbation figures are drawn from.
-SCENARIO_FITS = (
-    ("gradients", "none__k1__bpm-family", "gradients only"),
-    ("rolls", "none__k1+t__bpm-family", "gradients and rolls"),
-)
-
 #: What each scenario figure shows, per fit.
 PERTURBATION_FIGURES = (
     ("scenario_perturbation_beta", "beta-beating difference from baseline",
@@ -280,7 +289,7 @@ def render_scenario_page(campaigns, scenario_root: Path, modes,
         blocks += [render.heading("Tune and chromaticity"), "\n\n".join(top)]
 
     tabs = {}
-    for folder, case, word in SCENARIO_FITS:
+    for folder, case, word in LOCO_OPTICS_FITS:
         found = [
             render.figure(f"{folder}/{stem}.png", alt, caption, prefix)
             for stem, alt, caption in PERTURBATION_FIGURES
@@ -293,7 +302,8 @@ def render_scenario_page(campaigns, scenario_root: Path, modes,
 
     knob_tabs = {}
     for mode in modes:
-        for _, case, word in SCENARIO_FITS:
+        for case in DELTA_PAGE.cases:
+            word = parse_case(case).families_phrase
             directory = scenario_root / "scenario-comparison" / mode.slug / case
             found = [
                 render.figure(
@@ -354,7 +364,7 @@ GLOSSARY = (
 )
 
 
-def render_method_page(directions, destination: Path) -> str:
+def render_method_page(directions) -> str:
     """What was measured and fitted, as statements, plus the vocabulary."""
     blocks = []
     for label, campaigns in directions:

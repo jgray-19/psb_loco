@@ -12,12 +12,12 @@ from psb_md.plotting import finalize_figure, style_axis
 
 from loco_common.case_names import Page
 from loco_report import metrics
-from loco_report.data import RESIDUAL_TARGETS, Results, knob_statistics
+from loco_report.data import RESIDUAL_TARGETS, Results
 from loco_report.style import (
-    BPM_ZERO_OFFSET,
-    MAX_PANELS,
     CASE_COLOURS,
     FAMILIES,
+    MAX_PANELS,
+    MEASURED_BPM_RE,
     PREFIT_COLOUR,
     START_COLOUR,
     bar_width,
@@ -118,8 +118,8 @@ def family_significance(results: Results, page: Page, suffix: str,
     for slug in results.valid(page.cases):
         block = results.knobs(slug)
         block = block[block["suffix"] == suffix].sort_values("s")
-        # Method 1 comes off MAD.match and reports no covariance, so it has no
-        # significance to draw and a legend entry would read as an all-zero fit.
+        # Method 1 comes off MAD.match and reports no covariance (NaN sigma), so it
+        # has no significance to draw.
         if not block.empty and (block["uncertainty"].to_numpy() > 0).any():
             blocks[slug] = block
     if not blocks:
@@ -225,50 +225,102 @@ def _beat_error(frame: pd.DataFrame, beta: str, reference: str):
     return 100 * frame[f"{beta}_err"] / frame[reference]
 
 
-def optics(results: Results, page: Page, output: Path) -> list[Path]:
-    """What each fit did to the lattice: one figure per quantity, two panels each."""
-    frames = {
-        slug: results.optics(slug)
-        for slug in results.valid(page.cases)
-        if not results.optics(slug).empty
-    }
+def _fitted_optics(results: Results, page: Page):
+    """Each fitted case's cached optics with the start and matched model twiss, or None."""
+    frames = {}
+    for slug in results.valid(page.cases):
+        frame = results.optics(slug)
+        if not frame.empty:
+            frames[slug] = frame
     if not frames:
         logger.warning("%s: no cached optics; run scripts/case_optics.py", page.slug)
+        return None
+    start, matched = results.twiss("start-model"), results.twiss("matched-model")
+    if start.empty or matched.empty:
+        logger.warning("%s: no matched-model twiss", page.slug)
+        return None
+    return frames, start, matched
+
+
+def optics(results: Results, page: Page, output: Path) -> list[Path]:
+    """What each fit did to the lattice: one figure per quantity, two panels each."""
+    fitted = _fitted_optics(results, page)
+    if fitted is None:
         return []
-
-    measured = results.measured_optics
-    models = {
-        name: results.twiss(name)
-        for name in ("start-model", "matched-model")
-        if not results.twiss(name).empty
-    }
-
+    frames, start, matched = fitted
     # Only the tune-matched reference: the machine-knob model is on every panel
     # already, as the dotted un-fitted curve.
-    reference, file_suffix = "matched_model", "_matched"
-    if not measured.empty and f"beat_x_{reference}" not in measured.columns:
-        return []
-    if not {"start-model", "matched-model"} <= set(models):
-        logger.warning("%s: no matched-model twiss", page.slug)
+    measured = results.measured_optics
+    if not measured.empty and f"beat_x_{MEASURED_REFERENCE}" not in measured.columns:
         return []
 
-    drawn = {
-        slug: rereferenced(frame, models["start-model"], models["matched-model"])
-        for slug, frame in frames.items()
-    }
-    prefit = prefit_vs_matched(models["start-model"], models["matched-model"])
+    drawn = {slug: rereferenced(frame, start, matched) for slug, frame in frames.items()}
+    prefit = prefit_vs_matched(start, matched)
     start_frame = next(iter(drawn.values()))
     return [
         _optics_figure(
-            results, page, drawn, start_frame, prefit, measured, reference,
-            stem, title, columns, output / f"{page.slug}_{stem}{file_suffix}.png",
+            results, page, drawn, start_frame, prefit, measured, MEASURED_REFERENCE,
+            stem, columns, output / f"{page.slug}_{stem}_matched.png",
         )
-        for stem, title, columns in OPTICS_FIGURES
+        for stem, _title, columns in OPTICS_FIGURES
     ]
 
 
+def _phase_advance_from_mu(mu: pd.Series, s: pd.Series) -> tuple[np.ndarray, np.ndarray]:
+    """The BPM-to-BPM phase advance an absolute per-element mu implies.
+
+    Only the 16 measured BPMs count as a station; everything the model twisses
+    in between (drifts, magnets, the unmeasured tune BPM) is not a phase-advance
+    endpoint. Returned at the *downstream* BPM's ``s``, matching
+    ``measured_phase.parquet``.
+    """
+    bpms = [name for name in mu.index if MEASURED_BPM_RE.match(str(name).upper())]
+    ordered = sorted(bpms, key=lambda name: s.loc[name])
+    values = mu.loc[ordered].to_numpy()
+    positions = s.loc[ordered].to_numpy()
+    return positions[1:], np.diff(values)
+
+
+def phase_advance(results: Results, page: Page, output: Path) -> list[Path]:
+    """BPM-to-BPM phase advance, computed from each case's fitted lattice."""
+    fitted = _fitted_optics(results, page)
+    if fitted is None:
+        return []
+    frames, start, matched = fitted
+    measured = results.measured_phase
+
+    figure, axes = panels(2)
+    for index, (axis, plane, mu) in enumerate(
+        zip(axes, ("x", "y"), ("mu1", "mu2"), strict=True)
+    ):
+        mark_bpms(axis, results.positions, label=index == 0)
+        ref_s, ref_advance = _phase_advance_from_mu(matched[mu], matched["s"])
+        axis.plot(ref_s, ref_advance, color=START_COLOUR, linewidth=2.0,
+                  linestyle="--", zorder=1, label="matched model")
+        pre_s, pre_advance = _phase_advance_from_mu(start[mu], start["s"])
+        axis.plot(pre_s, pre_advance, color=PREFIT_COLOUR, linewidth=1.8,
+                  linestyle=":", zorder=2, label="machine-knob model, un-fitted")
+        if not measured.empty and f"phase_{plane}" in measured.columns:
+            axis.errorbar(measured["s"], measured[f"phase_{plane}"],
+                          yerr=measured.get(f"phase_{plane}_err"), fmt="o",
+                          color="k", markersize=5, zorder=4, elinewidth=0.9,
+                          capsize=2.0, label="measured")
+        for (slug, frame), colour in zip(frames.items(), CASE_COLOURS, strict=False):
+            aligned = frame.set_index("element")
+            fitted_mu = aligned[f"phase_error_{plane}"] + start[mu].reindex(aligned.index)
+            case_s, case_advance = _phase_advance_from_mu(fitted_mu, start["s"])
+            axis.plot(case_s, case_advance, color=colour, linewidth=1.5, alpha=0.9,
+                      zorder=3, label=page.label(slug))
+        axis.set_ylabel(f"{PLANE_WORD[plane]}\nphase advance [$2\\pi$]", fontsize=8)
+        style_axis(axis)
+    axes[-1].set_xlabel("s [m]")
+    axes[0].legend(fontsize=6, ncols=2, loc="upper left")
+    legend_headroom(axes[0])
+    return [_save(figure, output / f"{page.slug}_phase_advance_matched.png")]
+
+
 def _optics_figure(results, page, drawn, start_frame, prefit, measured, reference,
-                   stem, title, columns, path) -> Path:
+                   stem, columns, path) -> Path:
     figure, axes = panels(2)
     reference_label = "matched model"
     for index, (axis, column) in enumerate(zip(axes, columns, strict=True)):
@@ -293,7 +345,7 @@ def _optics_figure(results, page, drawn, start_frame, prefit, measured, referenc
             _draw_measured_dispersion(axis, results, plane)
         if stem == "coupling":
             _draw_measured_rdt(axis, measured, column)
-        if prefit is not None and column in prefit:
+        if column in prefit:
             pre_s, pre_values = prefit[column]
             text = _curve_rms(results, column, prefit["_elements"][1], pre_values,
                               measured_beat)
@@ -366,7 +418,7 @@ def residuals(results: Results, page: Page, output: Path) -> list[Path]:
         if not frames:
             continue
         written.append(_residual_figure(
-            results, page, frames, target, axis_label,
+            page, frames, axis_label,
             output / f"{page.slug}_residuals_{target}.png",
         ))
     if not written:
@@ -374,7 +426,7 @@ def residuals(results: Results, page: Page, output: Path) -> list[Path]:
     return written
 
 
-def _residual_figure(results, page, frames, target, axis_label, path) -> Path:
+def _residual_figure(page, frames, axis_label, path) -> Path:
     figure, axes = panels(2)
     bpms: list[str] = []
     for axis, plane in zip(axes, ("x", "y"), strict=True):
@@ -392,8 +444,6 @@ def _residual_figure(results, page, frames, target, axis_label, path) -> Path:
             axis.fill_between(range(len(statistical)), 0.0, statistical.to_numpy(),
                               color="0.55", alpha=0.35, zorder=0,
                               label="measurement standard error of the mean")
-            axis.axhline(1e3 * BPM_ZERO_OFFSET, color="0.35", linestyle=":",
-                         linewidth=1.3, zorder=0, label="BPM zero-offset systematic")
         axis.set_ylabel(f"{PLANE_WORD[plane]}\n{axis_label}", fontsize=8)
         style_axis(axis)
     if bpms:
@@ -435,8 +485,6 @@ def scores(results: Results, page: Page, output: Path) -> list[Path]:
         axis.bar(offsets, values, width=width * 0.92, color=colour, label=label)
     # Log y: one 3700% bar would otherwise flatten the 0-100% band entirely.
     log_axis(axis, drawn, floor=0.1)
-    axis.axhline(100.0, color="k", linewidth=1.2, linestyle="--",
-                 label="no information about the measurement")
     axis.set_xticks(range(len(SCORE_TARGETS)))
     axis.set_xticklabels([name for _, name in SCORE_TARGETS])
     axis.set_ylabel("residual rms\n[% of measured amplitude]", fontsize=8)
@@ -510,6 +558,16 @@ def case_tunes(results: Results, page: Page, output: Path) -> list[Path]:
         axis.axhline(0.0, color="k", linewidth=1.4)
         axis.axhspan(-spread[plane], spread[plane], color="0.5", alpha=0.25, zorder=0)
         axis.set_ylabel(f"$Q_{name}$ - measured\n({measured[plane]:.4f})", fontsize=8)
+        # ``annotate`` does not participate in Matplotlib's autoscaling.  That
+        # is barely noticeable for the normal-tune lattice, whose errors are
+        # all small and positive, but the larger, two-sided inverted-tune
+        # errors put the labels outside the axes and into the neighbouring
+        # panel.  Include the measurement band and leave asymmetric room for
+        # the labels at both ends of the bars.
+        low = min(0.0, -spread[plane], *values)
+        high = max(0.0, spread[plane], *values)
+        span = max(high - low, 1e-9)
+        axis.set_ylim(low - 0.18 * span, high + 0.20 * span)
         style_axis(axis)
     axes[-1].set_xticks(range(len(labels)))
     axes[-1].set_xticklabels(labels, fontsize=7)
@@ -591,38 +649,33 @@ def case_chromaticity(results: Results, page: Page, output: Path) -> list[Path]:
     return [_save(figure, output / f"{page.slug}_case_chromaticity.png")]
 
 
-#: The two reference lattices the measured optics is drawn against.
-MEASURED_REFERENCES = (
-    ("loco_model", "", "machine-knob model (un-matched)"),
-    ("matched_model", "_matched", "same lattice, tunes matched to the measurement"),
-)
-REFERENCE_LABELS = {key: label for key, _, label in MEASURED_REFERENCES}
+#: The reference lattice the measured optics is drawn against: the same
+#: lattice, tunes matched to the measurement.
+MEASURED_REFERENCE = "matched_model"
+MEASURED_REFERENCE_LABEL = "model, tunes matched to the measurement"
 
 
 def measured_optics(results: Results, output: Path) -> list[Path]:
-    """Measured beta, beta-beating and coupling against each reference lattice."""
+    """Measured beta, beta-beating and coupling, against the matched model."""
     frame = results.measured_optics
     if frame.empty:
         return []
     output.mkdir(parents=True, exist_ok=True)
-    written: list[Path] = []
-    for reference, file_suffix, label in MEASURED_REFERENCES:
-        if f"beta_x_{reference}" not in frame.columns:
-            continue
-        written.append(_measured_beta(results, frame, reference, label,
-                                      output / f"measured_beta{file_suffix}.png"))
-        written.append(_measured_beat(results, frame, reference, label,
-                                      output / f"measured_beat{file_suffix}.png"))
-        coupling = _measured_coupling(results, frame, reference,
-                                     output / f"measured_coupling{file_suffix}.png")
-        if coupling is not None:
-            written.append(coupling)
+    written = [
+        _measured_beta(results, frame, output / "measured_beta.png"),
+        _measured_beat(results, frame, output / "measured_beat.png"),
+    ]
+    coupling = _measured_coupling(results, frame, output / "measured_coupling.png")
+    if coupling is not None:
+        written.append(coupling)
+    phase = _measured_phase(results, output / "measured_phase.png")
+    if phase is not None:
+        written.append(phase)
     return written
 
 
-def _measured_beta(results, frame, reference, label, path) -> Path:
+def _measured_beta(results, frame, path) -> Path:
     figure, axes = panels(2)
-    other = "loco_model" if reference != "loco_model" else "matched_model"
     for index, (axis, plane) in enumerate(zip(axes, ("x", "y"), strict=True)):
         mark_bpms(axis, results.positions, label=index == 0)
         axis.errorbar(frame["s"], frame[f"beta_{plane}"],
@@ -636,12 +689,10 @@ def _measured_beta(results, frame, reference, label, path) -> Path:
                           color=CASE_COLOURS[1], markersize=6, linewidth=1.2,
                           markerfacecolor="none", zorder=3,
                           label="measured, from amplitude")
-        axis.plot(frame["s"], frame[f"beta_{plane}_{reference}"], color="0.20",
-                  linewidth=2.0, linestyle="--", label=label)
-        if f"beta_{plane}_{other}" in frame.columns:
-            axis.plot(frame["s"], frame[f"beta_{plane}_{other}"], color="0.60",
-                      linewidth=1.2, linestyle=":", alpha=0.9,
-                      label=REFERENCE_LABELS[other])
+        column = f"beta_{plane}_{MEASURED_REFERENCE}"
+        if column in frame.columns:
+            axis.plot(frame["s"], frame[column], color="0.20",
+                      linewidth=2.0, linestyle="--", label=MEASURED_REFERENCE_LABEL)
         axis.set_ylabel(f"$\\beta_{plane}$ [m]", fontsize=9)
         style_axis(axis)
     axes[-1].set_xlabel("s [m]")
@@ -650,27 +701,30 @@ def _measured_beta(results, frame, reference, label, path) -> Path:
     return _save(figure, path)
 
 
-def _measured_beat(results, frame, reference, label, path) -> Path:
+def _measured_beat(results, frame, path) -> Path:
     figure, axes = panels(2)
     for index, (axis, plane) in enumerate(zip(axes, ("x", "y"), strict=True)):
         mark_bpms(axis, results.positions, label=index == 0)
         axis.axhline(0.0, color="k", linewidth=0.8, alpha=0.5)
         # The reference is a model, so the beating's bar is the measured beta's
         # divided by that model: the same fraction, moved.
-        axis.errorbar(frame["s"], 100 * frame[f"beat_{plane}_{reference}"],
-                      yerr=_beat_error(frame, f"beta_{plane}",
-                                       f"beta_{plane}_{reference}"),
-                      fmt="o-", color="0.20", markersize=5, linewidth=1.6,
-                      zorder=3, elinewidth=0.9, capsize=2.0,
-                      label=f"from phase, against {label}")
-        amplitude = f"beat_{plane}_amp_{reference}"
-        if amplitude in frame.columns:
-            axis.errorbar(frame["s"], 100 * frame[amplitude],
-                          yerr=_beat_error(frame, f"beta_{plane}_amp",
-                                           f"beta_{plane}_{reference}"),
-                          fmt="^--", color="0.45", markersize=6, linewidth=1.2,
-                          markerfacecolor="none", zorder=2, elinewidth=0.9,
-                          capsize=2.0, label="from amplitude")
+        beat = f"beat_{plane}_{MEASURED_REFERENCE}"
+        if beat in frame.columns:
+            axis.errorbar(frame["s"], 100 * frame[beat],
+                          yerr=_beat_error(frame, f"beta_{plane}",
+                                           f"beta_{plane}_{MEASURED_REFERENCE}"),
+                          fmt="o--", color="0.20", markersize=5, linewidth=2.0,
+                          zorder=3, elinewidth=0.9, capsize=2.0,
+                          label=f"from phase, against {MEASURED_REFERENCE_LABEL}")
+            amplitude = f"beat_{plane}_amp_{MEASURED_REFERENCE}"
+            if amplitude in frame.columns:
+                axis.errorbar(frame["s"], 100 * frame[amplitude],
+                              yerr=_beat_error(frame, f"beta_{plane}_amp",
+                                               f"beta_{plane}_{MEASURED_REFERENCE}"),
+                              fmt="^--", color="0.20", markersize=6,
+                              linewidth=1.4, markerfacecolor="none",
+                              zorder=2, elinewidth=0.9, capsize=2.0,
+                              label=f"from amplitude, against {MEASURED_REFERENCE_LABEL}")
         axis.set_ylabel(f"{PLANE_WORD[plane]}\nbeta-beating [%]", fontsize=8)
         style_axis(axis)
     axes[-1].set_xlabel("s [m]")
@@ -679,7 +733,7 @@ def _measured_beat(results, frame, reference, label, path) -> Path:
     return _save(figure, path)
 
 
-def _measured_coupling(results, frame, reference, path) -> Path | None:
+def _measured_coupling(results, frame, path) -> Path | None:
     rdts = [rdt for rdt in ("f1001", "f1010") if rdt in frame.columns]
     if not rdts:
         return None
@@ -689,11 +743,35 @@ def _measured_coupling(results, frame, reference, path) -> Path | None:
         axis.errorbar(frame["s"], frame[rdt], yerr=frame.get(f"{rdt}_err"),
                       fmt="o", color="k", markersize=5, zorder=3, elinewidth=0.9,
                       capsize=2.0, label=f"measured, rms {metrics.rms(frame[rdt]):.2e}")
-        model = f"{rdt}_{reference}"
-        if model in frame.columns:
-            axis.plot(frame["s"], frame[model], color="0.35", linewidth=2.0,
-                      linestyle="--", label=REFERENCE_LABELS[reference])
+        column = f"{rdt}_{MEASURED_REFERENCE}"
+        if column in frame.columns:
+            axis.plot(frame["s"], frame[column], color="0.20", linewidth=2.0,
+                      linestyle="--", label=MEASURED_REFERENCE_LABEL)
         axis.set_ylabel(f"$|f_{{{rdt[1:]}}}|$", fontsize=9)
+        style_axis(axis)
+    axes[-1].set_xlabel("s [m]")
+    axes[0].legend(fontsize=6, ncols=2, loc="upper left")
+    legend_headroom(axes[0])
+    return _save(figure, path)
+
+
+def _measured_phase(results, path) -> Path | None:
+    """Measured phase advance between adjacent BPMs, against the matched model."""
+    frame = results.measured_phase
+    if frame.empty:
+        return None
+    figure, axes = panels(2)
+    for index, (axis, plane) in enumerate(zip(axes, ("x", "y"), strict=True)):
+        mark_bpms(axis, results.positions, label=index == 0)
+        axis.errorbar(frame["s"], frame[f"phase_{plane}"],
+                      yerr=frame.get(f"phase_{plane}_err"), fmt="o",
+                      color=CASE_COLOURS[0], markersize=5, linewidth=1.2,
+                      zorder=3, elinewidth=0.9, capsize=2.0, label="measured")
+        column = f"phase_{plane}_{MEASURED_REFERENCE}"
+        if column in frame.columns:
+            axis.plot(frame["s"], frame[column], color="0.20",
+                      linewidth=2.0, linestyle="--", label=MEASURED_REFERENCE_LABEL)
+        axis.set_ylabel(f"{PLANE_WORD[plane]}\nphase advance [$2\\pi$]", fontsize=8)
         style_axis(axis)
     axes[-1].set_xlabel("s [m]")
     axes[0].legend(fontsize=6, ncols=2, loc="upper left")

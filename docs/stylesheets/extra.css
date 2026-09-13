@@ -1,0 +1,4 @@
+/* Widen the content grid so wide figures/tables use more of the screen. */
+.md-grid {
+  max-width: 90rem;
+}

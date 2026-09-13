@@ -11,6 +11,10 @@ extra_javascript = [
   "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
 ]
 
+extra_css = [
+  "stylesheets/extra.css",
+]
+
 nav = [
   { "Overview" = "index.md" },
   { "Method" = "method.md" },
@@ -25,10 +29,6 @@ nav = [
           { "Delta orbits" = "inverted_tunes/reports/multi/delta.md" },
           { "Absolute orbits" = "inverted_tunes/reports/multi/absolute.md" },
           { "One knob per magnet" = "inverted_tunes/reports/multi/per-magnet.md" },
-      ]},
-      { "Method 1" = [
-          { "Method 1 result" = "inverted_tunes/reports/method1.md" },
-          { "Method 1 against Method 2" = "inverted_tunes/reports/benchmark.md" },
       ]},
       { "Measured optics" = "inverted_tunes/studies/measured-optics.md" },
       { "Scenario comparison" = "inverted_tunes/reports/scenarios.md" },
@@ -45,17 +45,14 @@ nav = [
           { "Absolute orbits" = "normal_tunes/reports/multi/absolute.md" },
           { "One knob per magnet" = "normal_tunes/reports/multi/per-magnet.md" },
       ]},
-      { "Method 1" = [
-          { "Method 1 result" = "normal_tunes/reports/method1.md" },
-          { "Method 1 against Method 2" = "normal_tunes/reports/benchmark.md" },
-      ]},
       { "Measured optics" = "normal_tunes/studies/measured-optics.md" },
       { "Scenario comparison" = "normal_tunes/reports/scenarios.md" },
   ]},
   { "Reference" = [
       { "Conventions" = "reference/conventions.md" },
-      { "Quadrupole roll" = "studies/quadrupole-roll.md" },
       { "Momentum calibration" = "studies/momentum-calibration.md" },
+      { "Phase advance constraint" = "studies/phase-advance-constraint.md" },
+      { "Quadrupole roll" = "studies/quadrupole-roll.md" },
       { "Reproducing" = "reference/reproducing.md" },
   ]},
 ]

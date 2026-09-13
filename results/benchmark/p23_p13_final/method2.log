@@ -1,0 +1,398 @@
+INFO __main__: Corrector baseline: zero; absolute planes: (none, pure delta fit)
+INFO __main__: Campaign: Inverted tunes, 28th (/user/psbop/MultiTurn/2026_08_28_Multiturn/inverted_tunes/loco/0mm)
+INFO pymadng_utils.io.utils: Reading knobs from /afs/cern.ch/work/j/jmgray/private/psb_md/data/xno4l1_off_p23_p13_strengths.txt
+INFO psb_md.acd_config: Read 2 p23-p13-final strengths from xno4l1_off_p23_p13_strengths.txt
+INFO psb_md.modelling: Reusing existing model at /afs/cern.ch/work/j/jmgray/private/psb_md/models/reference/model_qx0.234013_qy0.127497_driven_qx0.230500_qy0.131000_state_tunematch
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Skipping corrector strengths (not provided)
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          6.64372e-02 >
+ 2 q2                       equality     .          1         -1.11638e-01 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.39524e-01  0.00000e+00   .            .         
+ 2 kBRQD                   -7.37759e-01  0.00000e+00   .            .         
+
+ncall=1 [0.0s], fval=9.18611e-02, fstp=-inf, ccnt=2.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1         -3.21640e-04 >
+ 2 q2                       equality     .          1         -3.90793e-04 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34040e-01 -5.48355e-03   .            .         
+ 2 kBRQD                   -7.41117e-01 -3.35873e-03   .            .         
+
+ncall=4 [0.1s], fval=3.57891e-04, fstp=-9.15032e-02, ccnt=2.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1         -1.90638e-09
+ 2 q2                       equality     .          1          2.95909e-08 >
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01  6.03210e-05   .            .         
+ 2 kBRQD                   -7.41172e-01 -5.45183e-05   .            .         
+
+ncall=7 [0.2s], fval=2.09673e-08, fstp=-3.57870e-04, ccnt=1.
+
+
+ Constraints                Type        Kind        Weight     Expr. Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          4.44089e-15
+ 2 q2                       equality     .          1         -2.66454e-15
+
+ Variables                  Curr. Value  Curr. Step   Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01 -8.19458e-10   .            .         
+ 2 kBRQD                   -7.41172e-01  2.11945e-09   .            .         
+
+ncall=10 [0.3s], fval=3.66205e-15, fstp=-2.09673e-08, ccnt=0.
+
+
+ Constraints                Type        Kind        Weight     Penalty Value
+------------------------------------------------------------------------------
+ 1 q1                       equality     .          1          4.44089e-15
+ 2 q2                       equality     .          1          2.66454e-15
+
+ Variables                  Final Value  Init. Value  Lower Limit  Upper Limit
+--------------------------------------------------------------------------------
+ 1 kBRQF                    7.34101e-01  7.39524e-01   .            .         
+ 2 kBRQD                   -7.41172e-01 -7.37759e-01   .            .         
+
+ncall=10 [0.3s], fbst[10]=3.66205e-15, fstp=-2.09673e-08, status=FMIN.
+
+INFO psb_md.modelling: Tune match for p23-p13-final orbit 0: (0.300450, 0.015859) -> (0.234013, 0.127497), target (0.234013, 0.127497)
+INFO psb_md.modelling: Matched 2 strengths for p23-p13-final orbit 0 (dpp=0.000000e+00, ke=1.600000e-01)
+INFO loco_common.model: Quadrupole circuits from the inverted_second machine, not a tune match: kbrqd -0.7377586523 (matched -0.7411718941, +0.461 %), kbrqf +0.7395237891 (matched +0.7341005632, +0.739 %)
+INFO loco_common.model: Whatever this model twisses to is not matched to the machine's measured tune, by design (scripts/measured_optics.py reads that tune live from /afs/cern.ch/work/j/jmgray/private/psb_md/chroma/p23_p13_final_2026_08_28.txt)
+INFO loco_common.model: Using the scan's own corrector settings; largest disagreement with psb_md's campaign file is 0.000e+00 rad on kbr3dvt9l1
+INFO loco_common.model: Ring-3 model from /afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq: 6 tune knobs, 12 corrector knobs
+INFO aba_optimiser.training.config.models: OutputConfig: OutputConfig(write_tensorboard_logs=True, include_uncertainty=True, parallel_hessian=True, tensorboard_root=PosixPath('results/benchmark/inverted_second/method2/tensorboard'), mad_logfile=None, python_logfile=None)
+INFO aba_optimiser.config: OptimiserConfig: OptimiserConfig(max_epochs=20, warmup_epochs=0, warmup_lr_start=1.0, max_lr=1.0, min_lr=1.0, gradient_converged_value=1e-10, optimiser_type='lbfgs', validation_patience=None, validation_min_relative_improvement=0.0, grad_norm_alpha=0.2, lbfgs_history_size=10, lbfgs_max_grad_norm=1.0, lbfgs_max_step_norm=1.0, lbfgs_powell_damping=0.2, adam_weight_decay=0.0, decay_epochs=20)
+INFO aba_optimiser.config: SimulationConfig: SimulationConfig(num_workers=48, num_batches=1, data_fraction=1.0, validation_fraction=0.1, optimise_momenta=True, run_arc_by_arc=True, n_run_turns=1, different_turns_per_range=False, use_fixed_bpm=True, worker_logging_level=30, enable_preloop_outlier_screening=True, bpm_loss_outlier_sigma=3.0, worker_loss_outlier_sigma=3.0)
+INFO aba_optimiser.training.config.models: SequenceConfig: SequenceConfig(magnet_range='$start/$end', bad_bpms=None)
+INFO aba_optimiser.training.base_fitter: After filtering bad BPMs, BPM tracking start points: ['$start']; end points: ['$end']
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Skipping corrector strengths (not provided)
+INFO aba_optimiser.mad.optimising_mad_interface: Skipping tune knobs (not provided)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.training.config.manager: Total BPMs in model: 16, BPMs in configured observation range full cycled sequence ($start/$end): 16
+WARNING aba_optimiser.training.config.manager: Fixed BPMs from range full cycled sequence ($start/$end) not found in model, using first available
+WARNING aba_optimiser.training.config.manager: No true strengths provided, skipping filtering
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-twiss fit (pt=0) over 16 measured BPMs (0 model BPMs unobserved)
+INFO aba_optimiser.training_closed_twiss.fitter: Global loss normalisation over 48 worker(s): weight scale 2.327449e+12, 1536 weighted points
+INFO aba_optimiser.training_closed_twiss.closed_orbit: Closed-orbit fit: 48 worker series, 48 independent measurements
+INFO aba_optimiser.training.workers.lifecycle: Starting 48 workers...
+INFO aba_optimiser.training.workers.lifecycle: Successfully started 48 workers
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Counted 16 BPMs in observation range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Replaced 16 monitor BPMs with thin observation markers in range: full cycled sequence ($start/$end)
+INFO aba_optimiser.mad.optimising_mad_interface: Set 12 corrector knobs
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.mad.optimising_mad_interface: Created 32 knobs from 5.983511999999999 to 153.057827
+INFO aba_optimiser.mad.optimising_mad_interface: Updated 32 knobs from 32 provided
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 0: loss=7.600e-06, |g|=7.656e-03, lam=5.0e-04, tt=0.4s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 1: loss=1.641e-06, |g|=1.013e-03, lam=2.5e-04, tt=0.7s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 2: loss=3.114e-07, |g|=1.406e-04, lam=1.3e-04, tt=0.9s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 3: loss=4.406e-08, |g|=2.055e-05, lam=6.3e-05, tt=1.1s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 4: loss=3.757e-09, |g|=2.845e-06, lam=3.1e-05, tt=1.3s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 5: loss=9.574e-10, |g|=2.337e-07, lam=1.6e-05, tt=1.4s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 6: loss=9.255e-10, |g|=2.506e-09, lam=7.8e-06, tt=1.6s
+INFO aba_optimiser.training_closed_twiss.fitter: GN iter 7: loss=9.254e-10, |g|=5.977e-11, lam=3.9e-06, tt=1.8s
+INFO aba_optimiser.training_closed_twiss.fitter: Levenberg-Marquardt converged (gradient_converged) at iter 7
+INFO aba_optimiser.training.workers.lifecycle: Terminating workers...
+INFO aba_optimiser.training.workers.lifecycle: All workers terminated
+INFO aba_optimiser.training_closed_twiss.fitter: Closed-orbit optimisation complete.
+INFO psb_md.optimisation: Wrote optimisation results (48 knobs from loco_method2 stage) to results/benchmark/inverted_second/method2/knobs.csv
+INFO __main__: Method 2 done: 48 fitted knobs (48 physical output rows) from 48 settings

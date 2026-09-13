@@ -44,12 +44,6 @@ worker's own momentum.
 `prior_strength` is 1e-4, per family rather than one global scalar. It is the
 measured knee at 244 settings, not a tuning parameter.
 
-## Absolute-orbit error floor
-
-`--absolute-error-floor` is 1e-4 m, the BPM zero-offset systematic. It is the
-line a closed-orbit residual is read against; the statistical bar on a measured
-orbit is a standard error of the mean and is two orders of magnitude smaller.
-
 ## Machine-knob model
 
 The machine-knob model is built on the machine's own circuit currents, as

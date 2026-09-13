@@ -10,7 +10,7 @@ That scan was run twice, at two quadrupole powerings — the "normal" tunes
 correctors untouched between them. `loco_common/campaign.py` holds nine
 configurations -- four per working point (`*_second`, `*_sexts_on`,
 `*_qde14_err`, `*_qde14_qde3_err`) plus `inverted_double`; every script that
-reads the measurement takes `--campaign <slug>` and defaults to `inverted_second`.
+reads the measurement takes `--campaign <slug>` and defaults to `p23_p13_final`.
 
 The start model is **never tune-matched**: its two main quadrupole circuits are
 the machine's own LSA readings, so its tune disagrees with the measured one on
