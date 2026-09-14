@@ -8,10 +8,10 @@ Statements only. What was measured, what was modelled, what was fitted. The conv
 
 | configuration | measured $Q_x$ / $Q_y$ | QFO / QDE circuit, MAD $k_1$ | what it is |
 |---|---|---|---|
-| Inverted tunes, 28th | — | — | The 28th's inverted-tunes lattice, Qx above Qy, with nothing mis-trimmed: the baseline the other inverted-tunes configurations are compared against. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics. |
-| Inverted tunes, QDE14 error | — | — | The 28th's inverted lattice again, with QDE14 (kbrqd14corr = +0.0073775865) deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find the error. |
-| Inverted tunes, QDE14+QDE3 error | — | — | The 28th's inverted lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find both errors. |
-| Inverted tunes, sextupoles on | — | — | The 28th's inverted lattice with the ring sextupoles powered instead of off. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits. |
+| Inverted tunes, 28th | 4.2340 / 4.1276 | 0.7395238 / -0.7377587 | The 28th's inverted-tunes lattice, Qx above Qy, with nothing mis-trimmed: the baseline the other inverted-tunes configurations are compared against. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics. |
+| Inverted tunes, QDE14 error | 4.2331 / 4.1277 | 0.7395238 / -0.7377587 | The 28th's inverted lattice again, with QDE14 (kbrqd14corr = +0.0073775865) deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find the error. |
+| Inverted tunes, QDE14+QDE3 error | 4.2329 / 4.1276 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with both QDE14 and QDE3 deliberately mis-trimmed in LSA. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits so LOCO has to find both errors. |
+| Inverted tunes, sextupoles on | 4.2333 / 4.1283 | 0.7395238 / -0.7377587 | The 28th's inverted lattice with the ring sextupoles powered instead of off. The LOCO scan (all three RF offsets), the chroma and the AC-dipole optics were all retaken, and the model starts from its unperturbed circuits. |
 
 ### Normal tunes
 

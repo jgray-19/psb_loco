@@ -8,33 +8,33 @@ PSB ring 3 · single momentum · both planes as delta orbits · 4 machine config
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.32 | 4.85 | 0.01 | 115.36 | 48 of 48 |
-    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.25 | 4.71 | 0.01 | 113.29 | 48 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 5.20 | 10.96 | 0.45 | 7.08 | 45 of 48 |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.69 | 4.78 | 0.23 | 8.59 | 47 of 48 |
+    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.35 | 4.25 | 0.22 | 7.80 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 5.62 | 12.39 | 3.20 | 1.55 | 32 of 48 |
 
 === "Normal tunes, QDE14 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.03 | 5.63 | 0.01 | 148.79 | 48 of 48 |
-    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.92 | 5.49 | 0.01 | 137.67 | 48 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 5.84 | 12.02 | 0.44 | 8.91 | 44 of 48 |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.96 | 5.51 | 0.27 | 10.40 | 45 of 48 |
+    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.48 | 4.29 | 0.25 | 9.33 | 45 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 5.91 | 15.87 | 3.17 | 1.36 | 28 of 48 |
 
 === "Normal tunes, QDE14+QDE3 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.57 | 4.97 | 0.01 | 122.60 | 48 of 48 |
-    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.49 | 4.84 | 0.01 | 114.65 | 48 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 5.92 | 11.12 | 0.45 | 10.06 | 46 of 48 |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.12 | 5.95 | 0.26 | 10.66 | 45 of 48 |
+    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.71 | 5.28 | 0.24 | 9.42 | 44 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 5.30 | 10.01 | 3.35 | 1.48 | 30 of 48 |
 
 === "Normal tunes, sextupoles on"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.04 | 5.58 | 0.01 | 156.11 | 48 of 48 |
-    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.96 | 5.45 | 0.01 | 148.62 | 48 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 6.34 | 19.69 | 0.45 | 7.42 | 45 of 48 |
+    | Gradients, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 3.17 | 5.39 | 0.23 | 14.02 | 47 of 48 |
+    | Gradients and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.86 | 5.05 | 0.22 | 13.45 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 5.78 | 16.11 | 3.59 | 0.82 | 20 of 48 |
 
 ## Fitted knobs
 

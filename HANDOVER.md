@@ -86,8 +86,8 @@ as the drivers do — see §5.1 for why that matters more than it sounds.
 
 The scan lives on a read-only mount:
 `/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_21_Multiturn/psb_loco_scan/`
-(892 SDDS files). **Write nothing there.** `cached_scan()` reads it once into
-`data/scan_points.parquet` + `data/scan_orbits.parquet`; that took the cold read
+(892 SDDS files). **Write nothing there.** `cached_scan()` reads it once per campaign into
+`data/<campaign>_scan_points.parquet` + `data/<campaign>_scan_orbits.parquet`; that took the cold read
 from ~10 minutes to 0.66 s. If the mount is absent, the cached parquet is enough
 for everything except regenerating it, and the mount-gated tests skip themselves.
 

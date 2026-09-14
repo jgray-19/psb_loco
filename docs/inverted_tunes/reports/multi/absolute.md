@@ -8,49 +8,49 @@ PSB ring 3 · multi momentum · both planes absolute · 4 machine configurations
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.86 | 4.77 | 0.22 | 4.74 | 43 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.22 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.02 | 3.71 | 41 of 48 |
-    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.76 | 3.97 | 0.22 | 4.74 | 42 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.22 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.02 | 3.93 | 39 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 1.61 | 4.46 | 5.82 | 0.18 | 0 of 48 |
+    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.10 | 4.81 | 0.03 | 44.44 | 48 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 21.68 | 30 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.00 | 48.55 | 48 of 48 |
+    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.80 | 4.03 | 0.03 | 35.46 | 48 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 21.42 | 28 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.00 | 47.79 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 0.74 | 1.62 | 0.50 | 1.39 | 33 of 48 |
 
 === "Inverted tunes, QDE14 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.90 | 4.80 | 0.22 | 5.27 | 42 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.17 | 25 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.41 | 0.02 | 3.62 | 41 of 48 |
-    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.81 | 4.11 | 0.22 | 4.88 | 41 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.03 | 3.17 | 25 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.02 | 3.90 | 39 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 1.73 | 4.87 | 5.92 | 0.21 | 0 of 48 |
+    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.13 | 5.09 | 0.03 | 44.62 | 46 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 20.20 | 30 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.00 | 47.03 | 46 of 48 |
+    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.83 | 4.06 | 0.03 | 37.49 | 46 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.00 | 19.80 | 29 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.00 | 48.06 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 0.68 | 1.53 | 0.50 | 1.17 | 27 of 48 |
 
 === "Inverted tunes, QDE14+QDE3 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.86 | 4.74 | 0.22 | 4.71 | 43 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.20 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.02 | 3.64 | 41 of 48 |
-    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.76 | 4.01 | 0.22 | 4.71 | 44 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.20 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.02 | 3.92 | 39 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 1.76 | 5.12 | 5.95 | 0.16 | 0 of 48 |
+    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 2.10 | 5.26 | 0.03 | 39.08 | 47 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 19.69 | 29 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.00 | 53.32 | 48 of 48 |
+    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.86 | 4.17 | 0.03 | 35.22 | 48 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 19.64 | 30 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.00 | 54.57 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 0.68 | 1.62 | 0.45 | 1.11 | 29 of 48 |
 
 === "Inverted tunes, sextupoles on"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.74 | 4.51 | 0.22 | 3.91 | 44 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.33 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.02 | 3.71 | 41 of 48 |
-    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.64 | 3.70 | 0.22 | 4.51 | 42 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.03 | 3.32 | 26 of 32 |
-    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.02 | 3.98 | 39 of 48 |
-    |  | rolls \[mrad] | 32 of 48 | 1.65 | 4.43 | 5.95 | 0.16 | 0 of 48 |
+    | Gradients, bends and offsets, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.94 | 4.83 | 0.03 | 45.85 | 47 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 23.37 | 30 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.14 | 0.42 | 0.00 | 62.90 | 45 of 48 |
+    | Gradients, bends, offsets and rolls, lumped to 32 knobs by cell | gradients \[% of nominal $k_1L$] | 32 of 48 | 1.70 | 3.94 | 0.03 | 34.56 | 46 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.13 | 0.37 | 0.00 | 22.86 | 30 of 32 |
+    |  | offsets \[mm] | 32 of 48 | 0.13 | 0.42 | 0.00 | 63.73 | 48 of 48 |
+    |  | rolls \[mrad] | 32 of 48 | 0.70 | 1.55 | 0.39 | 1.60 | 38 of 48 |
 
 ## Fitted knobs
 

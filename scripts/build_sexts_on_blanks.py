@@ -73,6 +73,11 @@ def main() -> None:
 
         for path in blank_paths:
             link = blank_dir / path.name
+            # Always target the canonical /user path: the pipeline runs on a
+            # server that has /user but not the sshfs mount, so a mount-path
+            # target would be a dangling link there.
+            if path.is_relative_to(CERN_USER_MOUNT_ROOT):
+                path = Path("/") / path.relative_to(CERN_USER_MOUNT_ROOT)
             link.symlink_to(path)
         print(f"  -> symlinked into {blank_dir}")
 

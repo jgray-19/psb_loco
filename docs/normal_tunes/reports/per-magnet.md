@@ -8,37 +8,37 @@ PSB ring 3 · single momentum · mixed orbit-matching modes · 4 machine configu
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 8.11 | 22.85 | 0.06 | 106.22 | 47 of 48 |
-    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 2.93 | 9.05 | 4.62 | 0.46 | 13 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.03 | 2.64 | 23 of 32 |
-    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.54 | 0.19 | 0.34 | 11 of 48 |
+    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 6.97 | 22.32 | 0.62 | 5.21 | 44 of 48 |
+    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 2.51 | 7.77 | 0.32 | 5.85 | 46 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.00 | 19.26 | 32 of 32 |
+    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.43 | 0.01 | 15.46 | 48 of 48 |
 
 === "Normal tunes, QDE14 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 9.59 | 25.50 | 0.06 | 124.87 | 48 of 48 |
-    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 3.30 | 8.67 | 4.57 | 0.58 | 17 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.03 | 2.69 | 23 of 32 |
-    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.54 | 0.19 | 0.34 | 11 of 48 |
+    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 7.39 | 22.24 | 0.66 | 4.81 | 44 of 48 |
+    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 2.41 | 7.56 | 0.34 | 6.09 | 43 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.01 | 15.30 | 31 of 32 |
+    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.42 | 0.01 | 15.91 | 48 of 48 |
 
 === "Normal tunes, QDE14+QDE3 error"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 7.79 | 23.01 | 0.06 | 102.78 | 47 of 48 |
-    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 3.12 | 8.93 | 4.62 | 0.48 | 14 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.03 | 2.67 | 23 of 32 |
-    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.54 | 0.19 | 0.34 | 11 of 48 |
+    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 7.03 | 23.16 | 0.69 | 5.47 | 44 of 48 |
+    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 2.58 | 8.79 | 0.35 | 6.01 | 43 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.01 | 16.74 | 32 of 32 |
+    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.43 | 0.01 | 14.84 | 48 of 48 |
 
 === "Normal tunes, sextupoles on"
 
     | case | family | knobs | rms | max | median $\sigma$ | median $\lvert v\rvert/\sigma$ | above 1 |
     |---|---|---|---|---|---|---|---|
-    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 9.64 | 26.65 | 0.06 | 126.48 | 48 of 48 |
-    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 3.33 | 8.85 | 4.59 | 0.61 | 16 of 48 |
-    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.03 | 2.69 | 23 of 32 |
-    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.54 | 0.19 | 0.34 | 11 of 48 |
+    | Gradients, one knob per magnet, delta orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 7.54 | 23.53 | 0.68 | 6.21 | 45 of 48 |
+    | Gradients, bends and offsets, one knob per magnet, absolute orbits | gradients \[% of nominal $k_1L$] | 48 of 48 | 2.73 | 8.26 | 0.34 | 6.34 | 40 of 48 |
+    |  | bends \[% of nominal bend angle] | 32 of 32 | 0.12 | 0.37 | 0.00 | 18.67 | 32 of 32 |
+    |  | offsets \[mm] | 48 of 48 | 0.13 | 0.46 | 0.01 | 13.25 | 48 of 48 |
 
 ## Fitted knobs
 
