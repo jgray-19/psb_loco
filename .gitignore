@@ -6,6 +6,7 @@
 __pycache__/
 *.pyc
 *.egg-info/
+uv.lock
 # Build output of `zensical build`; regenerated from docs/.
 site/
 

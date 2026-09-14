@@ -22,7 +22,7 @@ jobs:
 
       - uses: astral-sh/setup-uv@v3
 
-      - run: uv run --with zensical zensical build
+      - run: uvx --with zensical zensical build
 
       - uses: actions/upload-pages-artifact@v3
         with:
