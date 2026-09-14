@@ -11,36 +11,36 @@
   },
   "measured": {
     "natural_tunes": [
-      4.172972341769445,
-      4.229254623322724
+      4.172972341769444,
+      4.229254623322723
     ],
     "natural_tune_spread": [
-      3.53915981916586e-05,
+      3.5391598190770424e-05,
       0.00014273441234635698
     ],
     "dq_dpt": [
-      -6.70828117113677,
-      -13.15273617330578
+      -6.708281171136695,
+      -13.15273617330585
     ],
     "dq_dpt_error": [
-      0.03241865776362047,
-      0.07326741240283231
+      0.03241865776361888,
+      0.07326741240283237
     ],
     "dq_dpt_closed_orbit": [
-      -7.163491918045554,
-      -13.597278720472858
+      -7.163491918045221,
+      -13.597278720472687
     ],
     "dq_dpt_closed_orbit_error": [
       0.08526602822090004,
       0.2773396316670721
     ],
     "qprime": [
-      -3.4866489240841543,
-      -6.836173418719147
+      -3.4866489240841156,
+      -6.836173418719183
     ],
     "qprime_error": [
-      0.016849692988140732,
-      0.038080953691074344
+      0.016849692988139906,
+      0.03808095369107437
     ],
     "chroma_file": "/afs/cern.ch/work/j/jmgray/private/psb_md/chroma/p17_p23_final_2026_08_29.txt"
   },
@@ -52,8 +52,8 @@
     "sequence_file": "/afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq",
     "matched": false,
     "tune_error": [
-      -0.0025819490561094227,
-      0.0017078690632601479
+      -0.0025819490561085345,
+      0.001707869063261036
     ],
     "qprime": [
       -3.3571001775234937,
@@ -66,30 +66,30 @@
   },
   "matched_model": {
     "tunes": [
-      4.172972341769452,
-      4.229254623322745
+      4.172972341769439,
+      4.229254623322758
     ],
     "matched": true,
     "matched_to": [
-      4.172972341769445,
-      4.229254623322724
+      4.172972341769444,
+      4.229254623322723
     ],
     "quad_settings": {
-      "kbrqf": 0.729201516626107,
-      "kbrqd": -0.7443400286389009
+      "kbrqf": 0.7292015166261059,
+      "kbrqd": -0.7443400286389013
     },
     "qprime": [
-      -3.358536653693577,
-      -6.741845423271084
+      -3.3585366536935712,
+      -6.741845423271109
     ],
     "dq_dpt": [
-      -6.461794315142675,
-      -12.971249958446467
+      -6.461794315142664,
+      -12.971249958446517
     ]
   },
   "folders": {
     "m2mm": {
-      "folder": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/m2mm",
+      "folder": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/m2mm",
       "drive": {
         "files": 31,
         "configured_qxd": 0.1738,
@@ -101,7 +101,7 @@
       },
       "optics": true,
       "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
-      "blank_acquisitions": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/m2mm",
+      "blank_acquisitions": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/m2mm",
       "harpy_tunes": {
         "driven_qx": 0.177340771422,
         "driven_qy": 0.237514973453
@@ -111,7 +111,7 @@
       "free_dir": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p17_p23_final/m2mm/free"
     },
     "0mm": {
-      "folder": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/0mm",
+      "folder": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/0mm",
       "drive": {
         "files": 32,
         "configured_qxd": 0.1696,
@@ -123,7 +123,7 @@
       },
       "optics": true,
       "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
-      "blank_acquisitions": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/0mm",
+      "blank_acquisitions": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/0mm",
       "harpy_tunes": {
         "driven_qx": 0.173089523292,
         "driven_qy": 0.229003918154
@@ -133,7 +133,7 @@
       "free_dir": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p17_p23_final/0mm/free"
     },
     "2mm": {
-      "folder": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/2mm",
+      "folder": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/2mm",
       "drive": {
         "files": 36,
         "configured_qxd": 0.1652,
@@ -145,7 +145,7 @@
       },
       "optics": true,
       "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
-      "blank_acquisitions": "/home/jmgray/mnt/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/2mm",
+      "blank_acquisitions": "/user/psbop/MultiTurn/2026_08_29_Multiturn/normal_tunes/blank_acquisitions/2mm",
       "harpy_tunes": {
         "driven_qx": 0.168660607391,
         "driven_qy": 0.221060190579
@@ -164,8 +164,8 @@
         "bpms": 16
       },
       "vs_matched_model": {
-        "rms": 0.0656832437234629,
-        "max": 0.11682387281020334,
+        "rms": 0.06568324372345827,
+        "max": 0.11682387281018425,
         "bpms": 16
       },
       "vs_omc3_model": {
@@ -181,8 +181,8 @@
         "bpms": 16
       },
       "vs_matched_model": {
-        "rms": 0.05786810257615731,
-        "max": 0.10926483929518915,
+        "rms": 0.05786810257615963,
+        "max": 0.10926483929520558,
         "bpms": 16
       },
       "vs_omc3_model": {
@@ -200,8 +200,8 @@
         "bpms": 16
       },
       "vs_matched_model": {
-        "rms": 0.09482317202079964,
-        "max": 0.27533172276644724,
+        "rms": 0.09482317202079658,
+        "max": 0.2753317227664476,
         "bpms": 16
       },
       "vs_omc3_model": {
@@ -217,8 +217,8 @@
         "bpms": 16
       },
       "vs_matched_model": {
-        "rms": 0.05674844173640223,
-        "max": 0.11322903732070877,
+        "rms": 0.056748441736401374,
+        "max": 0.11322903732070966,
         "bpms": 16
       },
       "vs_omc3_model": {
@@ -248,8 +248,8 @@
         "bpms": 15
       },
       "vs_matched_model": {
-        "rms": 0.002958518996732328,
-        "max": 0.005779148804415435,
+        "rms": 0.0029585189967319893,
+        "max": 0.005779148804416101,
         "bpms": 15
       },
       "vs_omc3_model": {
@@ -265,8 +265,8 @@
         "bpms": 15
       },
       "vs_matched_model": {
-        "rms": 0.0029605817246177277,
-        "max": 0.00477496640559999,
+        "rms": 0.0029605817246178443,
+        "max": 0.004774966405600434,
         "bpms": 15
       },
       "vs_omc3_model": {

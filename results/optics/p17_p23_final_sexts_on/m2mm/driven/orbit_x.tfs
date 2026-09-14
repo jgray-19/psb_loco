@@ -1,7 +1,7 @@
 @ Measure_optics:version %s             "0.29.0"
 @ Command              %s "/afs/cern.ch/work/j/jmgray/private/accpy/bin/python scripts/measured_optics.py --campaign p17_p23_final_sexts_on --optics-folders all"
 @ CWD                  %s "/afs/cern.ch/work/j/jmgray/private/psb_loco"
-@ Date                 %s "11. September 2026, 20:56:38"
+@ Date                 %s "14. September 2026, 08:13:20"
 @ Model_directory      %s "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p17_p23_final_sexts_on/m2mm/omc3_model"
 @ Compensation         %s               "none"
 @ Q1                   %le       0.177932586984

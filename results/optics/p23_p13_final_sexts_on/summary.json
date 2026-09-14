@@ -1,0 +1,279 @@
+{
+  "campaign": "p23_p13_final_sexts_on",
+  "label": "Inverted tunes, sextupoles on",
+  "quad_settings": {
+    "kbrqd": -0.7377586523437502,
+    "kbrqf": 0.7395237890625004,
+    "kbrqfcorr": 0.0,
+    "kbrqdcorr": 0.0,
+    "kbrqd3corr": 0.0,
+    "kbrqd14corr": 0.0
+  },
+  "measured": {
+    "natural_tunes": [
+      4.2332752282630866,
+      4.128255069540514
+    ],
+    "natural_tune_spread": [
+      0.00016488599725583697,
+      0.0002060744063996367
+    ],
+    "dq_dpt": [
+      -6.4370454585901316,
+      -12.682973697821321
+    ],
+    "dq_dpt_error": [
+      0.042368859725650715,
+      0.07395116461329707
+    ],
+    "dq_dpt_closed_orbit": [
+      -6.349285038594338,
+      -13.158984086209347
+    ],
+    "dq_dpt_closed_orbit_error": [
+      0.037218420984848746,
+      0.12723772810383358
+    ],
+    "qprime": [
+      -3.3456733625061834,
+      -6.592012986569961
+    ],
+    "qprime_error": [
+      0.02202133980500393,
+      0.03843633591912027
+    ],
+    "chroma_file": "/afs/cern.ch/work/j/jmgray/private/psb_md/chroma/p23_p13_final_sexts_on_2026_08_28.txt"
+  },
+  "loco_model": {
+    "tunes": [
+      4.3004051466711415,
+      4.016193379939039
+    ],
+    "sequence_file": "/afs/cern.ch/work/j/jmgray/private/psb_loco/models/model_qx0.165000_qy0.227500/psb3_saved.seq",
+    "matched": false,
+    "tune_error": [
+      0.06712991840805493,
+      -0.11206168960147522
+    ],
+    "qprime": [
+      -3.3920622117840136,
+      -6.267537243171261
+    ],
+    "dq_dpt": [
+      -6.526297187380952,
+      -12.058685285845954
+    ]
+  },
+  "matched_model": {
+    "tunes": [
+      4.233275228263081,
+      4.128255069540538
+    ],
+    "matched": true,
+    "matched_to": [
+      4.2332752282630866,
+      4.128255069540514
+    ],
+    "quad_settings": {
+      "kbrqf": 0.734032693550466,
+      "kbrqd": -0.7411795912398925
+    },
+    "qprime": [
+      -3.3803783652387223,
+      -6.645057328839735
+    ],
+    "dq_dpt": [
+      -6.503817571711928,
+      -12.785030535269364
+    ]
+  },
+  "folders": {
+    "m2mm": {
+      "folder": "/user/psbop/MultiTurn/2026_08_28_Multiturn/inverted_tunes_sexts_on/m2mm",
+      "drive": {
+        "files": 30,
+        "configured_qxd": 0.234,
+        "configured_qyd": 0.1403,
+        "measured_qxd": 0.23400133452145086,
+        "measured_qyd": 0.140295211618252,
+        "spread_qxd": 6.78104928287073e-07,
+        "spread_qyd": 1.493470161650659e-06
+      },
+      "optics": true,
+      "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
+      "blank_acquisitions": "/afs/cern.ch/work/j/jmgray/private/psb_md/data/p23_p13_final_sexts_on_blanks/m2mm",
+      "harpy_tunes": {
+        "driven_qx": 0.237480862062,
+        "driven_qy": 0.136798234641
+      },
+      "phase_advance_rms_x": 0.005387503778078147,
+      "phase_advance_rms_y": 0.002181920627236937,
+      "free_dir": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p23_p13_final_sexts_on/m2mm/free"
+    },
+    "0mm": {
+      "folder": "/user/psbop/MultiTurn/2026_08_28_Multiturn/inverted_tunes_sexts_on/0mm",
+      "drive": {
+        "files": 30,
+        "configured_qxd": 0.2298,
+        "configured_qyd": 0.1319,
+        "measured_qxd": 0.22980160614264122,
+        "measured_qyd": 0.1318954531932667,
+        "spread_qxd": 5.438506957968917e-07,
+        "spread_qyd": 1.151814671590275e-06
+      },
+      "optics": true,
+      "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
+      "blank_acquisitions": "/afs/cern.ch/work/j/jmgray/private/psb_md/data/p23_p13_final_sexts_on_blanks/0mm",
+      "harpy_tunes": {
+        "driven_qx": 0.233284197281,
+        "driven_qy": 0.128356965656
+      },
+      "phase_advance_rms_x": 0.0045975777849158505,
+      "phase_advance_rms_y": 0.0017880357675582608,
+      "free_dir": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p23_p13_final_sexts_on/0mm/free"
+    },
+    "2mm": {
+      "folder": "/user/psbop/MultiTurn/2026_08_28_Multiturn/inverted_tunes_sexts_on/2mm",
+      "drive": {
+        "files": 30,
+        "configured_qxd": 0.2258,
+        "configured_qyd": 0.1235,
+        "measured_qxd": 0.22580160614264122,
+        "measured_qyd": 0.12349434687641678,
+        "spread_qxd": 4.973766789428368e-07,
+        "spread_qyd": 1.6261709340433382e-06
+      },
+      "optics": true,
+      "preprocessing": "cleaning=svd(rank=2), demodulate, remove_interference, remove_energy_motion",
+      "blank_acquisitions": "/afs/cern.ch/work/j/jmgray/private/psb_md/data/p23_p13_final_sexts_on_blanks/2mm",
+      "harpy_tunes": {
+        "driven_qx": 0.229345603547,
+        "driven_qy": 0.119968925781
+      },
+      "phase_advance_rms_x": 0.00504303143438349,
+      "phase_advance_rms_y": 0.0015336118693031963,
+      "free_dir": "/afs/cern.ch/work/j/jmgray/private/psb_loco/results/optics/p23_p13_final_sexts_on/2mm/free"
+    }
+  },
+  "reference_folder": "m2mm",
+  "beta_beat": {
+    "x": {
+      "vs_loco_model": {
+        "rms": 0.15025864090356683,
+        "max": 0.34850797546611156,
+        "bpms": 16
+      },
+      "vs_matched_model": {
+        "rms": 0.14577813569203188,
+        "max": 0.33607721247334177,
+        "bpms": 16
+      },
+      "vs_omc3_model": {
+        "rms": 0.1462407786695701,
+        "max": 0.33702740976484424,
+        "bpms": 16
+      }
+    },
+    "y": {
+      "vs_loco_model": {
+        "rms": 0.05455840904826313,
+        "max": 0.10603602883426566,
+        "bpms": 16
+      },
+      "vs_matched_model": {
+        "rms": 0.05529066008819931,
+        "max": 0.09946345227300657,
+        "bpms": 16
+      },
+      "vs_omc3_model": {
+        "rms": 0.055293814221517676,
+        "max": 0.0997216730077215,
+        "bpms": 16
+      }
+    }
+  },
+  "beta_beat_amplitude": {
+    "x": {
+      "vs_loco_model": {
+        "rms": 0.12839492562750127,
+        "max": 0.3975375113468671,
+        "bpms": 16
+      },
+      "vs_matched_model": {
+        "rms": 0.12695766539459571,
+        "max": 0.3846547862216756,
+        "bpms": 16
+      },
+      "vs_omc3_model": {
+        "rms": 0.1270455568600648,
+        "max": 0.3856395311265739,
+        "bpms": 16
+      }
+    },
+    "y": {
+      "vs_loco_model": {
+        "rms": 0.060696039697160774,
+        "max": 0.12048488570688409,
+        "bpms": 16
+      },
+      "vs_matched_model": {
+        "rms": 0.06101629159403889,
+        "max": 0.12588376342560337,
+        "bpms": 16
+      },
+      "vs_omc3_model": {
+        "rms": 0.061049526705752345,
+        "max": 0.1259627080593917,
+        "bpms": 16
+      }
+    }
+  },
+  "phase_vs_amplitude": {
+    "x": {
+      "rms": 0.11027799691199845,
+      "max": 0.28262997074055685,
+      "bpms": 16
+    },
+    "y": {
+      "rms": 0.08930589782237704,
+      "max": 0.1618732908849938,
+      "bpms": 16
+    }
+  },
+  "phase_beat": {
+    "x": {
+      "vs_loco_model": {
+        "rms": 0.006761827248887102,
+        "max": 0.017459059869306293,
+        "bpms": 15
+      },
+      "vs_matched_model": {
+        "rms": 0.005380163613974493,
+        "max": 0.013269269795757266,
+        "bpms": 15
+      },
+      "vs_omc3_model": {
+        "rms": 0.005387503778078147,
+        "max": 0.013463278731000006,
+        "bpms": 15
+      }
+    },
+    "y": {
+      "vs_loco_model": {
+        "rms": 0.007997048616973387,
+        "max": 0.012798310102127841,
+        "bpms": 15
+      },
+      "vs_matched_model": {
+        "rms": 0.002227797334539104,
+        "max": 0.004218559098896124,
+        "bpms": 15
+      },
+      "vs_omc3_model": {
+        "rms": 0.002181920627236937,
+        "max": 0.003915023114000049,
+        "bpms": 15
+      }
+    }
+  }
+}

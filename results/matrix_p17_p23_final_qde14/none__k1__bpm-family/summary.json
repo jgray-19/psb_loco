@@ -4,11 +4,11 @@
   "diagnostics": {
     "converged": true,
     "reason": "loss_converged",
-    "iterations": 5,
-    "best_loss": 7.144657717135677e-10,
-    "gradient_norm": 1.020528840941875e-10,
-    "damping": 3.125e-05,
-    "accepted_evaluations": 5
+    "iterations": 4,
+    "best_loss": 1.0795677727240509e-10,
+    "gradient_norm": 2.633883423436601e-10,
+    "damping": 6.25e-05,
+    "accepted_evaluations": 4
   },
   "rf_offsets": [
     0.0
@@ -45,7 +45,6 @@
   "momentum_calibration": {},
   "absolute_planes": [],
   "corrector_baseline": "zero",
-  "absolute_error_floor": 0.0,
   "optimise_quadrupoles": true,
   "optimise_bends": false,
   "optimise_quad_dy": false,

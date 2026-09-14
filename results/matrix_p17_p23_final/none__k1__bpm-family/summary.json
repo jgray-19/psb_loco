@@ -5,8 +5,8 @@
     "converged": true,
     "reason": "loss_converged",
     "iterations": 4,
-    "best_loss": 7.29301274723499e-10,
-    "gradient_norm": 1.7804517156669278e-10,
+    "best_loss": 1.1559192374873763e-10,
+    "gradient_norm": 2.003694957607158e-10,
     "damping": 6.25e-05,
     "accepted_evaluations": 4
   },
@@ -45,7 +45,6 @@
   "momentum_calibration": {},
   "absolute_planes": [],
   "corrector_baseline": "zero",
-  "absolute_error_floor": 0.0,
   "optimise_quadrupoles": true,
   "optimise_bends": false,
   "optimise_quad_dy": false,

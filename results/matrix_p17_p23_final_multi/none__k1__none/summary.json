@@ -5,8 +5,8 @@
     "converged": true,
     "reason": "loss_converged",
     "iterations": 5,
-    "best_loss": 2.6104322032752783e-10,
-    "gradient_norm": 1.0897290566376397e-09,
+    "best_loss": 1.452565414258547e-10,
+    "gradient_norm": 2.7960273854742716e-10,
     "damping": 3.125e-05,
     "accepted_evaluations": 5
   },
@@ -67,7 +67,6 @@
   },
   "absolute_planes": [],
   "corrector_baseline": "zero",
-  "absolute_error_floor": 0.0,
   "optimise_quadrupoles": true,
   "optimise_bends": false,
   "optimise_quad_dy": false,

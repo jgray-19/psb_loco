@@ -3,8 +3,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.17379760742200007 | optics_measurements.phase
    INFO | Writing phases: 2 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.003682359551235225 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.004461896506533544 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.003682359551235229 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.004461896506533536 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 12.579% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -12,7 +12,7 @@
    INFO | Measured tune in plane Y = 0.24099731445299993 | optics_measurements.phase
    INFO | Writing phases: 2 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0029630284366359574 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0028585970975398764 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0028585970975398742 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.290% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -96,10 +96,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.17379760742200007 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0040509888015461855 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.004050988801546186 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0033224480885720217 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0040309911993586306 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0033656393094311245 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0040309911993586375 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.003365639309431114 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 12.290% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -110,9 +110,9 @@
    INFO | Measured tune in plane Y = 0.24099731445299993 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.003595120935285101 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002910478574880373 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0029104785748803852 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0035949805049806 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0029361103237150214 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0029361103237150227 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.838% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -206,7 +206,7 @@
    INFO | Measured tune in plane Y = 0.232500851154 | optics_measurements.phase
    INFO | Writing phases: 2 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0032360598454700905 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0028026672156423165 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002802667215642321 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.709% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -297,7 +297,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.003940902697456246 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.003005828977925508 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.00392980309171932 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.003050433040805272 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0030504330408052723 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 9.778% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -310,7 +310,7 @@
    INFO | Phase advance beating in phase_y.tfs = 0.0032916123078890634 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.00275987575136998 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.003289876893826016 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002789035338642321 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002789035338642317 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.192% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -402,15 +402,15 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 2 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.003440724593865907 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.003817234813070241 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.003817234813070246 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.349% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 2 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.003603486645439221 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.003263760724943478 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.003603486645438846 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0032637607249435515 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.608% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -504,10 +504,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0029331934009833695 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0029331934009833656 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027333313385858146 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002932560258156377 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027465515378079044 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027465515378079096 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.981% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -517,10 +517,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028696043264543124 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024598031842464536 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028464895577222835 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002470053488990372 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002869604326454306 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002459803184246489 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028464895577222666 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002470053488990397 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.181% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -616,7 +616,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002946185304109976 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.00272694801595944 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029456970151728293 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.00294569701517283 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027405088190500934 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.736% | optics_measurements.beta_from_phase
@@ -628,9 +628,9 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0029256641953019336 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024859892354034776 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002485989235403482 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0029020624487600634 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002496928667323252 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002496928667323244 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.123% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -737,10 +737,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0027931352514830687 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00241060533134291 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027723315638207486 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002424200687283655 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0027931352514830917 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024106053313429515 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027723315638207664 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024242006872836957 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.032% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -834,10 +834,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0028907289804621077 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002890728980462104 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002801288341783024 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002890338571405035 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.00281843359077597 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028184335907759633 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.534% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -847,10 +847,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002965069434413094 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00249926238773909 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0029394796861493735 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025036919638438578 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0029650694344130553 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024992623877391276 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002939479686149335 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00250369196384389 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.903% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -947,7 +947,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029530499887453613 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002778962269466781 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002950928382265452 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027937367479297925 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002793736747929808 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.286% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -957,8 +957,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002865952925777241 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002444646363808314 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028659529257772463 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024446463638083163 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028412927716693686 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002454051939329594 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -1055,8 +1055,8 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002912069095181807 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002665830645831661 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002913373892522267 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026658306458316574 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029133738925222726 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026760754632725843 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.179% | optics_measurements.beta_from_phase
@@ -1067,10 +1067,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002918542471456251 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025363784922710045 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002889945206172983 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002548006027066442 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002918542471456203 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002536378492271072 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002889945206172936 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002548006027066495 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.083% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1177,10 +1177,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002865092370503147 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024791834232527473 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002841063305574603 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00248736163692356 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002865092370503103 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024791834232527825 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028410633055745605 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024873616369235933 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.053% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1275,7 +1275,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029792273051475267 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0028409092306455725 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0028409092306455794 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029806866087981865 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002857608161453733 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -1287,10 +1287,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002885221905834144 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024372903099936206 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028613775129829678 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002443798733603266 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002885221905834093 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024372903099936444 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002861377512982917 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024437987336032928 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.563% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1387,7 +1387,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0030188627088534787 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002679930099693757 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.003017919784659911 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002689244322781167 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002689244322781155 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.890% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -1397,10 +1397,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028163316192822744 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002478921626638638 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027954226736766497 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024959772345496366 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002816331619282296 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024789216266386583 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027954226736766666 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024959772345496526 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.836% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1494,9 +1494,9 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0029941320415201307 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002994132041520123 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027698067323854826 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029960918658813096 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002996091865881316 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027855132755357317 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.304% | optics_measurements.beta_from_phase
@@ -1507,10 +1507,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0029314658811436457 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002516375032432916 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002905937053022695 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025241186083733752 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002931465881143644 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025163750324329616 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.00290593705302269 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002524118608373413 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.955% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1605,9 +1605,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002930128491463501 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002806884604202867 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0028068846042028734 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029290537006721497 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002824848897885186 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002824848897885184 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.846% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -1617,10 +1617,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0029075920638159092 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002471431482775446 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002888469424422253 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002484317177650878 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002907592063815807 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.00247143148277548 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028884694244221505 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002484317177650903 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.538% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1715,8 +1715,8 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029457579246969135 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002804780363388973 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002942442451710471 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0028047803633889736 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029424424517104702 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002820720572421532 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.526% | optics_measurements.beta_from_phase
@@ -1728,8 +1728,8 @@
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028331662190195397 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024097145833254325 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028118056760741113 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024097145833254386 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028118056760741117 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002416332701347998 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.305% | optics_measurements.beta_from_phase
@@ -1825,7 +1825,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002916889295514189 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026999878888889755 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026999878888889785 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002915302069886137 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002712318954295654 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -1837,10 +1837,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00292736884019363 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025206171427782174 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002905537965508351 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025310161806188585 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0029273688401936005 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002520617142778251 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0029055379655083214 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002531016180618888 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.790% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -1937,7 +1937,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029979461290056074 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027775381763758857 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029957906402826094 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027910412217938196 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002791041221793819 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.385% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -1947,10 +1947,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002895789435893218 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002423282804516846 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028721162492773666 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024294734999227934 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002895789435893182 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024232828045169263 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002872116249277336 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024294734999228637 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.955% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2044,8 +2044,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0029385167585632517 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027699884372015 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0029385167585632512 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002769988437201499 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029410932524927946 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002786582936727089 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -2057,10 +2057,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002893804817720403 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024745104132262805 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028694521321997015 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002483519864219984 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002893804817720247 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024745104132263716 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028694521321995345 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024835198642200636 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.117% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2155,9 +2155,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028780332231671817 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026759025001570178 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002675902500157018 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028745624786861482 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026879911646443566 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026879911646443674 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.143% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -2167,10 +2167,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00284713980778426 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00247308409011828 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002821959772991457 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024797404482735956 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002847139807784241 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024730840901183316 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028219597729914475 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024797404482736376 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.054% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2265,9 +2265,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029018640538642474 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027599536413899116 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027599536413898972 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028983898273078766 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027745089969377482 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027745089969377617 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.020% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -2277,10 +2277,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028563211235322545 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002430615662828384 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028361212722121756 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002445170417208263 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028563211235322515 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024306156628284034 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028361212722121725 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024451704172082775 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.264% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2377,7 +2377,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0030113132878934624 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002750509867218079 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.00300489978172689 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027616185456433807 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027616185456433803 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.074% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -2387,10 +2387,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460513644750002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028900136599881365 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025018827880598587 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002873568265463368 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025183131386028066 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028900136599881794 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025018827880599033 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002873568265463413 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025183131386028526 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.464% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2487,7 +2487,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.00288991223513426 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002766140974324622 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002888124727689821 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002782212901001559 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027822129010015586 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.390% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -2497,10 +2497,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002895581325594549 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024897890359996005 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028725549286613265 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002501126452665915 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028955813255945404 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002489789035999624 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028725549286613182 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002501126452665925 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.742% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2594,9 +2594,9 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.002870306821124988 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027085192005850928 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0028651260936900283 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002870306821124991 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027085192005850975 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002865126093690021 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002719966392215663 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.928% | optics_measurements.beta_from_phase
@@ -2608,9 +2608,9 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0027855674567041546 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024197178017173614 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027687114343620802 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024330802493491037 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024197178017173527 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027687114343620824 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002433080249349104 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.782% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2706,7 +2706,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029496652605669554 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027410552541042316 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029448410089386273 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002944841008938629 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002751249286647758 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.487% | optics_measurements.beta_from_phase
@@ -2718,9 +2718,9 @@
    INFO | Measured tune in plane Y = 0.22460513644750002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028944615666991838 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00245359545228861 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024535954522886057 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.002870602646662641 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002464409258685726 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024644092586857216 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.370% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2815,7 +2815,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029992885978906373 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027598240344542013 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002759824034454194 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002995364687032306 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027706142794505424 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -2827,10 +2827,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460513644750002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002871401454539256 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002501511929588894 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.00284940223863702 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025181455750071993 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002871401454539279 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025015119295889125 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028494022386370437 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025181455750072153 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 4.755% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -2926,8 +2926,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002912811016506663 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002732420181961493 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002913976372804007 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002748417330432277 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002913976372804014 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027484173304322766 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.704% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -2937,10 +2937,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0027831975804759714 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002783197580475972 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.002426114996557172 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0027596847728642428 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024357145318162103 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024357145318162085 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.343% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3036,7 +3036,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029161986459521417 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0026601478847966356 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002916659592632412 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029166595926324083 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026718182767576206 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.275% | optics_measurements.beta_from_phase
@@ -3047,10 +3047,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028988613243053217 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002518605222311345 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028749559162257405 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025303008455151523 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028988613243053113 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002518605222311375 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028749559162257305 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025303008455151766 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.411% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3147,7 +3147,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0028459101040416764 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027053684888845493 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028436748577480224 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027179122218494397 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027179122218494245 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.650% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -3158,9 +3158,9 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028020788476052485 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002393323180595821 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002777276517928077 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002399647501496466 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0023933231805958253 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027772765179280767 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0023996475014964602 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.890% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3267,10 +3267,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002855060419808417 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002475653154348624 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028349047719647635 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00249138850630742 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.00285506041980838 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002475653154348662 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028349047719647266 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024913885063074393 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.367% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3378,9 +3378,9 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002857341865469092 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002526793590240563 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002835608007585387 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002542343126528702 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002526793590240559 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002835608007585386 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002542343126528701 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.213% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3477,7 +3477,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029307571169657183 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002763680740042722 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029321483789748045 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027771473448047965 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002777147344804804 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.870% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -3488,8 +3488,8 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002900364551153294 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002469668207192088 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002876113031614426 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024696682071920976 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002876113031614421 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024768096973767674 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.744% | optics_measurements.beta_from_phase
@@ -3585,9 +3585,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028878251021233563 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026797036284382783 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0028836506804070456 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026893813544246613 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026797036284382735 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002883650680407045 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026893813544246604 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.390% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -3597,10 +3597,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00285469107718548 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025215586376519704 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028406139298863165 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025403026175541622 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028546910771854914 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025215586376519947 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002840613929886322 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025403026175541852 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.038% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3707,10 +3707,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460683186850006 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028545640228940044 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024798091994859954 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028325248857610005 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002492948390324614 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002854564022893863 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002479809199486073 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028325248857608595 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002492948390324678 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.481% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3806,8 +3806,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028851066755208204 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002785568231314565 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002884225330580145 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002802729473640295 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002884225330580137 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028027294736402957 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.963% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -3817,10 +3817,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028918879569852763 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024696278149704443 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028703881247828774 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002482018771380619 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002891887956985167 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024696278149704625 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002870388124782765 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002482018771380632 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.085% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -3917,7 +3917,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.002956939149699262 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027497515031607886 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002957016901672698 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027634761973521285 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027634761973521237 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.907% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -4025,7 +4025,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029878897164275966 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027610213945928924 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027610213945929007 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029874604271443506 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002774397761632609 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -4037,10 +4037,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002827100973392174 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024312468074135945 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028028156515942895 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024392815187971877 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002827100973392139 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002431246807413635 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028028156515942596 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024392815187972224 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.561% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4147,10 +4147,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0029226537260612397 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025250131562932258 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002895266620834085 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002535390415832393 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002922653726061263 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002525013156293307 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002895266620834102 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025353904158324516 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.074% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4257,10 +4257,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028090753349934478 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002391607254184313 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002786211952056016 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024009372949104217 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028090753349934456 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002391607254184361 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.00278621195205601 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024009372949104595 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.867% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4355,8 +4355,8 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030094897516477355 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002779148906850213 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0030097081035459095 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027791489068502216 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0030097081035459087 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.00279062599716033 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.532% | optics_measurements.beta_from_phase
@@ -4367,10 +4367,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00284654355671739 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028465435567173922 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.002453909703407578 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.002821354142231868 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00246288519395632 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024628851939563173 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.598% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4464,7 +4464,7 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.003024576205437513 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.003024576205437511 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002782757594491713 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.003024514355351341 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002794250188938743 | optics_measurements.phase
@@ -4477,10 +4477,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002836246399866075 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00247443862702001 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002812512039896528 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024874028527524226 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002836246399866052 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002474438627020031 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002812512039896508 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024874028527524447 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.154% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4575,9 +4575,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028829221693992264 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026594773467964353 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026594773467964314 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028833600088231256 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002672660393540191 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002672660393540198 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.869% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -4587,10 +4587,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002891745984819079 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002508841914951688 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002866258092118336 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002521041392046615 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028917459848190304 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025088419149517983 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028662580921182874 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025210413920467105 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.224% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4697,10 +4697,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002853653025427374 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002487306153640206 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028332147792849093 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025034892724932127 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.00285365302542737 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024873061536402345 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028332147792849015 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002503489272493232 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.053% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4795,9 +4795,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029547866473188865 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027400432666089183 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027400432666089135 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.00295681958470707 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027529958275671713 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.00275299582756717 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.145% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -4807,10 +4807,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028502236247505293 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002498282730840532 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028274162667972216 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002516519855775463 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028502236247505315 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002498282730840544 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002827416266797224 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025165198557754744 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.055% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -4904,8 +4904,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0029720145325255543 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027824868845165896 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002972014532525555 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027824868845165844 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029695832616991784 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002794961877659715 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -4917,10 +4917,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00292197883701723 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025418167416303926 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0029027946981856345 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025560059941964813 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0029219788370171995 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025418167416304004 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002902794698185591 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025560059941964882 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.478% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5015,7 +5015,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029615251478855523 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002736275427324318 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027362754273243307 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029633264910067995 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027500452364762483 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -5027,8 +5027,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028782326225023362 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00246344022444552 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028782326225023367 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002463440224445533 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028515349207900898 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024688512114354735 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -5124,10 +5124,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0028880524720744194 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0028880524720744233 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002756950278000995 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028912439297603654 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027749598205733866 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002774959820573382 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.396% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -5137,10 +5137,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028782590787615283 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024622753695180814 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028504657375818397 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024713350111688543 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002878259078761505 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024622753695181434 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028504657375818137 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002471335011168907 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.930% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5235,9 +5235,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002899959646333604 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027624917904810445 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0028974497965512875 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027760138749074914 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027624917904810575 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002897449796551288 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027760138749074923 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.642% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -5247,10 +5247,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028623317634961618 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002454677627960786 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028423774048406815 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002467960565397508 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028623317634961292 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002454677627960809 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002842377404840659 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002467960565397517 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.679% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5345,9 +5345,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002918318779845443 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002705875235954575 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027058752359545735 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002915973630526105 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002715133017787087 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002715133017787092 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.723% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -5359,8 +5359,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0029051615966520423 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0025177584674305675 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028845389377336068 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025350606319180084 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002884538937733606 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002535060631918004 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.522% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5467,10 +5467,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0027551857862901613 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024020714775742523 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027364876204375695 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024152204801973025 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0027551857862900975 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002402071477574276 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002736487620437512 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002415220480197322 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.011% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5565,7 +5565,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002928864059744458 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027943335396135075 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027943335396134954 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029311930109473 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002809989656951444 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -5577,7 +5577,7 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028851996375930103 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028851996375930155 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0024779962787915433 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.002859949366972395 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002482244808856797 | optics_measurements.phase
@@ -5675,7 +5675,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028979433743098293 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027231726130003855 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002723172613000388 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002897323373584272 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027385262470585674 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -5687,10 +5687,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002834480243287648 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002443399732137381 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002808040638300547 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024525278246346582 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028344802432876065 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024433997321374546 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028080406383005057 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024525278246347293 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.131% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5785,9 +5785,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002853628236346573 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002672207976715197 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026722079767151977 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002850435995053172 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002684136166881397 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026841361668813817 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.664% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -5797,10 +5797,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460513644750002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002893955678635753 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025058320591146207 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028700495808819814 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025239421721098576 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028939556786358733 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025058320591146766 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028700495808821037 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025239421721099035 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.594% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -5895,9 +5895,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002901873979232217 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027486417128751816 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002748641712875151 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029021871241168722 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027626731227037155 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002762673122703718 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.253% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -5907,10 +5907,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002840741783329362 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002404607148816935 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028407417833293622 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002404607148816936 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028131309564026754 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002404085432199141 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002404085432199149 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.292% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6007,7 +6007,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029814498595048355 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002711041192649026 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002976344621650172 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027211544332854157 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027211544332854175 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.493% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -6017,10 +6017,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002750875279466474 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024429870403068184 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027333687399377607 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024627449401539484 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0027508752794665192 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024429870403068744 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002733368739937812 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024627449401539935 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.188% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6115,7 +6115,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029685416217325607 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027354138099055874 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002735413809905588 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029693660813683866 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027468753507109266 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -6127,10 +6127,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002835560635769843 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002484389482526498 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028114580517362062 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024947996658523995 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002835560635769855 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024843894825265413 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002811458051736218 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002494799665852445 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.272% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6226,7 +6226,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002968164448805098 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027473882060554625 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029650110084435076 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.00296501100844351 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027612415165042615 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.599% | optics_measurements.beta_from_phase
@@ -6237,10 +6237,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028394206025573777 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024389369741076956 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028171893770495685 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002446709304563221 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028394206025574 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002438936974107732 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028171893770495985 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002446709304563269 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.317% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6334,8 +6334,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0029365750235669707 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027855061380169413 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0029365750235669716 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027855061380169426 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029347452824791064 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027997172691008854 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -6347,10 +6347,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028853063689388628 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002418351420696828 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.00288530636893886 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024183514206968263 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028595636466011098 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024246192787609395 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024246192787609386 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.092% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6457,10 +6457,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028326878451130845 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002480273884889145 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028142509345303475 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002498208042106368 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028326878451131 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002480273884889168 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028142509345303493 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00249820804210639 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.497% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6569,8 +6569,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002824360278175081 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0024092042887124336 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002798891390208679 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002413848421225318 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027988913902086774 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024138484212253065 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.094% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6665,9 +6665,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029202483956270206 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002753781973891339 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027537819738913086 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029176674003701017 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002767024071833766 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027670240718337615 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.639% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -6677,10 +6677,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002857768554146439 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025052350268462732 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028379539664355326 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025237857201283504 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028577685541464354 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002505235026846287 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028379539664355295 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025237857201283465 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.768% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6777,7 +6777,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.003046769031982004 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027874731524203237 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030487175125262253 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002800961658961172 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028009616589611706 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.955% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -6788,9 +6788,9 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0029278615257997604 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024930747929942615 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024930747929942775 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0029029263647069913 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002501417031082339 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00250141703108234 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.393% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -6898,8 +6898,8 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002853168695616522 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002442081661927619 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.00283178696170008 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024420816619276156 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002831786961700085 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024518663973092107 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.699% | optics_measurements.beta_from_phase
@@ -6995,9 +6995,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.003053795535850383 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0028119401139981284 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0028119401139981314 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.003049300053474313 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028243121928518506 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028243121928518476 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.630% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7007,10 +7007,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460513644750002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002785044156509206 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024167768581574143 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027663083329651865 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002432415292063142 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0027850441565091797 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024167768581574607 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027663083329651592 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002432415292063168 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 4.959% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7120,7 +7120,7 @@
    INFO | Phase advance beating in phase_y.tfs = 0.002957598351656776 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.00256328106640559 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.002932374877926333 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002574697092682693 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002574697092682697 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.118% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7217,7 +7217,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.002982045197827997 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027501604334723494 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029819476340814536 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027619551972872017 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027619551972872095 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.171% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7325,7 +7325,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002967750452454451 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027708830161601223 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027708830161601227 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002970449758048552 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027880968782763916 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -7337,10 +7337,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028947233820899175 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002463834157312416 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002870985542903664 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024664883921113163 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002894723382089623 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002463834157312502 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028709855429033633 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024664883921113943 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.552% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7437,7 +7437,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.002852311938670728 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0026915756894032596 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028510485910499994 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027059151925587135 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027059151925587187 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.209% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7447,10 +7447,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002807851409668866 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024137955075628327 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002783693891987553 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024197038459942643 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028078514096688246 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024137955075629255 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027836938919875206 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002419703845994349 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.935% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7545,9 +7545,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002935123413611411 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026778273060776682 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029301581281958727 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026895134915029943 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026778273060776834 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029301581281958753 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026895134915030103 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.111% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7558,9 +7558,9 @@
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028515730866452106 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002409344778055502 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002409344778055503 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028298654263714217 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002415647732603794 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024156477326037966 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.417% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7657,7 +7657,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.003043569105278567 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027464698541231677 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030421572288204597 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002756904516306475 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002756904516306473 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.556% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7668,7 +7668,7 @@
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.003006345559325611 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002574519769836911 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025745197698369073 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0029865229277664398 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025913531350383774 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -7765,7 +7765,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030044262510229482 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002864883920099728 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.00286488392009972 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030061889509524113 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.00288351402211042 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -7777,10 +7777,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.003040134895690956 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025440723777393755 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0030095308917376553 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025473296397161248 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0030401348956909623 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025440723777394128 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.003009530891737662 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00254732963971617 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.280% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7877,7 +7877,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029168887150678386 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002657300767032662 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002915011252134768 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002667382298414093 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026673822984140875 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.913% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -7887,10 +7887,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460683186850006 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028421992357312077 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024329974085216424 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028191080145705933 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024394563828009047 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028421992357311977 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002432997408521684 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002819108014570574 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002439456382800947 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.631% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -7985,8 +7985,8 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030199370538492518 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027208254748193263 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.003016282967792039 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.00272082547481932 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.003016282967792042 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002732232765737649 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.508% | optics_measurements.beta_from_phase
@@ -7997,10 +7997,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224604288737 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002860998579424343 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024471940975431734 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002845042760656768 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024622088084622416 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002860998579424387 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024471940975432094 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002845042760656806 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002462208808462263 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.114% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8094,8 +8094,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.002856560022168091 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026988859179424333 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0028565600221680905 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026988859179424363 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028554812158444976 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002711567242540655 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -8107,10 +8107,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028617504781694825 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024499721060248867 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002842648004817612 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.00246051721528805 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002861750478169445 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024499721060249557 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002842648004817575 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024605172152881096 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.365% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8206,8 +8206,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002903934634450615 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002680688249834426 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002902286176580033 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002692433390117923 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.002902286176580039 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026924333901179186 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.527% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -8220,7 +8220,7 @@
    INFO | Phase advance beating in phase_y.tfs = 0.0029229796311080565 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0024868979217658343 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0029001493207793647 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002498971392065521 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002498971392065517 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.310% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8317,7 +8317,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.002893255924108118 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002730639170953609 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028924823366560585 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027454480556648717 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027454480556648713 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.235% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -8327,10 +8327,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0029148650819192153 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002457136925553863 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002890086389492456 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002463061808468413 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002914865081919225 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024571369255539056 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028900863894924644 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024630618084684466 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.846% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8427,7 +8427,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.003068469689231864 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002763042277919683 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030666485394593743 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002774755985628807 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027747559856288006 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.988% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -8537,7 +8537,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029266892025817523 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002713879380405625 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029258220348066764 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.00272598139430379 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002725981394303783 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.254% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -8547,10 +8547,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002863671973777789 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024983106781722992 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028432674481889703 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025128352048955993 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028636719737777437 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002498310678172342 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028432674481889252 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002512835204895638 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.862% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8644,10 +8644,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.002972698179847443 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002709336494906516 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002972698179847448 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027093364949065156 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029703199979215725 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002718391653705729 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002718391653705734 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.167% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -8755,7 +8755,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002870160478595192 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026413525152351445 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002641352515235141 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002870112156919362 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026516958209800933 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -8767,10 +8767,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002831378968778561 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028313789687785663 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.002439456596429973 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.002805370497941149 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024443520714940345 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024443520714940263 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.193% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8866,7 +8866,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002990717290102463 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002751573757723942 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.00299140053920858 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029914005392085736 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002764785981303884 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.653% | optics_measurements.beta_from_phase
@@ -8877,10 +8877,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.2246068318685 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002862085974263924 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002466583048687899 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002838380865835144 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024770046533592375 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028620859742638925 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024665830486879595 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028383808658351125 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024770046533592878 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.770% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -8974,7 +8974,7 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0030131130630034787 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.003013113063003482 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002718983289998603 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.003013722061449411 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027305919860351386 | optics_measurements.phase
@@ -8987,10 +8987,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028711587571073893 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002451441693155777 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002848693616982692 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024617794651123058 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028711587571074 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002451441693155856 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028486936169827086 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024617794651123656 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.636% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9085,9 +9085,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030389380628757902 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027814876928868534 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.003035988783792567 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027964307468967956 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002781487692886853 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0030359887837925655 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002796430746896789 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 8.605% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -9100,7 +9100,7 @@
    INFO | Phase advance beating in phase_y.tfs = 0.00292227578386849 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0024694564989370528 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028960982281839376 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002477460949263468 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024774609492634633 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.639% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9196,7 +9196,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029524595310181294 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027631325873998976 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.002956102702012067 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0029561027020120678 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027770982457186798 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.630% | optics_measurements.beta_from_phase
@@ -9305,9 +9305,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0028386280020690894 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002700131837664792 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027001318376647927 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028397225861121226 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027120639552889654 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002712063955288996 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.361% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -9318,9 +9318,9 @@
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028536976473453237 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024380075623593807 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002438007562359382 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028298574991750727 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002441950277653459 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024419502776534597 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.145% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9429,8 +9429,8 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002849709151308153 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.002447310083081785 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028290784925436786 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002459355778754639 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002829078492543683 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002459355778754633 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.188% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9524,7 +9524,7 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.002956900568201008 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0029569005682010094 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0027306091869812033 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002957430463083946 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002745751325800675 | optics_measurements.phase
@@ -9538,9 +9538,9 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002838231151221533 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024724804452427 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024724804452427047 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028126868586630964 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024834057721588323 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024834057721588366 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.079% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9635,7 +9635,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029410853100680814 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027211439336899553 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002721143933689956 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002939667051822796 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027357180810722273 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -9648,7 +9648,7 @@
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0029055010077020035 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024788837925532187 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002478883792553226 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028854431694278642 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002488468557305213 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -9745,7 +9745,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002910396346555573 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026996600137236997 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002699660013723684 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029084023445244645 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002712150420346939 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -9757,10 +9757,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002909386300232839 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002461885718712511 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028863897626175876 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024740763258207727 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0029093863002328624 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024618857187125483 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028863897626176076 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002474076325820806 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.836% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9855,7 +9855,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002959012882820133 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002675468058116006 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002675468058116014 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029555306606883227 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0026854808244183444 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -9867,10 +9867,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002795178725861453 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002440212479249968 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027715064531870677 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024518147646710254 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0027951787258614458 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002440212479250039 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002771506453187056 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024518147646710783 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.896% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -9965,7 +9965,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029618252286146844 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002754226051372008 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027542260513720076 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029624577730139015 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027679496488434356 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -9977,10 +9977,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.00288296126119898 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024586501726209906 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002857982613490875 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024706428424804833 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028829612611989508 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024586501726210092 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028579826134908417 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024706428424805006 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.870% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10075,7 +10075,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0029568424897767802 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002758451210152654 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002758451210152647 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029571110636350236 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002771665508406342 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10087,10 +10087,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.224609375 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028889959013239995 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024616222490938993 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028651992017846534 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002471274781253512 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002888995901323957 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024616222490939357 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002865199201784605 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024712747812535387 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.375% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10185,7 +10185,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002970128592591345 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027350593628570133 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027350593628570207 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0029684463314749547 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002748599892894887 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10197,10 +10197,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460683186850006 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028788885186079288 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024776009452902956 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028567298232176673 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024910002642993625 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028788885186079435 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.00247760094529037 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028567298232176856 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002491000264299435 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.994% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10294,8 +10294,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.002884111251922737 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0026805899275546686 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002884111251922738 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026805899275546695 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002881340169475545 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002692272434899995 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10307,10 +10307,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028492762548350315 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0025033013699931076 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028312677836793763 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025256651637532313 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028492762548350432 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002503301369993111 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028312677836793807 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002525665163753223 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.346% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10417,10 +10417,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002871178332863059 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.00251856364270219 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002846669620324667 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002535461298736484 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002871178332863143 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0025185636427022175 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002846669620324753 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025354612987365096 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.895% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10514,8 +10514,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.003003126755005469 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002735921413597057 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.0030031267550054775 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027359214135970577 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030009817099959694 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027479726483355315 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10528,9 +10528,9 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002849624245220139 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002424281515919555 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024242815159195483 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028263579733875744 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024284359308670293 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024284359308670324 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.029% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10625,9 +10625,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030152876927635607 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027480642131779225 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002748064213177936 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0030160245642451757 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002758483738064631 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027584837380646254 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.782% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -10637,10 +10637,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002847137365405707 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024462796490938576 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002847137365405706 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002446279649093857 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028244807457113814 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024553681923976172 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024553681923976107 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.169% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10737,7 +10737,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0030335957695925508 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.0028273048400383745 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.003033947358397094 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002845260353767879 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0028452603537678788 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.265% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -10747,10 +10747,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460683186850006 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002902132090883181 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024460213145586266 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002880305873361166 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024531709753070263 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0029021320908831968 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002446021314558691 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002880305873361188 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024531709753070827 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.858% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -10845,7 +10845,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002930688612154299 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.0027308396288075517 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027308396288075547 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002929062621797837 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002741810590819348 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10858,7 +10858,7 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028843375861230956 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002469413723888513 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024694137238885014 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_y.tfs = 0.0028627206575472823 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002484250823262196 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -10967,10 +10967,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.002866384781608927 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.002476022750451162 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028382830749051316 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024853503453097694 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.0028663847816089104 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002476022750451238 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028382830749051203 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024853503453098383 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.530% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -11065,7 +11065,7 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.002896806555205899 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002697238657221219 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0026972386572212135 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028976409690882375 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002711213141543669 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -11077,10 +11077,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0028795163868610986 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024681988889045598 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002853637874471522 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024729829258141683 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002879516386861096 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002468198888904605 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.00285363787447152 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002472982925814209 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.072% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -11188,8 +11188,8 @@
    INFO | Measured tune in plane Y = 0.22460598415800004 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0027836646699336436 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024108658113839738 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002760887943743166 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.002410865811383975 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002760887943743164 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024213559547276143 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.597% | optics_measurements.beta_from_phase
@@ -11285,9 +11285,9 @@
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_x.tfs = 0.0030147623838344653 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002725366342615605 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_x.tfs = 0.0030134260758308495 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002738128999006069 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.0027253663426156124 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_x.tfs = 0.0030134260758308542 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.0027381289990060643 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 7.111% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -11299,7 +11299,7 @@
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.002879053102836086 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_y.tfs = 0.0025159659347793037 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028556177345902246 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.00285561773459023 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0025305330155156822 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 5.780% | optics_measurements.beta_from_phase
@@ -11394,8 +11394,8 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane X = 0.16519165039099998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_x.tfs = 0.0028591050651899327 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_x.tfs = 0.002704222857185978 | optics_measurements.phase
+   INFO | Phase advance beating in phase_x.tfs = 0.002859105065189932 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_x.tfs = 0.002704222857185977 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.0028607852566322456 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002718213558065216 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
@@ -11407,10 +11407,10 @@
    INFO | Calculating phase advances | optics_measurements.phase
    INFO | Measured tune in plane Y = 0.22460852728949998 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
-   INFO | Phase advance beating in phase_y.tfs = 0.0027737608966267534 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024491922610266944 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.002751416722305968 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.002465276999341045 | optics_measurements.phase
+   INFO | Phase advance beating in phase_y.tfs = 0.002773760896626643 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024491922610267044 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.0027514167223058592 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024652769993410463 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.097% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling
@@ -11507,7 +11507,7 @@
    INFO | Phase advance beating in phase_x.tfs = 0.0029226291811595387 | optics_measurements.phase
    INFO | Phase advance beating in total_phase_x.tfs = 0.002736380663162056 | optics_measurements.phase
    INFO | Phase advance beating in phase_driven_x.tfs = 0.002921557089214054 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002748599309208932 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_x.tfs = 0.002748599309208937 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.521% | optics_measurements.beta_from_phase
    INFO | -- Run phase calculation with requested compensation | optics_measurements.phase
@@ -11518,9 +11518,9 @@
    INFO | Measured tune in plane Y = 0.22460767957900002 | optics_measurements.phase
    INFO | Writing phases: 4 | optics_measurements.phase
    INFO | Phase advance beating in phase_y.tfs = 0.0028321814200891935 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_y.tfs = 0.0024315616604877904 | optics_measurements.phase
-   INFO | Phase advance beating in phase_driven_y.tfs = 0.0028065633018931934 | optics_measurements.phase
-   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024362962367542726 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_y.tfs = 0.0024315616604877947 | optics_measurements.phase
+   INFO | Phase advance beating in phase_driven_y.tfs = 0.002806563301893194 | optics_measurements.phase
+   INFO | Phase advance beating in total_phase_driven_y.tfs = 0.0024362962367542743 | optics_measurements.phase
    INFO | Errors from 3BPM method | optics_measurements.beta_from_phase
    INFO |  - RMS beta beat: 6.174% | optics_measurements.beta_from_phase
    INFO | Calculating coupling | optics_measurements.coupling

@@ -1,0 +1,81 @@
+{
+  "method": "delta_orbit",
+  "status": "complete",
+  "diagnostics": {
+    "converged": true,
+    "reason": "gradient_converged",
+    "iterations": 9,
+    "best_loss": 8.173489781509521e-10,
+    "gradient_norm": 1.0467733969749458e-11,
+    "damping": 1.953125e-06,
+    "accepted_evaluations": 9
+  },
+  "rf_offsets": [
+    -2.0,
+    0.0,
+    2.0
+  ],
+  "correctors": [
+    "(dispersion)",
+    "logical.BR3.DHZ11L4/K",
+    "logical.BR3.DHZ12L4/K",
+    "logical.BR3.DHZ13L4/K",
+    "logical.BR3.DHZ14L1/K",
+    "logical.BR3.DHZ8L1/K",
+    "logical.BR3.DHZ9L1/K",
+    "logical.BR3.DVT12L4/K",
+    "logical.BR3.DVT13L4/K",
+    "logical.BR3.DVT2L4/K",
+    "logical.BR3.DVT6L4/K",
+    "logical.BR3.DVT8L1/K",
+    "logical.BR3.DVT9L1/K"
+  ],
+  "offsets_k": [
+    -0.00015,
+    -7.5e-05,
+    0.0,
+    7.5e-05,
+    0.00015
+  ],
+  "n_settings": 146,
+  "phase_constraint": false,
+  "phase_weight": 1.0,
+  "n_phase_series": 0,
+  "batch_momenta": true,
+  "momentum_source": "chroma",
+  "momentum_values": {
+    "-2": -0.0006643398994322256,
+    "0": 0.0,
+    "2": 0.0006183804233931812
+  },
+  "momentum_calibration": {
+    "-2": {
+      "selected_pt": -0.0006643398994322256,
+      "orbit_pt": -0.000652712572264895,
+      "chroma_pt": -0.0006643398994322256
+    },
+    "0": {
+      "selected_pt": 0.0,
+      "orbit_pt": -0.0,
+      "chroma_pt": 0.0
+    },
+    "2": {
+      "selected_pt": 0.0006183804233931812,
+      "orbit_pt": 0.0006272075908787609,
+      "chroma_pt": 0.0006183804233931812
+    }
+  },
+  "absolute_planes": [],
+  "corrector_baseline": "zero",
+  "optimise_quadrupoles": true,
+  "optimise_bends": false,
+  "optimise_quad_dy": false,
+  "optimise_quad_tilt": false,
+  "group_quadrupoles_by_cell": false,
+  "prior_strength": 0.0001,
+  "prior_strengths": {},
+  "initial_knobs": null,
+  "zero_step_duplicates": false,
+  "n_fit_knobs": 48,
+  "n_output_knobs": 48
+}
