@@ -15,3 +15,5 @@ plots/
 chroma_investigation/
 data/*.parquet
 scripts/inverted_second/*.png
+acc-models-psb/
+*.log
