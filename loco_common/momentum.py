@@ -1,15 +1,8 @@
-"""Momentum of each RF-steering setting, for Method 2's optional multi-``pt`` mode.
+"""Momentum of each RF-steering setting, for Method 2's multi-``pt`` mode.
 
-The scan repeated the whole corrector sweep at five RF-steering offsets, so the
-same delta-response is available at five momenta and the off-momentum Jacobians
-are genuinely independent. The LOCO log records a radial-steering setting in
-millimetres, not a ``dp/p``. The accompanying chromaticity scan visited the same
-orbit plateaus, however, and supplies an RF-derived ``Dp/p`` calibration that is
-independent of the model dispersion. This module keeps that calibration
-separate from the older orbit-projection estimate so they can be compared.
-
-Every calibration is relative to the 0 mm orbit: that plateau is the reference
-particle and is always passed to MAD-NG as exactly ``pt=0``.
+The chromaticity scan visited the same orbit plateaus as the LOCO scan and gives an
+RF-derived ``Dp/p`` calibration, kept separate from the orbit-projection estimate for comparison.
+Every calibration is relative to the 0 mm orbit, which is always ``pt=0``.
 """
 
 from __future__ import annotations
@@ -26,10 +19,7 @@ logger = logging.getLogger(__name__)
 def _chroma_bands(chroma_file, rf_offsets) -> tuple[tuple[float, ...], dict]:
     """The chroma scan's momentum band of each LOCO plateau, 0 mm required.
 
-    XImeter does not write radial-orbit labels. ``psb_md`` recovers them by
-    grouping repeated rows into momentum bands and numbering the bands outwards
-    from the one nearest zero. This acquisition used 1 mm steps, so a band index
-    is also its LOCO ``rf_offset_mm``.
+    ``psb_md`` numbers the bands outwards from the one nearest zero; with 1 mm steps a band index is its ``rf_offset_mm``.
     """
     from psb_md.defaults import DPP_PER_MM
     from psb_md.tune_measurements import load_orbit_tune_table
@@ -54,13 +44,7 @@ def chroma_pt_by_rf_offset(
     """Return RF-derived ``pt`` for the LOCO plateaus, relative to 0 mm."""
     offsets, table = _chroma_bands(chroma_file, rf_offsets)
 
-    # Dp/p in the chroma export is an absolute machine readback, whereas this
-    # fit uses the 0 mm orbit as its reference particle. Rebase momentum first:
-    # if p_i = p_machine*(1+dpp_i) and p_0 = p_machine*(1+dpp_0), then the
-    # relative deviation seen by the fit is p_i/p_0 - 1. Only that relative
-    # Dp/p may be converted to the fit's canonical pt. Subtracting two canonical
-    # pt values is not a coordinate transformation and is wrong once dp2pt is
-    # nonlinear.
+    # Rebase to the 0 mm plateau before converting: subtracting two canonical pt values is wrong once dp2pt is nonlinear.
     reference_dpp = float(table[0].dpp)
     relative_dpp = {
         offset: (1.0 + float(table[int(offset)].dpp)) / (1.0 + reference_dpp) - 1.0
@@ -89,11 +73,8 @@ def chroma_pt_error_by_rf_offset(
 ) -> dict[float, float]:
     """One-sigma uncertainty on :func:`chroma_pt_by_rf_offset`'s ``pt``.
 
-    ``psb_md``'s per-band ``dpp_std`` is propagated through the same rebasing
-    arithmetic (both the numerator and the shared reference contribute, since
-    every band is rebased against the same 0 mm plateau) and then through
-    ``dp2pt``'s local slope, taken by central finite difference since
-    ``dp2pt`` is not assumed linear.
+    ``dpp_std`` is propagated through the rebasing (numerator and shared reference) and ``dp2pt``'s
+    local slope, by central finite difference.
     """
     offsets, table = _chroma_bands(chroma_file, rf_offsets)
     reference_dpp = float(table[0].dpp)
@@ -128,12 +109,7 @@ def chroma_pt_error_by_rf_offset(
 def compare_momentum_calibrations(
     reference: dict[float, float], alternative: dict[float, float]
 ) -> dict[float, float]:
-    """Return ``alternative - reference`` for matching RF offsets.
-
-    Both mappings must already be expressed relative to the same nominal-RF
-    point. Keeping this operation explicit prevents a calibration comparison
-    from accidentally mixing absolute ``pt`` with reference-relative ``pt``.
-    """
+    """Return ``alternative - reference`` for matching RF offsets; both must be reference-relative."""
     if set(reference) != set(alternative):
         raise ValueError("Momentum calibrations must contain the same RF offsets")
     if 0.0 in reference and (
@@ -150,20 +126,13 @@ def compare_momentum_calibrations(
 def frame_from_orbit(orbit: pd.DataFrame, twiss: pd.DataFrame) -> pd.DataFrame:
     """Build the orbit-zero reference from the *measured* nominal-RF closed orbit.
 
-    The origin has to be a measured orbit. A dipole error is exactly degenerate
-    with the dispersive orbit at a single momentum, so a modelled origin biases
-    ``pt`` by tens of percent while looking perfectly reasonable; the
-    RF-offset-0 acquisition is the only admissible reference here.
-
-    *twiss* is accepted for a stable call signature across callers but is
-    unused: tmom_recon's ``closed_orbit_at_zero`` is a plain x/y DataFrame,
-    not a frame object carrying its own reference twiss.
+    Must be measured: a dipole error is degenerate with the dispersive orbit at a single momentum.
+    *twiss* is unused; kept for a stable call signature.
     """
     orbit_zero = pd.DataFrame({"x": orbit["X"].astype(float)}, index=orbit.index)
     orbit_zero["y"] = orbit["Y"].astype(float) if "Y" in orbit else 0.0
     orbit_zero.index = orbit_zero.index.astype(str)
-    # normalize_closed_orbit requires a "name" column, or an index named "name"
-    # (case-insensitive); pin the latter rather than depend on orbit's own index name.
+    # normalize_closed_orbit needs a "name" column or index; pin the index.
     orbit_zero.index.name = "name"
     return orbit_zero
 
@@ -175,14 +144,10 @@ def estimate_pt(
 ) -> float:
     """Estimate this orbit's MAD-NG ``pt`` offset from *frame*'s origin.
 
-    *orbit* is one RF setting's measured closed orbit (``X`` in metres, indexed by
-    BPM); *twiss* is the model twiss indexed by BPM, carrying ``dx`` (and ``ddx``
-    where available, which makes the estimator solve the second-order relation
-    instead of projecting linearly).
+    *orbit* is one RF setting's measured closed orbit (``X`` in metres, indexed by BPM);
+    *twiss* carries ``dx`` (and ``ddx`` for the second-order estimator).
     """
-    # ``.intersection()`` drops the index name when the two sides disagree on
-    # its case ("NAME" vs "name"), which then propagates into ``twiss.loc[common]``
-    # and trips tmom_recon's index-name check; pin it explicitly instead.
+    # ``.intersection()`` drops the index name on a case mismatch, which trips tmom_recon; pin it.
     common = orbit.index.intersection(twiss.index).rename("name")
     measured = pd.DataFrame({"x": orbit.loc[common, "X"].to_numpy(dtype=float)}, index=common)
     return float(
@@ -194,12 +159,7 @@ def estimate_pt_by_rf_offset(
     orbits: dict[float, pd.DataFrame],
     twiss: pd.DataFrame,
 ) -> dict[float, float]:
-    """Estimate ``pt`` for each RF-steering offset, keyed by that offset.
-
-    *orbits* maps RF offset in mm to the measured closed orbit at that setting;
-    the ``0.0`` entry is required and becomes the frame origin, so the returned
-    ``pt`` values are offsets from nominal RF, which is what a worker pins.
-    """
+    """Estimate ``pt`` for each RF offset in mm; the required ``0.0`` entry is the frame origin."""
     if 0.0 not in orbits:
         raise ValueError(
             "The RF-offset-0 orbit is required as the momentum reference: pt is "

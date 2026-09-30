@@ -1,13 +1,7 @@
 """The PSB machine states the LOCO scans were taken on: exactly ``psb_md``'s campaigns.
 
-Every input path, circuit and chroma file comes from ``psb_md.defaults``, so a
-LOCO fit and the optics reconstruction it is meant to improve cannot disagree on
-what a campaign is. This module only names each state for the report and says
-where its derived products live.
-
-The LOCO scan sits beside each campaign's AC-dipole folders: ``<acd_root>/loco``
-holds one ``scan_*.jsonl`` per RF offset in the same ``m2mm``/``0mm``/``2mm``
-folders, and the acquisitions of all three runs were saved under ``loco/0mm``.
+Inputs come from ``psb_md.defaults``; this module names each state and says where its derived products live.
+The LOCO scan sits in ``<acd_root>/loco`` (one ``scan_*.jsonl`` per RF offset); all three runs' acquisitions are under ``loco/0mm``.
 """
 
 from __future__ import annotations
@@ -27,10 +21,7 @@ from psb_md.defaults import campaign as psb_md_campaign
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CACHE_PATH = REPO_ROOT / "data"
 
-#: The four ring quadrupole trim circuits, off in every campaign. Pinned rather
-#: than left to the sequence's defaults so a sequence that happens to define them
-#: non-zero cannot silently move the start model -- and so an error campaign's
-#: deliberate mis-trim is never handed to the fit that has to recover it.
+#: The four ring quadrupole trim circuits, off in every campaign; pinned so the sequence defaults cannot move the start model.
 TRIMS_OFF: dict[str, float] = {
     "kbrqfcorr": 0.0,
     "kbrqdcorr": 0.0,
@@ -102,11 +93,7 @@ class Campaign:
 
     @property
     def method1_dir(self) -> Path:
-        """Where ``run_method1`` writes this campaign's Method-1 fit.
-
-        Method 1 writes the same native cell-grouped ``.dk1l`` knobs as Method 2,
-        so the scoring, optics cache and figures read this directory directly.
-        """
+        """Where ``run_method1`` writes this campaign's Method-1 fit (same ``.dk1l`` knobs as Method 2)."""
         return self.results_root / "method1"
 
     @property

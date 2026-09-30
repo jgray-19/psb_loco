@@ -1,24 +1,12 @@
 """Optics of each fitted lattice along ``s``, against the model it started from.
 
-The scoreboard says how well a fit reproduces the measurement. It says nothing
-about what the fit did to the *lattice*, and two options with the same residual
-can be different machines: a few percent of beta-beating spread around the ring
-is a different claim from the same rms concentrated in one straight section.
-
-So every case gets its own twiss and is differenced against the start model:
+Each case gets its own twiss, differenced against the start model:
 
 * **beta-beating**, ``(beta_fit - beta_start) / beta_start``, per plane;
-* **phase-advance error**, ``mu_fit - mu_start``, in units of :math:`2\\pi`,
-  with the ring-wide slope left in -- a fit that moves the tune moves every
-  downstream phase, and hiding that would hide the tune change with it;
-* **dispersion**, ``dx`` and ``dy``, for both the fitted and the start lattice.
+* **phase-advance error**, ``mu_fit - mu_start`` in units of :math:`2\\pi`, ring-wide slope kept;
+* **dispersion**, ``dx`` and ``dy``, for the fitted and start lattice.
 
-MAD-NG works in ``pt`` throughout, so the Twiss ``dx``/``dy`` columns and
-``dq1``/``dq2`` headers come directly from the DA/normal-form calculation.
-The finite-difference ``chrom`` option is deliberately not enabled.
-
-This is expensive -- one MAD-NG process per case -- so the result is cached to
-parquet and the figure scripts read that.
+One MAD-NG process per case, so the result is cached to parquet for the figure scripts.
 
     uv run python scripts/case_optics.py                    # every page's cases
     uv run python scripts/case_optics.py --options none__k1__none
@@ -58,20 +46,10 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
            *, high_order: bool = False) -> pd.DataFrame:
     """One lattice's twiss at every element, with the fitted knobs applied.
 
-    Every knob family is created and defaulted to zero before the fit's own
-    values are written in, exactly as ``predict_loco`` does it, so a family the
-    fit froze enters as an explicit zero rather than as whatever the sequence
-    happened to carry.
-
-    ``match_to`` moves ``kbrqf``/``kbrqd`` until the lattice sits on that tune,
-    the way :mod:`scripts.measured_optics` builds its matched model. It is for
-    the reference lattice only -- no fit is ever matched.
-
-    ``high_order`` selects the order-8, 2-slice integrator instead of the
-    production ``method=6`` convention, for the skew-multipole (k0s/k1s) case
-    only. Note this means that case's diff against the start/matched
-    reference (always twissed at method=6) carries an integrator-order
-    difference alongside the physics one.
+    Every knob family is created and zeroed first, as ``predict_loco`` does.
+    ``match_to`` matches ``kbrqf``/``kbrqd`` to a tune, for the reference lattice only.
+    ``high_order`` selects the order-8, 2-slice integrator (skew-multipole case only), so its diff
+    against the method=6 reference includes an integrator-order difference.
     """
     interface = open_full_interface(model)
     try:
@@ -81,8 +59,7 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
         interface.update_knob_values(values)
         if match_to is not None:
             interface.match_tunes(*match_to)
-        # coupling=True adds the f1001/f1010 columns; a fit given tilts has to
-        # be readable against the measured RDTs, not only against beta.
+        # coupling=True adds the f1001/f1010 columns.
         if high_order:
             table = interface.run_twiss(observe=0, method=8, nslice=2, coupling=True)
         else:
@@ -90,9 +67,7 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
     finally:
         interface.close()
     present = [c for c in TWISS_COLUMNS if c in table.columns]
-    # The RDTs come back complex, and only they do: every figure and every rms
-    # here is of the amplitude, which is what omc3 reports as well. Taking the
-    # modulus of the real columns instead would silently unsign the orbit.
+    # RDTs are complex; figures and rms use the amplitude, as omc3 does. Don't take the modulus of real columns.
     frame = pd.DataFrame({
         column: (
             np.abs(table[column].to_numpy())
@@ -110,13 +85,7 @@ def _twiss(model, fitted: pd.Series | None, match_to: tuple[float, float] | None
 
 def case_optics(model, knobs_path: Path | None, start: pd.DataFrame,
                  *, high_order: bool = False) -> pd.DataFrame:
-    """One case's optics, differenced against *start*.
-
-    Both twisses come off the same element list, so the difference is taken
-    element by element with no interpolation. A beta of zero would be a broken
-    lattice rather than a small number, so it is left to divide and show as
-    infinite instead of being quietly floored.
-    """
+    """One case's optics, differenced element by element against *start*; a zero beta divides through rather than being floored."""
     fitted = (
         None if knobs_path is None
         else pd.read_csv(knobs_path).set_index("knob")["value"]
@@ -188,9 +157,7 @@ def main() -> None:
     start.to_parquet(args.output / "start-model.twiss.parquet")
     logger.info("Start model twiss over %d elements", len(start))
 
-    # The second reference lattice: same sequence and same corrector settings,
-    # with the two main circuits matched to the measured tune. The report pages
-    # difference every fit against both, so it is cached beside the first.
+    # Second reference lattice: main circuits matched to the measured tune.
     natural_tune = campaign_natural_tune(campaign, args.sequence_file)
     matched = _twiss(model, None, match_to=natural_tune)
     matched.to_parquet(args.output / "matched-model.twiss.parquet")
@@ -209,8 +176,7 @@ def main() -> None:
         if option != "method1" and not result_is_valid(args.matrix / option):
             logger.warning("%s: no accepted optimisation step, skipping", option)
             continue
-        # The skew-multipole families (k0s/k1s) are the only cases scored at the
-        # order-8, 2-slice integrator; every other option keeps method=6.
+        # Only the skew-multipole families use the order-8 integrator.
         high_order = bool({"k0s", "k1s"} & set(parse_case(option).family_list))
         optics = case_optics(model, knobs, start, high_order=high_order)
         optics.to_parquet(args.output / f"{option}.optics.parquet")

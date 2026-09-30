@@ -1,9 +1,6 @@
 """The acceptance comparison: two fitted response matrices against each other.
 
-The model is stood up exactly as the drivers stand it up -- ``build_model`` plus
-``GenericMadInterface`` with the campaign's tune and corrector knobs. Comparing
-fitted knobs on a bare sequence instead silently evaluates them on a different
-lattice.
+The model is stood up as the drivers do (``build_model`` plus ``GenericMadInterface`` with the campaign's tune and corrector knobs).
 """
 import argparse
 import pathlib
@@ -20,8 +17,7 @@ from loco_common.naming import lsa_to_element
 from method1_madng_da.run_method1 import _matrices
 from tests.madng_helpers import read_response, setup_response_da
 
-#: build_model()'s default model directory does not currently exist, so the
-#: sequence has to be named explicitly. See the handover notes.
+#: build_model()'s default model directory does not exist, so name the sequence explicitly.
 SEQ = "/afs/cern.ch/work/j/jmgray/private/psb_md/models/reference/model_qx0.234255_qy0.127202_driven_qx0.230300_qy0.131200_dpp-3.850735e-06_state_tunematch/psb3_saved.seq"
 
 parser = argparse.ArgumentParser(description=__doc__)

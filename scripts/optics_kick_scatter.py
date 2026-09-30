@@ -1,10 +1,6 @@
-"""Report how far omc3's measured-optics error bar is from kick-to-kick reality.
+"""Report how far omc3's measured-optics error bar is from kick-to-kick scatter, one folder at a time.
 
-The estimator lives in :mod:`loco_common.optics_reproducibility`, which is also
-what ``measured_optics.py`` uses to set the bars it writes; this script is the
-standalone view of the same numbers, one folder at a time, and the place to run
-the single-kick diagnostic that shows why the bootstrap resamples whole folders
-rather than individual kicks.
+Uses :mod:`loco_common.optics_reproducibility`; also runs the single-kick diagnostic.
 """
 
 from __future__ import annotations

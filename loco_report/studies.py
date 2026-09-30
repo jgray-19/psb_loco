@@ -14,8 +14,7 @@ if TYPE_CHECKING:
 
     from loco_common.campaign import Campaign
 
-#: Figures the measured-optics page shows per configuration tab, against the
-#: tune-matched model.
+#: Figures the measured-optics page shows per configuration tab, against the tune-matched model.
 OPTICS_FIGURES = (
     (
         "measured_beta",
@@ -52,11 +51,7 @@ COMPARISON_FIGURES = (
 
 
 def tune_and_chroma_table(campaigns) -> str:
-    """Natural tune and chromaticity, one row per configuration.
-
-    Chromaticity is against the matched model and both Dp/p calibrations, so
-    a reader gets the tune and the chroma comparison without switching tabs.
-    """
+    """Natural tune and chromaticity, one row per configuration, against the matched model and both Dp/p calibrations."""
     rows = []
     for campaign in campaigns:
         summary = read_json(campaign.optics_dir / "summary.json")
@@ -334,8 +329,7 @@ def render_scenario_page(campaigns, scenario_root: Path, modes,
     return render.page("Scenario comparison", statement, blocks)
 
 
-#: The vocabulary the pages use, defined once. Four words were previously used
-#: across the site for three concepts, with no glossary anywhere.
+#: The vocabulary the pages use, defined once.
 GLOSSARY = (
     ("working point", "One of the two quadrupole powerings the MD ran: normal "
      "tunes or inverted tunes. A nav section each."),

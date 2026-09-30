@@ -144,8 +144,7 @@ def test_no_page_carries_more_than_two_tables(pages):
     over = []
     for path in pages:
         lines = path.read_text().splitlines()
-        # Distinct header rows: the same table repeated once per campaign tab
-        # is one table, not four.
+        # Distinct header rows: a table repeated per campaign tab is one table.
         headers = {
             lines[index - 1].strip()
             for index, line in enumerate(lines)

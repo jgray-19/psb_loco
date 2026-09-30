@@ -1,15 +1,8 @@
 """Docs-style figures for phase_advance_constraint/experiment.py's fitted cases.
 
-Reuses the same twiss/differencing (scripts.case_optics) and figure styling
-(loco_report.style, psb_md.plotting) as the docs site, so these plots are
-directly comparable to docs/assets/figures/. Writes, per campaign:
-
-* beta_beating / phase_error / dispersion / coupling, one PNG each, all
-  labels overlaid against the un-fitted machine-knob model (the "optics"
-  figure family);
-* phase_advance: BPM-to-BPM mu1/mu2 from each fitted lattice's own plain
-  twiss (no correctors), against the measured phase-advance file, at 0Hz;
-* orbit: model X/Y at the fitted knobs against the measured closed orbit.
+Per campaign: beta_beating / phase_error / dispersion / coupling PNGs against the un-fitted
+machine-knob model; phase_advance (BPM-to-BPM mu1/mu2 against the measured file, at 0Hz); and
+orbit (model X/Y at the fitted knobs against the measured closed orbit).
 
 Usage:
     python -m phase_advance_constraint.plot_experiment --campaign p17_p23_final \
@@ -22,12 +15,8 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-# psb_md has its own *regular* `scripts` package, which -- once its path is on
-# sys.path -- wins package resolution over psb_loco's namespace-package
-# `scripts` regardless of sys.path order (a regular package always beats a
-# namespace portion, PEP 420). Importing psb_loco's scripts.case_optics here,
-# before psb_md's path is inserted below, caches the right module in
-# sys.modules so the later `from scripts.case_optics import ...` reuses it.
+# psb_md's regular `scripts` package would shadow this repo's namespace `scripts` (PEP 420);
+# import scripts.case_optics first so sys.modules caches the right one.
 from scripts.case_optics import _twiss, case_optics  # noqa: E402
 
 sys.path.insert(0, "/afs/cern.ch/work/j/jmgray/private/psb_md")

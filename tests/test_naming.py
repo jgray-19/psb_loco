@@ -52,15 +52,8 @@ def test_every_scanned_corrector_exists_in_the_model(sequence_file, parameter):
 def test_lsa_k_is_a_kick_in_radians(sequence_file, psb_line, bpm_names, fake_orbits):
     """Pin the *magnitude* ``LSA_K_TO_RAD``: one ``/K`` step through both codes.
 
-    This is the one assumption in the fit that no residual would expose. If LSA's
-    ``/K`` were not the kick angle in rad, every fitted gradient would be wrong by
-    the same factor and every method would agree on the wrong answer, so it is
-    checked against a second code rather than asserted.
-
-    It says nothing about the *sign*, and cannot: both codes here are models, and
-    the fixture adopts MAD's convention on the xsuite side by construction
-    (``knl[0] = -hkick``). Only the machine knows the sign of LSA's ``/K``; see
-    ``test_horizontal_lsa_k_is_inverted_in_the_measurement`` below.
+    No residual would expose a wrong magnitude. It cannot test the sign (the fixture adopts MAD's
+    convention by construction); see ``test_horizontal_lsa_k_is_inverted_in_the_measurement``.
     """
     from tests.madng_helpers import closed_orbit, open_interface, set_knob
 
@@ -92,13 +85,8 @@ def test_lsa_k_is_a_kick_in_radians(sequence_file, psb_line, bpm_names, fake_orb
 def test_horizontal_lsa_k_is_inverted_in_the_measurement(sequence_file):
     """The evidence behind ``LSA_K_SIGN``, re-derived from the cached measurement.
 
-    Applying the signed conversion has to make the measured response *agree in
-    sign* with the model for both planes. Under the wrong convention the six DHZ
-    correctors come back at correlation -0.998 while the six DVT sit at +0.999,
-    which is not something a quadrupole error can do -- no gradient error flips
-    the sign of a corrector's response at every BPM at once.
-
-    Skipped without the acquisition cache, since only the machine can settle this.
+    The signed conversion must make the measured response agree in sign with the model in both
+    planes; under the wrong convention DHZ correlate at -0.998 and DVT at +0.999. Skipped without the acquisition cache.
     """
     import numpy as np
 

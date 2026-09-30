@@ -1,9 +1,7 @@
 """Method 1 driver: fit quadrupole ``k1`` to the measured orbit-response matrix.
 
-Everything numerical happens in ``response_da.mad``; this module's job is to
-stand the ring-3 model up, hand MAD-NG the measured response as two matrices,
-run the match and write the result out in the same format as every other psb_md
-optimisation stage.
+The numerics are in ``response_da.mad``; this module sets up the ring-3 model, sends MAD-NG
+the measured response as two matrices, runs the match and writes the result.
 """
 
 from __future__ import annotations
@@ -59,14 +57,9 @@ class Method1Result:
 def _matrices(
     response: pd.DataFrame, bpm_names: list[str], correctors: list[str]
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Lay slopes out on the model's ``(2*BPM, corrector)`` grid.
+    """Lay slopes out on the model's ``(2*BPM, corrector)`` grid, in m/rad (signed by :func:`lsa_k_to_rad`).
 
-    The slopes are measured per LSA ``/K`` step, so they are converted to m/rad
-    by :func:`lsa_k_to_rad` before meeting a model that works in kick angles --
-    signed, and negative for the horizontal correctors. The weight takes the
-    magnitude, since a sign does not change the size of an error bar. A
-    BPM/corrector pair the scan does not carry gets weight zero, which removes it
-    rather than pulling it to zero.
+    Weights take the magnitude; a pair the scan lacks gets weight zero.
     """
     target = np.zeros((2 * len(bpm_names), len(correctors)))
     weight = np.zeros_like(target)
@@ -110,7 +103,7 @@ def run(
         ring=model.ring,
         sequence_file=model.sequence_file,
         kinetic_energy=model.kinetic_energy,
-        optimise_quadrupoles=True,
+        errors={"quad": {"k1"}},
         group_quadrupoles_by_cell=True,
     )
     interface = GradientDescentMadInterface(
@@ -125,13 +118,10 @@ def run(
 
         mad["corr_elements"] = [lsa_to_element(name) for name in correctors]
         mad["quad_knobs"] = quad_knobs
-        # The BPM grid has to be the model's, so send placeholder matrices, run
-        # one twiss to learn the observed BPM ordering, then send the real
-        # targets on that ordering.
+        # The BPM grid must be the model's: send placeholders, twiss once for the ordering, then the real targets.
         mad["target_mat"] = np.zeros((1, len(correctors)))
         mad["weight_mat"] = np.zeros((1, len(correctors)))
-        # The script writes back through ``pyi``; bind it to whatever this
-        # interface named its Python channel rather than assuming a name.
+        # The script writes back through ``pyi``; bind it to this interface's Python channel name.
         mad.send(f"pyi = {interface.py_name}")
         mad.send(SCRIPT.read_text())
         mad.send("compute_response(); send_response()")

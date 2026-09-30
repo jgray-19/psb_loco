@@ -1,12 +1,4 @@
-"""Phase-only ``ClosedOrbitSeries`` for Method 2's ``--phase-constraint``.
-
-Everything here is imported by ``method2_delta_orbit/run_method2.py`` and
-nowhere else -- the production fitter's own file only carries the CLI flags
-and the one-line call into :func:`build_phase_series`. See
-``docs/studies/phase-advance-constraint.md`` for why this observable exists,
-what it does to the fit, and the weight-scan evidence behind
-``--phase-weight``.
-"""
+"""Phase-only ``ClosedOrbitSeries`` for Method 2's ``--phase-constraint`` (see ``docs/studies/phase-advance-constraint.md``)."""
 
 from __future__ import annotations
 
@@ -36,11 +28,8 @@ if TYPE_CHECKING:
 def phase_optics_dir(campaign: Campaign, rf_offset: float) -> Path:
     """The equation-compensated optics measured at one RF offset.
 
-    ``scripts/measured_optics.py --optics-folders all`` writes them per psb_md
-    orbit folder (``FINAL_ACD_ORBIT_FOLDERS``), so the offset -> folder mapping
-    is psb_md's, not a second table here. The optics come from cleaned
-    turn-by-turn data (its production preprocessing chain); the closed orbits
-    they are joined with come from the LOCO scan, which needs no cleaning.
+    ``scripts/measured_optics.py --optics-folders all`` writes them per psb_md orbit folder
+    (``FINAL_ACD_ORBIT_FOLDERS``); the closed orbits they are joined with come from the LOCO scan.
     """
     return campaign.optics_dir / FINAL_ACD_ORBIT_FOLDERS[int(rf_offset)] / "free"
 
@@ -52,23 +41,12 @@ def build_phase_series(
     *,
     phase_weight: float = 1.0,
 ) -> list[ClosedOrbitSeries]:
-    """One phase-only series per RF offset: a plain twiss, no corrector trim,
-    whose residual is only the BPM-to-BPM phase advance (mu1/mu2).
+    """One phase-only series per RF offset: a plain twiss, no corrector trim, residual is the BPM-to-BPM phase advance (mu1/mu2).
 
-    Phase advance is BPM-to-BPM within a single twiss, never a delta against a
-    reference state (docs/studies/phase-advance-constraint.md), so this rides
-    alongside the many orbit-only corrector-trim series without touching them:
-    each is its own ``ClosedOrbitSeries`` with ``control_knob=None``. Every
-    momentum has its own measured phase, so this cannot reuse one folder for
-    all three RF offsets the way the nominal-RF orbit reference can.
+    Each is its own ``ClosedOrbitSeries`` with ``control_knob=None``, and each momentum has its own measured phase.
 
-    ``phase_weight`` divides ``mu1_var``/``mu2_var`` by this factor, which
-    multiplies phase's fit weight by it (weight = 1/variance). Needed because
-    phase's measurement SNR (median ~290) is far looser than the closed
-    orbit's (median ~3400), so under chi-normalisation the ~140 orbit
-    corrector-trim settings otherwise swamp 3 phase-only settings to the point
-    of no visible effect -- see docs/studies/phase-advance-constraint.md and
-    plots/real_method2_phase_check_p17_p23_final.png (weight=1).
+    ``phase_weight`` divides ``mu1_var``/``mu2_var``, multiplying phase's fit weight by it; phase SNR
+    (median ~290) is far below orbit's (~3400), so ~140 orbit settings otherwise swamp 3 phase settings.
     """
     optics_dirs = {momenta[offset]: phase_optics_dir(campaign, offset) for offset in rf_offsets}
     missing = [str(path) for path in optics_dirs.values() if not (path / "beta_phase_x.tfs").exists()]
@@ -88,9 +66,7 @@ def build_phase_series(
             ).items()
             if key[1] == 0.0
         }
-        # Twelve recordings of one machine state (drop_zero_step_duplicates'
-        # rationale applies here too): average, do not sum, or the error bars
-        # go in twelve-fold under-weighted.
+        # Average, do not sum: summing under-weights the error bars twelve-fold.
         closed_orbits[momenta[offset]] = average_orbit_frames(list(untrimmed.values()))
 
     frames = assemble_measured_optics(closed_orbits=closed_orbits, optics_dirs=optics_dirs, dispersion=None)

@@ -1,19 +1,11 @@
 """Run the nine cases the report pages show, for one campaign.
 
-A 60-case option-matrix sweep was run once, on the normal-tunes scan, and has
-been retired: it will not be repeated, its fits are gone and the page that
-quoted them with it. What a machine configuration needs is the cases the report
-pages actually compare, and those are declared in :mod:`loco_common.case_names`
-and read from there rather than re-listed here.
-
-The slug is the specification: ``<planes>__<families>__<lump>`` maps to the
-fitter's flags one-for-one.
+The cases are declared in :mod:`loco_common.case_names`; the slug ``<planes>__<families>__<lump>``
+maps to the fitter's flags one-for-one. Serial by construction: each fit spawns one MAD-NG process
+per corrector setting.
 
     uv run python scripts/run_campaign_fits.py --campaign inverted
     uv run python scripts/run_campaign_fits.py --campaign inverted --dry-run
-
-Serial by construction: each fit spawns one MAD-NG process per corrector setting,
-so two fits at once oversubscribe the machine rather than finishing sooner.
 """
 
 from __future__ import annotations
@@ -43,19 +35,13 @@ from loco_common.fit_mode import (
 
 logger = logging.getLogger(__name__)
 
-#: Both staged modes warm-start straight from ``single``: every campaign scanned
-#: -2/0/+2 mm, so ``three`` has no intermediate offsets to bridge to.
+#: Both staged modes warm-start from ``single``: every campaign scanned -2/0/+2 mm, so ``three`` has no intermediate offsets.
 PREVIOUS_MODE = {THREE.slug: SINGLE, MULTI.slug: SINGLE}
 
-#: Which family letter turns on which flag. ``k1`` is the odd one out: quadrupole
-#: gradients are free by default, so its absence is the flag.
-FAMILY_FLAGS = {
-    "b": ["--optimise-bends"],
-    "dy": ["--optimise-quad-dy"],
-    "t": ["--optimise-quad-tilt"],
-    "k0s": ["--optimise-quad-k0s"],
-    "k1s": ["--optimise-quad-k1s"],
-}
+#: Which case family letter frees which ``--errors`` token.
+ERROR_TOKENS = {"k1": "quad:k1", "b": "bend:k0", "k0s": "quad:k0s", "k1s": "quad:k1s"}
+#: Which case family letter frees which ``--misalign`` token.
+MISALIGN_TOKENS = {"dy": "quad:dy", "t": "quad:tilt"}
 
 def command(
     slug: str,
@@ -81,10 +67,11 @@ def command(
     ]
     if case.planes != "none":
         argv += ["--absolute-planes", *list(case.planes)]
-    if "k1" not in case.family_list:
-        argv += ["--no-optimise-quadrupoles"]
-    for family in case.family_list:
-        argv += FAMILY_FLAGS.get(family, [])
+    errors = [ERROR_TOKENS[f] for f in case.family_list if f in ERROR_TOKENS]
+    misalign = [MISALIGN_TOKENS[f] for f in case.family_list if f in MISALIGN_TOKENS]
+    argv += ["--errors", *(errors or ["none"])]
+    if misalign:
+        argv += ["--misalign", *misalign]
     if case.lump != "none":
         argv += ["--group-quadrupoles-by-cell"]
     if rf_offsets != (0.0,):
@@ -208,8 +195,7 @@ def main() -> None:
             print(" ".join(argv))
             continue
         if warm_start:
-            # Only the mode the warm start is read from: requiring ``three`` too
-            # fitted (or trusted stale) results that ``multi`` never reads.
+            # Only the mode the warm start is read from.
             prerequisite = PREVIOUS_MODE[mode.slug]
             prerequisite_destination = prerequisite.results_root(campaign) / slug
             if not staged_result_is_valid(prerequisite_destination, require_warm_start=False):

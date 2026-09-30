@@ -74,8 +74,7 @@ class Quantity:
     fmt: str
 
 
-#: Optics column prefix -> quantity. Replaces the startswith/elif rms dispatch
-#: that figure_optics carried twice.
+#: Optics column prefix -> quantity.
 QUANTITIES: dict[str, Quantity] = {
     "beta_beating": Quantity("beta-beating [%]", 100.0, True, "{:.1f}%"),
     "phase_error": Quantity("phase error [$2\\pi$]", 1.0, False, "{:.4f}"),

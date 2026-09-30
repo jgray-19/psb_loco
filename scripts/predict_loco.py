@@ -1,23 +1,14 @@
 """Evaluate every fitted LOCO option on one common set of predictions.
 
-A fit's own loss is not a score: each option fits a different target, so their
-residuals are not comparable -- the same trap HANDOVER.md section 9.4 documents
-for the momentum curve. What *is* comparable is what each fitted model predicts
-about the machine, so every result directory is evaluated here on the same three
-questions, whatever it was fitted on:
+Each option fits a different target, so fit losses are not comparable; every
+result directory is scored on the same three targets:
 
 1. **Delta orbits.** The 48 corrector trims at nominal RF, reference removed.
-   This is Method 2's home ground and the number HANDOVER.md quotes.
-2. **Static closed orbit.** The machine's untrimmed orbit in both planes, which
-   only the bends (x) and quadrupole ``dy`` (y) can explain.
-3. **Dispersion.** The slope of the untrimmed orbit against momentum over the
-   five RF-steering settings, measured and modelled the same way -- a linear fit
-   over the same five ``pt``, so no twiss-column convention enters.
+2. **Static closed orbit.** The untrimmed orbit in both planes.
+3. **Dispersion.** Slope of the untrimmed orbit against ``pt`` over the five RF settings.
 
-Every model is stood up identically: all three knob families created (so a knob
-absent from a fit is set to zero rather than missing), the machine's own
-corrector settings standing, and the corrector trims applied through the MAD-X
-global the sequence defers to.
+Every model is stood up identically: all knob families created (absent knobs set
+to zero), the machine's corrector settings standing, trims applied through the MAD-X global.
 """
 
 from __future__ import annotations
@@ -46,7 +37,7 @@ from loco_common.measured_response import (
     cached_scan,
     measured_orbits,
 )
-from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model
+from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_twiss
 from loco_common.momentum import chroma_pt_by_rf_offset, chroma_pt_error_by_rf_offset
 from method2_delta_orbit.run_method2 import build_settings
 
@@ -55,23 +46,16 @@ logger = logging.getLogger(__name__)
 PLANES = ("x", "y")
 #: Measured-frame column per plane; the model's twiss columns are lowercase.
 MEASURED_COLUMN = {"x": "X", "y": "Y"}
-#: The measurement's own error bar, alongside the value. It is a standard error
-#: of the mean over turns and bunches (``measured_response.closed_orbit``),
-#: propagated through the reference subtraction in quadrature, so a residual can
-#: be read against it: inside the bar the model already explains the orbit to
-#: the precision the machine was measured at, and no fit can do better.
+#: The measurement's error bar: standard error of the mean over turns and bunches, propagated through the reference subtraction.
 MEASURED_ERROR_COLUMN = {"x": "ERRX", "y": "ERRY"}
 
 
 def measured_targets(model, campaign: Campaign):
     """The three common targets, in metres, indexed by BPM.
 
-    Returns ``(deltas, absolute, pt, measured_dispersion_error)`` where
-    *deltas* maps a corrector trim to its reference-subtracted orbit frame,
-    *absolute* maps an RF offset to the machine's untrimmed orbit, *pt* maps
-    an RF offset to its momentum, and *measured_dispersion_error* is one-sigma
-    on the *measured* orbit's dispersion slope, indexed by ``(plane, bpm)``
-    -- see :func:`measured_dispersion_uncertainty`.
+    Returns ``(deltas, absolute, pt, measured_dispersion_error)``: trim -> delta orbit,
+    RF offset -> untrimmed orbit, RF offset -> ``pt``, and the one-sigma on the measured
+    dispersion slope indexed by ``(plane, bpm)``.
     """
     points, orbit_by_path = cached_scan(campaign=campaign)
     absolute = {}
@@ -84,16 +68,10 @@ def measured_targets(model, campaign: Campaign):
             ).items()
             if key[1] == 0.0
         }
-        # Repeats of one machine state: every corrector's scan started here.
-        # ``sum(...) / len(...)`` would average the ERRX/ERRY columns with the
-        # orbits and leave the error bar a factor sqrt(N) too large.
+        # Not sum/len: that would average ERRX/ERRY instead of dividing by sqrt(N).
         raw_by_offset[offset] = list(untrimmed.values())
         absolute[offset] = average_orbit_frames(raw_by_offset[offset])
-    # The chroma/XImeter Dp/p calibration is the momentum reference: it is
-    # independent of the model dispersion the orbit-projection estimate
-    # (``estimate_pt_by_rf_offset``) relies on, and carries its own measured
-    # uncertainty (``chroma_pt_error_by_rf_offset``), which the projection
-    # estimate has none of.
+    # Chroma calibration: independent of model dispersion and carries its own uncertainty.
     momentum_accelerator = OptimiserPSB(
         ring=model.ring,
         sequence_file=model.sequence_file,
@@ -106,11 +84,9 @@ def measured_targets(model, campaign: Campaign):
         campaign.chroma_file, sorted(absolute), momentum_accelerator
     )
     measured_dispersion_error = measured_dispersion_uncertainty(
-        raw_by_offset, pt, pt_error
+        raw_by_offset, pt, pt_error, model_twiss(model, chrom=True)
     )
-    # ``machine`` so that ``setting.nominal`` is where the corrector actually
-    # stood: the trim is applied as nominal + dk against a model whose other
-    # correctors are at their machine values, so the delta is the measured one.
+    # ``machine`` baseline: trim applied as nominal + dk on the machine's corrector values.
     deltas = build_settings(
         cached_orbits(0.0, campaign=campaign), model, rf_offset=0.0,
         corrector_baseline="machine",
@@ -122,16 +98,13 @@ def measured_dispersion_uncertainty(
     raw_by_offset: dict[float, list[pd.DataFrame]],
     pt: dict[float, float],
     pt_error: dict[float, float],
+    tws: pd.DataFrame,
 ) -> pd.DataFrame:
-    """One-sigma on the measured dispersion slope, from repeat acquisitions.
+    """One-sigma on the measured dispersion slope, via ``tmom_recon.physics.closed_orbit.measure_dispersion``.
 
-    Wraps ``tmom_recon.physics.closed_orbit.measure_dispersion``: each RF
-    offset's repeat untrimmed acquisitions (one per corrector's scan start,
-    ``raw_by_offset``) give that point's orbit scatter, and *pt_error* -- the
-    chroma calibration's own uncertainty -- gives the momentum's. This
-    replaces refitting the line and reading off its residual scatter, which
-    is dominated by model/measurement mismatch over the handful of RF
-    settings available, not by how precisely each point was measured.
+    Orbit scatter comes from the repeat untrimmed acquisitions in *raw_by_offset*,
+    momentum scatter from *pt_error*. *tws* is the ``pt = 0`` twiss with
+    ``chrom=True``; its ``ddx``/``ddy`` are removed before the slope fit.
 
     Returns one row per ``(plane, bpm)`` with a ``measured_error`` column.
     """
@@ -143,7 +116,7 @@ def measured_dispersion_uncertainty(
             for frame in frames
         ]
         pt_sigma[pt[offset]] = pt_error[offset]
-    result = measure_dispersion(orbits_by_pt, pt_sigma)
+    result = measure_dispersion(orbits_by_pt, pt_sigma, tws=tws)
     rows = []
     for plane, error_column in (("x", "dx_err"), ("y", "dy_err")):
         rows.append(
@@ -161,22 +134,14 @@ def measured_dispersion_uncertainty(
 def open_full_interface(model):
     """One interface carrying every knob family, on the machine's correctors.
 
-    Every family is created even for a fit that froze one, so that a
-    frozen family enters as an explicit zero and every option is evaluated on
-    the same lattice parametrisation. Missing one here would not error -- the
-    fitted knobs for it would simply never be applied, and the option would be
-    scored as though it had never been fitted at all.
+    Every family is created so a frozen one enters as zero; a missing one would silently go unapplied.
     """
     accelerator = OptimiserPSB(
         ring=model.ring,
         sequence_file=str(model.sequence_file),
         kinetic_energy=model.kinetic_energy,
-        optimise_quadrupoles=True,
-        optimise_bends=True,
-        optimise_quad_dy=True,
-        optimise_quad_tilt=True,
-        optimise_quad_k0s=True,
-        optimise_quad_k1s=True,
+        errors={"quad": {"k1", "k0s", "k1s"}, "bend": {"k0"}},
+        misalignments={"quad": {"dy", "tilt"}},
     )
     return GradientDescentMadInterface(
         accelerator=accelerator,
@@ -188,15 +153,8 @@ def open_full_interface(model):
 def orbit_at(interface, pt: float = 0.0, *, high_order: bool = False) -> pd.DataFrame:
     """Closed orbit at the observed BPMs, in metres, at momentum ``pt``.
 
-    ``pt`` goes to twiss directly: MAD-NG is ``pt``-based throughout and
-    ``run_twiss`` accepts ``pt=``, seeding it as ``X0=[0,0,0,0,0,pt]``. No
-    conversion to ``dp/p`` happens or should -- the momenta this module works
-    in are the same ``pt`` that :func:`estimate_pt_by_rf_offset` returns and
-    that :func:`dispersion` fits the orbit slope against.
-
-    ``high_order`` selects the order-8, 2-slice integrator instead of the
-    production ``method=6`` convention. Each branch is a literal call so
-    ``tests/test_production_optics_conventions.py`` can still pin both.
+    ``high_order`` selects the order-8, 2-slice integrator instead of ``method=6``;
+    each branch is a literal call so ``tests/test_production_optics_conventions.py`` can pin both.
     """
     if high_order:
         twiss = interface.run_twiss(observe=1, pt=pt, method=8, nslice=2)
@@ -215,14 +173,9 @@ def set_corrector(interface, knob: str, value: float) -> None:
 def predict(open_interface, model, targets, *, high_order: bool = False):
     """Model predictions for the three common targets, aligned to the BPMs.
 
-    *open_interface* is a factory, not an interface, because a fitted lattice can
-    fail to close at the measured off-momentum settings -- an unstable optics is
-    one of the things an option can predict, and it has to be recorded rather
-    than crash the sweep. MAD-NG is not reliably usable after it errors, so each
-    off-momentum point gets a fresh process and a failure becomes ``NaN``.
-
-    ``high_order`` selects the order-8, 2-slice integrator for every twiss in
-    this call, for the one case that asks for it. See :func:`orbit_at`.
+    *open_interface* is a factory: a lattice can fail to close off-momentum and MAD-NG is
+    unreliable after an error, so each off-momentum point gets a fresh process and a failure becomes ``NaN``.
+    ``high_order`` is passed to :func:`orbit_at`.
     """
     deltas, absolute, pt, _measured_dispersion_error = targets
     standing = dict(model.corrector_knobs)
@@ -374,8 +327,7 @@ def main() -> None:
         return
 
     index, count = (int(part) for part in args.shard.split("/"))
-    # Shards are 1-based. Without this, --shard 0/8 slices [-1::8] and quietly
-    # scores exactly one option while looking like it worked.
+    # Shards are 1-based; --shard 0/8 would slice [-1::8].
     if not 1 <= index <= count:
         raise SystemExit(f"--shard i/n needs 1 <= i <= n, got {args.shard}")
     model = build_model(sequence_file=args.sequence_file, campaign=campaign)
@@ -417,8 +369,7 @@ def main() -> None:
             interface.update_knob_values(values)
             return interface
 
-        # The skew-multipole families (k0s/k1s) are the only cases scored at the
-        # order-8, 2-slice integrator; every other option keeps method=6.
+        # Only the skew-multipole families use the order-8 integrator.
         high_order = bool({"k0s", "k1s"} & set(parse_case(name).family_list))
         delta_frame, absolute_frame, lost = predict(
             open_configured, model, targets, high_order=high_order

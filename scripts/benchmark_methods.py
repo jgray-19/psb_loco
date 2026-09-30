@@ -1,23 +1,8 @@
 """Both methods on the same data, timed: what each costs and where they agree.
 
-The two methods share no solver and no objective. Method 1 hands MAD-NG the
-measured response matrix and matches it in one process; Method 2 fits delta
-closed orbits with a Levenberg-Marquardt Gauss-Newton solve spread over one
-MAD-NG worker per corrector setting. They free the *same* 32 cell-grouped
-``dk1l`` knobs, so their answers are directly comparable, which makes the two
-questions on this page well posed: do they land in the same place, and what does
-each cost to get there.
-
-Both are run here rather than timed from the report directories, because a
-runtime is only meaningful if the two runs happen on the same machine, in the
-same state, back to back. The results go to ``results/benchmark/<campaign>.json``
-and nothing else reads the fits this script writes -- the pages keep using the
-campaign's own results root.
-
-Timing is wall clock plus the CPU time of the whole process tree
-(``RUSAGE_CHILDREN``), because the two methods spend it differently: Method 2's
-wall time is a parallel sum over workers, and reporting only wall clock would
-credit it with hardware rather than efficiency.
+Both free the same 32 cell-grouped ``dk1l`` knobs and are run back to back here so the
+runtimes are comparable. Timing is wall clock plus CPU of the whole process tree
+(``RUSAGE_CHILDREN``). Results go to ``results/benchmark/<campaign>.json``.
 
     uv run python -m scripts.benchmark_methods --campaign normal inverted
 """
@@ -44,9 +29,7 @@ logger = logging.getLogger(__name__)
 #: The nominal integrated gradient every report scales a ``dk1l`` by.
 NOMINAL_K1L = 0.36705
 
-#: The Method-2 case this benchmark is against: delta orbits, gradients only,
-#: lumped to the same 32 knobs Method 1 fits. Any other case would be comparing
-#: two different questions and calling the difference a benchmark.
+#: The Method-2 case benchmarked: delta orbits, gradients only, lumped to the same 32 knobs.
 METHOD2_CASE = "none__k1__bpm-family"
 
 

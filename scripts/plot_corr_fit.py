@@ -1,9 +1,4 @@
-"""Plot the measured closed-orbit response to corrector changes.
-
-The scan loading, reference subtraction and slope fit all live in
-:mod:`loco_common.measured_response` -- the same code the two LOCO methods take
-their targets from, so what is plotted here is what is fitted there.
-"""
+"""Plot the measured closed-orbit response to corrector changes (loaded and fitted by :mod:`loco_common.measured_response`)."""
 
 from __future__ import annotations
 
@@ -27,8 +22,7 @@ from loco_common.measured_response import (
     subtract_reference,
 )
 
-# Wong palette: high-contrast colours that remain distinguishable for common
-# forms of colour-vision deficiency.
+# Wong palette.
 COLOURBLIND_PALETTE = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9")
 
 
@@ -46,11 +40,7 @@ def plot_plane(
         return
     correctors = list(dict.fromkeys(point.corrector for point in plane_points))
     column = "X" if plane == "x" else "Y"
-    # measured_response() keeps both BPM channels per corrector (a corrector can
-    # couple into the other plane), so (NAME, CORRECTOR) is not a unique index
-    # until the row for the *other* plane's channel is dropped first -- keeping
-    # both left .loc[(bpm, corrector)] returning two rows and drawing a line
-    # built from one plane's slope and the other's intercept.
+    # measured_response() keeps both BPM channels per corrector; drop the other plane's row so (NAME, CORRECTOR) is unique.
     response = measured_response(
         rf_offset, points=plane_points, orbit_by_path=orbit_by_path, reference=reference
     )
@@ -69,8 +59,7 @@ def plot_plane(
             )
             offsets = np.array([p.offset_k for p in selected])
             error_column = "ERRX" if column == "X" else "ERRY"
-            # Subtracted through the same helper the fits use, against the same
-            # single global reference, so the points drawn are the points fitted.
+            # Same subtraction helper and global reference as the fits.
             deltas = [
                 subtract_reference(_frame(orbit_by_path[p.path]), reference).loc[bpm]
                 for p in selected
@@ -125,8 +114,7 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     campaign = campaign_by_slug(args.campaign)
-    # The acquisition mount is read-only, so figures land beside this script by
-    # default, namespaced by campaign like every other generated product.
+    # The acquisition mount is read-only, so figures land beside this script, namespaced by campaign.
     output_root = args.output or Path(__file__).parent
     output_stem = output_root / campaign.slug / "corr_fit"
 

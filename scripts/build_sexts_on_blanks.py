@@ -1,17 +1,9 @@
 """One-off: build blank_acquisitions for p23_p13_final_sexts_on from the LOCO scan.
 
-This campaign never took a dedicated AC-dipole-off blank set. Its
-blank_acquisitions/{m2mm,0mm,2mm} folders exist but are empty. The LOCO scan
-recorded three RF-offset runs, and every reset/offset_k=0 point in each run's
-scan log is, by construction, the untrimmed machine (see
-loco_common.measured_response.read_scan_log) -- exactly what a blank
-acquisition is. Those acquisitions all live physically under loco/0mm
-(loco_common.campaign.Campaign.measurements_path), tagged by timestamp against
-each RF offset's own scan_*.jsonl.
-
-This symlinks the qualifying files into blank_acquisitions/<orbit> so
-psb_md.defaults.default_blank_acd_measurement_dir resolves them normally, with
-no change to psb_md itself and no copy of the real data.
+The campaign has no AC-dipole-off blanks, but every reset/offset_k=0 point in the scan logs is the
+untrimmed machine (see loco_common.measured_response.read_scan_log). Those files live under loco/0mm
+(loco_common.campaign.Campaign.measurements_path); this symlinks them into
+blank_acquisitions/<orbit> so psb_md.defaults.default_blank_acd_measurement_dir resolves them.
 """
 
 from __future__ import annotations
@@ -34,9 +26,7 @@ def _mounted(path: Path) -> Path:
     return CERN_USER_MOUNT_ROOT / path.relative_to("/")
 
 
-#: The real-data mount is read-only for us, so the derived blank set lives here
-#: instead of under blank_acquisitions/ on the mount. psb_md.defaults overrides
-#: this campaign's get_blank_dir to point at it (see CampaignConfig.blank_dir_override).
+#: The mount is read-only, so the derived blank set lives here (psb_md.defaults overrides get_blank_dir to it).
 LOCAL_BLANK_ROOT = (
     Path(__file__).resolve().parent.parent.parent
     / "psb_md"
@@ -73,9 +63,7 @@ def main() -> None:
 
         for path in blank_paths:
             link = blank_dir / path.name
-            # Always target the canonical /user path: the pipeline runs on a
-            # server that has /user but not the sshfs mount, so a mount-path
-            # target would be a dangling link there.
+            # Target the canonical /user path; the sshfs mount path would dangle on the pipeline server.
             if path.is_relative_to(CERN_USER_MOUNT_ROOT):
                 path = Path("/") / path.relative_to(CERN_USER_MOUNT_ROOT)
             link.symlink_to(path)

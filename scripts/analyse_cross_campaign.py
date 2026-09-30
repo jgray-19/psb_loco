@@ -1,14 +1,7 @@
-"""Persist the cross-campaign comparison data the report figures are drawn from.
+"""Persist the cross-campaign comparison data under ``results/cross_campaign/``.
 
-Analysis, not plotting: everything here reads what earlier pipeline stages
-already wrote per campaign (``summary.json``, benchmark records, per-case
-``knobs.csv``) and combines it across campaigns into tidy files under
-``results/cross_campaign/``. ``scripts/plot_cross_campaign.py`` draws the
-comparison figures from what is written here; nothing about a comparison is
-recomputed by that script, and nothing here draws a figure -- so a later
-analysis that wants the same combined data (a notebook, a different report)
-reads these files directly instead of re-deriving them from every campaign's
-raw results.
+Combines what earlier stages wrote per campaign (``summary.json``, benchmark records, per-case
+``knobs.csv``) into tidy files; ``scripts/plot_cross_campaign.py`` draws from them.
 
     uv run python scripts/analyse_cross_campaign.py
 """
@@ -53,14 +46,7 @@ def _write_json(path: Path, data: object) -> None:
 
 
 def matched_model_bpms(campaign, summary: dict, sequence_file: Path) -> pd.DataFrame | None:
-    """The BPM twiss of this campaign's lattice matched to its measured tune.
-
-    Only the dispersion columns are new -- the matched model's beta and phase
-    advance are already written beside the measurement by
-    ``scripts/measured_optics.py`` -- but nothing stores its dispersion, so the
-    match is re-run here. It is the same call that script makes, so the two
-    cannot drift apart.
-    """
+    """The BPM twiss of this campaign's lattice matched to its measured tune (adds the dispersion columns)."""
     measured = summary.get("measured", {}).get("natural_tunes")
     if not measured:
         return None
@@ -72,13 +58,7 @@ def analyse_direction(
     direction: str, page_campaigns: tuple, positions: dict[str, float],
     benchmark_root: Path, sequence_file: Path, output_root: Path,
 ) -> None:
-    """One direction's scenario campaigns: optics summaries, dispersion, the
-    benchmark records, and every case's raw per-magnet fit, campaign by campaign.
-
-    Everything is per-direction because every page that reads it tabs between
-    exactly these campaigns; a single global set drawn from the first normal and
-    inverted campaigns would put figures on a page that its own tabs never show.
-    """
+    """One direction's scenario campaigns: optics summaries, dispersion, benchmark records and raw per-magnet fits."""
     root = output_root / direction
     summaries = {c.slug: optics_summary(c) for c in page_campaigns}
     _write_json(root / "scenario_optics_summaries.json", summaries)
@@ -86,8 +66,7 @@ def analyse_direction(
     _write_json(root / "scenario_dispersion_beat.json", dispersion)
     _write_json(root / "benchmark.json", benchmark_records(benchmark_root, page_campaigns))
 
-    # The per-BPM beating the two along-s comparison figures draw; the rms in
-    # the two files above is what is left of it.
+    # Per-BPM beating for the along-s comparison figures.
     beats = pd.concat(
         [optics_beat_along_s(c, positions) for c in page_campaigns], ignore_index=True
     )
@@ -96,19 +75,14 @@ def analyse_direction(
     beats.to_parquet(beats_path)
     logger.info("wrote %s", beats_path)
 
-    # The raw per-BPM values the perturbation-effect figures difference one
-    # campaign against another with: the measurement, the tune-matched model,
-    # and the LOCO-fitted lattice. One tune match per campaign, for the matched
-    # model's dispersion alone; everything else is already on disk.
+    # Raw per-BPM values (measurement, tune-matched model, LOCO-fitted lattice) for the perturbation figures.
     blocks = []
     for c in page_campaigns:
         measured = optics_values_along_s(
             c, positions, matched_model_bpms(c, summaries.get(c.slug, {}), sequence_file)
         )
         blocks.append(measured)
-        # One block per entry in LOCO_OPTICS_FITS: the perturbation figures
-        # are drawn once per fit, on their own page, and both have to be here
-        # for the plotting script to draw either without a fit of its own.
+        # One block per LOCO_OPTICS_FITS entry.
         for slug, case_slug, _ in LOCO_OPTICS_FITS:
             blocks.append(loco_optics_values_along_s(
                 c, set(measured["name"]), case_slug=case_slug,
@@ -118,8 +92,7 @@ def analyse_direction(
     values_path = root / "scenario_optics_values.parquet"
     values.to_parquet(values_path)
     logger.info("wrote %s", values_path)
-    # So the along-s figures can mark the BPMs without plot_cross_campaign.py
-    # having to build the model, which is the one thing that script does not do.
+    # So plot_cross_campaign.py can mark BPMs without building the model.
     _write_json(root / "element_positions.json", positions)
 
     baseline, *scenarios = page_campaigns

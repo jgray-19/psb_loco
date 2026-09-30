@@ -1,13 +1,8 @@
 """Plot both LOCO fitters' convergence trace: loss vs. call/iteration.
 
-Method 2 (Levenberg-Marquardt, ``aba_optimiser.training_closed_twiss.fitter``)
-logs ``GN iter N: loss=..., |g|=..., lam=...`` at INFO level. Method 1
-(MAD-NG's own ``match``, ``method1_madng_da/response_da.mad``) prints
-``ncall=N [Ts], fval=..., fstp=..., ccnt=...`` to MAD's own stdout, which
-passes straight through the Python process. Neither needs a code change to
-plot -- just redirect the run's stdout/stderr to a file and pass it here.
-Several logs (any mix of the two methods) can be overlaid to compare runs
-(different campaigns, priors, or ``--initial-knobs`` starting points).
+Method 2 logs ``GN iter N: loss=..., |g|=..., lam=...``; Method 1 (MAD-NG ``match``) prints
+``ncall=N [Ts], fval=..., fstp=..., ccnt=...`` to stdout. Redirect a run's output to a file and
+pass it here; several logs of either method can be overlaid.
 
     python -m method2_delta_orbit.run_method2 ... > run_a.log 2>&1
     python -m method1_madng_da.run_method1 ... > run_b.log 2>&1
@@ -72,10 +67,8 @@ def parse_method2_log(path: Path) -> dict[str, list[float]] | None:
 def parse_method1_log(path: Path) -> dict[str, list[float]] | None:
     """One Method 1 (MAD-NG match) run's per-call objective trace, or None.
 
-    ``run_method1`` calls MAD's ``match`` twice -- a small preliminary one
-    (``ccnt=2``, tune/setup bookkeeping) and the real 384-constraint response
-    fit. ``ncall`` restarts at 1 for each, so blocks are split wherever it
-    drops, and only the longest block (the real fit) is kept.
+    ``run_method1`` calls ``match`` twice (a small preliminary one, then the real fit); ``ncall``
+    restarts at 1 for each, so blocks are split where it drops and the longest is kept.
     """
     blocks: list[tuple[list[int], list[float]]] = []
     calls: list[int] = []
@@ -110,12 +103,7 @@ def parse_log(path: Path) -> dict[str, list[float]]:
 
 
 def plot_runs(runs: list[tuple[str, dict]], output: Path) -> None:
-    """Loss always plots (both methods have it); |gradient|/damping are method2-only.
-
-    Method 1's x-axis is match *calls*, method 2's is GN *iterations* -- not the
-    same unit, so mixing them on one x-axis is a rough visual comparison of
-    convergence shape/speed, not a call-for-call one.
-    """
+    """Loss always plots; |gradient|/damping are method2-only. Method 1's x is match calls, method 2's is GN iterations."""
     has_method2 = any(trace["method"] == "method2" for _, trace in runs)
     n_panels = 3 if has_method2 else 1
     figure, axes = plt.subplots(n_panels, 1, figsize=(8, 10 if has_method2 else 4), sharex=False)

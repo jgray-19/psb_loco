@@ -1,13 +1,7 @@
-"""Multi-momentum absolute-orbit fit (k0+dy+k1+tilt), with or without phase
-advance (mu1/mu2) in the loss, and an optional phase up-weight.
+"""Multi-momentum absolute-orbit fit (k0+dy+k1+tilt), with or without phase advance (mu1/mu2) in the loss.
 
-Phase advance is BPM-to-BPM (both sides differenced -- see
-aba_optimiser.workers.closed_twiss._to_advance / fitter._advance_targets).
-Its measurement SNR (|PHASEX|/ERRPHASEX, median ~290) is far looser than
-orbit's (|X|/ERRX, median ~3400), so under use_errors=True chi-normalisation
-phase is swamped by orbit in the loss even when it's in `observables`. This
-script lets you divide mu1_var/mu2_var by --phase-weight to counteract that
-(weight = 1/variance, so dividing variance by W multiplies phase's weight by W).
+Phase SNR (median ~290) is far below orbit's (~3400), so under chi-normalisation orbit swamps
+phase; ``--phase-weight W`` divides ``mu1_var``/``mu2_var`` by W to compensate.
 
 Usage:
     python -m phase_advance_constraint.experiment --campaign p17_p23_final \
@@ -47,8 +41,7 @@ RESULTS_DIR = Path("/afs/cern.ch/work/j/jmgray/private/psb_loco/results/phase_ad
 
 RF_OFFSETS = (-2.0, 0.0, 2.0)
 
-# rf_offset (mm) -> phase-cache subfolder, confirmed via chromaticity-sign
-# cross-check against momentum_reference_sources.json.
+# rf_offset (mm) -> phase-cache subfolder (chromaticity-sign cross-check against momentum_reference_sources.json).
 LABEL_BY_OFFSET = {-2.0: "offmom_0", 0.0: "0Hz", 2.0: "offmom_1"}
 
 CACHE_HIO_DIR_BY_CAMPAIGN = {
@@ -104,10 +97,8 @@ def run_fit(campaign_slug: str, observables: tuple[str, ...], phase_weight: floa
     accelerator = OptimiserPSB(
         ring=3,
         sequence_file=str(model.sequence_file),
-        optimise_bends=True,
-        optimise_quad_dy=True,
-        optimise_quadrupoles=True,
-        optimise_quad_tilt=True,
+        errors={"bend": {"k0"}, "quad": {"k1"}},
+        misalignments={"quad": {"dy", "tilt"}},
         group_quadrupoles_by_cell=True,
     )
     fitter = ClosedTwissFitter(

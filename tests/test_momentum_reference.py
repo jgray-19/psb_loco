@@ -43,8 +43,7 @@ def test_chroma_dpp_is_rebased_on_the_0mm_plateau_before_conversion_to_pt(chroma
     expected[0.0] = 0.0
     assert result == pytest.approx(expected, rel=1e-12, abs=0.0)
     assert result[-2.0] < 0.0 < result[2.0]
-    # Subtracting the absolute pt values instead is off by a few ppm on this scan,
-    # far above the tolerance above.
+    # Subtracting absolute pt values is off by a few ppm on this scan, above the tolerance.
     for offset in (-2.0, 2.0):
         naive = accelerator.dp2pt(table[int(offset)].dpp) - accelerator.dp2pt(table[0].dpp)
         assert abs(naive - result[offset]) > 1e-7 * abs(result[offset])

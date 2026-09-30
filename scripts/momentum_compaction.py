@@ -1,7 +1,6 @@
 """Fit measured momentum compaction from XImeter Frev and orbit-derived Dp/p.
 
-The XImeter ``Dp/p`` values only identify RF plateaus. Momentum for the fit is
-independently reconstructed from the measured closed orbit. The fitted law is
+XImeter ``Dp/p`` only identifies RF plateaus; momentum is reconstructed from the measured closed orbit.
 
     (Frev - Frev0) / Frev0 = -eta * Dp/p + intercept
     alpha_p = eta + 1/gamma**2 = 1/gamma**2 - slope.
@@ -98,8 +97,7 @@ def orbit_dpp_by_rf_offset(campaign: Campaign) -> dict[int, float]:
         }
         absolute[offset] = average_orbit_frames(list(untrimmed.values()))
 
-    # Use the lattice matched to the measured tune. In particular, the recorded
-    # inverted currents put the model near integer Qy and are not the measured optics.
+    # Tune-matched lattice: the recorded inverted currents put the model near integer Qy.
     model = build_model(
         campaign=campaign,
         sequence_file=DEFAULT_SEQUENCE_FILE,

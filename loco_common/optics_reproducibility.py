@@ -1,19 +1,9 @@
 """Kick-to-kick error bars for the driven-optics measurement.
 
-omc3 quotes an error per BPM that it propagates from the phase errors of one
-pooled analysis of a whole ACD folder. Nothing in that bar is a repeat
-measurement, so it does not know how much the machine moves between kicks -- and
-measured against the folder's own kicks it is several times too small.
-
-The bar this module builds is a bootstrap over kicks: resample the folder's
-kicks with replacement, rerun the compensated-optics stage on each replica, and
-take the spread of the resulting betas. The replica keeps the folder's kick
-count, so the 3-BPM beta-from-phase stays as well conditioned as it is in the
-real measurement -- which matters, because from a single kick that method is
-badly enough conditioned to return a negative beta.
-
-Only the harpy stage is expensive and it is already cached as lin files, so a
-replica costs a fraction of a second.
+omc3's per-BPM error is propagated from one pooled analysis and is several times too small
+against the folder's own kicks. Here: bootstrap over kicks (resample with replacement, rerun the
+compensated-optics stage per replica, take the spread of the betas). Replicas keep the kick
+count so the 3-BPM beta-from-phase stays well conditioned; lin files are cached, so a replica is cheap.
 """
 
 from __future__ import annotations
@@ -29,8 +19,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-#: Bootstrap replicas per folder. The spread of a spread converges slowly, but
-#: the bar only needs its leading digit and 100 puts that well inside 10%.
+#: Bootstrap replicas per folder; 100 puts the bar's leading digit within 10%.
 REPLICAS = 100
 
 
@@ -53,11 +42,7 @@ def optics_for(
     work: Path,
     read_frame: Callable[[Path], pd.DataFrame],
 ) -> pd.DataFrame | None:
-    """Run the compensated-optics stage on one set of kicks.
-
-    A repeated base is staged under a fresh name, so a replica that drew a kick
-    twice really carries it twice instead of collapsing to the unique set.
-    """
+    """Run the compensated-optics stage on one set of kicks (a repeated base is staged under a fresh name)."""
     from psb_md.hio_analysis import run_driven_compensated_optics_from_lin_files  # noqa: PLC0415
 
     lin_dir, out_dir = work / "lin", work / "out"
@@ -82,11 +67,7 @@ def bootstrap_frames(
     seed: int = 0,
     single: bool = False,
 ) -> pd.DataFrame:
-    """One row per (replica, BPM). *single* runs each kick alone instead.
-
-    The single-kick mode is a diagnostic, not an error bar: see the module
-    docstring on why one kick is too ill-conditioned to resample from.
-    """
+    """One row per (replica, BPM). *single* runs each kick alone; a diagnostic only (one kick is too ill-conditioned)."""
     model_dir = folder_root / "omc3_model"
     bases = lin_bases(folder_root)
     rng = np.random.default_rng(seed)
@@ -115,11 +96,7 @@ def bootstrap_errors(
     replicas: int = REPLICAS,
     seed: int = 0,
 ) -> pd.DataFrame:
-    """Per-BPM bootstrap error for every measured column *read_frame* returns.
-
-    Columns are named as the measurement's own error columns -- ``beta_x`` gives
-    ``beta_x_err`` -- so the result can be dropped straight onto the frame.
-    """
+    """Per-BPM bootstrap error for every measured column *read_frame* returns (``beta_x`` -> ``beta_x_err``)."""
     frames = bootstrap_frames(folder_root, read_frame, replicas=replicas, seed=seed)
     measured = [
         column
@@ -140,17 +117,8 @@ def apply_bootstrap_errors(
 ) -> pd.DataFrame:
     """*measured* with the bootstrap added in quadrature to its quoted errors.
 
-    Added, not substituted, because the two bars cover different things and
-    neither contains the other. The bootstrap resamples within one kick set, so
-    it sees how much the machine moves between kicks but is blind to anything
-    common to the whole folder -- the kick normalisation and the BPM
-    calibration that the amplitude beta leans on. omc3's propagated bar carries
-    those and no repeat of the machine. Phase beta is dominated by the
-    bootstrap and grows several times; amplitude beta is dominated by omc3's
-    and barely moves.
-
-    A column the bootstrap could not produce keeps omc3's bar rather than
-    losing it.
+    Added, not substituted: the bootstrap misses folder-common effects (kick normalisation, BPM
+    calibration) that omc3's bar carries. A column the bootstrap could not produce keeps omc3's bar.
     """
     errors = bootstrap_errors(folder_root, read_frame, replicas=replicas, seed=seed)
     updated = measured.copy()

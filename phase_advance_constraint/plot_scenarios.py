@@ -1,10 +1,5 @@
-"""All-scenario optics figures: every multi-momentum case, no phase constraint
-vs phase constraint (--phase-weight 100), beta-beating / phase-error /
-dispersion / coupling against the tune-matched model. Reuses the same
-twiss/differencing (scripts.case_optics), the measured overlays and rms
-(loco_report.data, loco_report.figures) and the styling (loco_report.style,
-psb_md.plotting) as the docs site, so the measured points sit on these plots
-exactly as they do on the report pages.
+"""All-scenario optics figures: every multi-momentum case, no phase constraint vs
+phase constraint (--phase-weight 100), against the tune-matched model.
 
     python -m phase_advance_constraint.plot_scenarios --campaign p17_p23_final
     python -m phase_advance_constraint.plot_scenarios --campaign p23_p13_final
@@ -15,12 +10,8 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-# psb_md has its own *regular* `scripts` package, which -- once its path is on
-# sys.path -- wins package resolution over psb_loco's namespace-package
-# `scripts` regardless of sys.path order (a regular package always beats a
-# namespace portion, PEP 420). Importing psb_loco's scripts.case_optics here,
-# before psb_md's path is inserted below, caches the right module in
-# sys.modules so the later `from scripts.case_optics import ...` reuses it.
+# psb_md's regular `scripts` package would shadow this repo's namespace `scripts` (PEP 420);
+# import scripts.case_optics first so sys.modules caches the right one.
 from scripts.case_optics import case_optics  # noqa: E402
 
 sys.path.insert(0, "/afs/cern.ch/work/j/jmgray/private/psb_md")
@@ -51,9 +42,7 @@ SEQUENCE_FILE = "models/model_qx0.165000_qy0.227500/psb3_saved.seq"
 RESULTS = Path("results")
 OUT_ROOT = Path("docs/assets/figures/studies/phase-advance-constraint/scenarios")
 
-#: The measured-optics table's column suffix for the tune-matched reference,
-#: which is the reference these figures difference every case against -- see
-#: ``loco_report.figures.optics``.
+#: Column suffix of the tune-matched reference these figures difference against.
 REFERENCE = "matched_model"
 
 CASES = (
@@ -149,10 +138,7 @@ def main():
 
     campaign = campaign_by_slug(args.campaign)
     model = build_model(sequence_file=SEQUENCE_FILE, campaign=campaign)
-    # Both scenarios' fits are differenced against the same tune-matched model
-    # the un-constrained "multi" run already cached: the campaign's measured
-    # optics are only comparable in that reference frame (see
-    # loco_report.figures.optics), and the phase constraint does not change it.
+    # Both scenarios are differenced against the tune-matched model the "multi" run cached.
     base_mode = fit_mode_by_slug("multi")
     start = read_parquet(base_mode.results_root(campaign) / "optics" / "matched-model.twiss.parquet")
     positions = start["s"].to_dict()

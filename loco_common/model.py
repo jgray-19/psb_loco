@@ -1,9 +1,4 @@
-"""The ring-3 model both methods fit, built the way every other psb_md stage builds it.
-
-Nothing machine-specific is decided here: the sequence, the campaign's quadrupole
-circuits and its corrector strengths all come from ``psb_md``, so a LOCO fit runs
-on the same lattice as the optics reconstruction it is meant to improve.
-"""
+"""The ring-3 model both methods fit, built from ``psb_md``'s sequence, campaign circuits and corrector strengths."""
 
 from __future__ import annotations
 
@@ -23,12 +18,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-#: The ring-3 sequence this analysis is built on, vendored into the repository.
-#: ``REFERENCE_MODEL_DIR`` points into ``psb_md``'s own working directory, which
-#: it may delete and rebuild concurrently (see that constant's docstring); every
-#: script here wants the frozen copy, and four scripts each spelling out the
-#: same path is how three of them end up pointing at a sequence the fits were
-#: not run against.
+#: The vendored ring-3 sequence; ``REFERENCE_MODEL_DIR`` points into ``psb_md``'s working directory, which it may rebuild.
 DEFAULT_SEQUENCE_FILE = (
     Path(__file__).resolve().parent.parent
     / "models"
@@ -65,16 +55,11 @@ def build_model(
 ) -> LocoModel:
     """Resolve the ring-3 sequence and the knobs that put it on *campaign*'s machine.
 
-    The correctors are the campaign's own LSA settings, ``psb_md``'s orbit-corrector
-    file, already converted with :func:`loco_common.naming.lsa_k_to_rad`. They are
-    never free knobs, but they have to exist at their machine values for their
-    response to be the machine's, and an absolute-orbit target contains their kicks.
+    Correctors are the campaign's LSA settings converted with :func:`loco_common.naming.lsa_k_to_rad`;
+    they are never free knobs but must sit at machine values.
 
-    ``scan_quads`` (the default) stands the model on the campaign's quadrupole
-    circuits rather than a tune match, so its tune comes out wherever those put it.
-    That disagreement with the measured tune is the signal: matching the model to
-    it would absorb the very gradient error LOCO exists to find into the two main
-    circuits. Pass ``False`` for the tune-matched lattice.
+    ``scan_quads`` (default) uses the campaign's quadrupole circuits rather than a tune match;
+    pass ``False`` for the tune-matched lattice.
     """
     sequence = Path(sequence_file) if sequence_file else resolve_sequence_file(model_dir)
     matched = matched_tune_knobs(campaign.machine_config, orbit, kinetic_energy=KINETIC_ENERGY)
@@ -122,12 +107,7 @@ def _interface(model: LocoModel):
 
 
 def model_element_positions(model: LocoModel) -> dict[str, float]:
-    """Every element's ``s`` in the loaded sequence, keyed by element name.
-
-    ``model_twiss`` observes the BPMs only; the quadrupole positions the ``dy``
-    lumping groups by are not in it, so this runs the same twiss with
-    ``observe=0`` and keeps the geometry alone.
-    """
+    """Every element's ``s`` in the loaded sequence, keyed by element name (twiss with ``observe=0``)."""
     interface = _interface(model)
     try:
         table = interface.run_twiss(observe=0, method=6)
@@ -137,12 +117,7 @@ def model_element_positions(model: LocoModel) -> dict[str, float]:
 
 
 def model_twiss(model: LocoModel, *, chrom: bool = False) -> pd.DataFrame:
-    """The model's method-6 closed Twiss at the BPMs, indexed by BPM name.
-
-    Used by the multi-momentum mode to project a measured orbit onto a momentum
-    offset. Set ``chrom=True`` when a second-order dispersion column (``ddx``)
-    is needed by a nonlinear momentum estimator.
-    """
+    """The model's method-6 closed Twiss at the BPMs, indexed by BPM name; ``chrom=True`` adds ``ddx``."""
     interface = _interface(model)
     try:
         return interface.run_twiss(observe=1, method=6, chrom=chrom)

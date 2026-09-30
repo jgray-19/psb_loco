@@ -1,38 +1,16 @@
-"""What the machine's optics actually were, at each of the two tune settings.
+"""Measured optics per campaign, against the LOCO start model and a tune-matched copy of it.
 
-The LOCO fits start from a model whose quadrupole circuits are the machine's own
-LSA readings and whose tune is therefore *wrong on purpose* -- nothing in the fit
-path matches (``loco_common.model.build_model``). That is the right thing
-to do, because a tune match absorbs the very gradient error the fit exists to
-measure into the two main circuits, but it leaves an obvious question unanswered:
-by how much is it wrong, and in what?
+Per campaign:
 
-This script answers it, per campaign, from the MD's own measurements:
+1. driven tunes, re-measured from the AC-dipole acquisitions;
+2. natural tunes and chromaticity, from the tune/chroma scan;
+3. measured optics (beta from phase and amplitude, BPM-to-BPM phase advance,
+   coupling RDTs) through ``psb_md``'s omc3 pipeline on
+   :data:`PRODUCTION_PREPROCESSING`, equation-compensated to the free machine;
+4. the same quantities from the un-matched LOCO start model and from that lattice
+   matched to the measured tune.
 
-1. the **driven tunes**, re-measured from the AC-dipole acquisitions rather than
-   taken from what the operator dialled in -- the drive is the strongest line in
-   the record and reproduces across a folder to ~1e-6;
-2. the **natural tunes and chromaticity**, from the campaign's tune/chroma scan;
-3. the **measured optics** -- beta from phase and the BPM-to-BPM phase advance --
-   through ``psb_md``'s omc3 pipeline, on the production preprocessing chain
-   (:data:`PRODUCTION_PREPROCESSING`), equation-compensated so the numbers
-   describe the free machine rather than the AC dipole's driven lattice;
-4. the same quantities out of the **LOCO start model**, un-matched, on the
-   campaign's circuits, and out of **that same lattice matched to the measured
-   tune** -- the model this would have been done against if it were an optics
-   reconstruction rather than a LOCO start point.
-
-Three beta-beats come out of that, and the differences between them are the
-point. Against the LOCO start model it is what the fit sees on iteration zero.
-Against the tune-matched lattice it is what the ring's gradient error looks like
-once the tune is taken out of it -- the same two circuits LOCO must not be
-allowed to use. Against omc3's analysis model, matched by construction, it is the
-conventional number an optics measurement quotes.
-
-Chromaticity plots use MAD-NG's native ``dq1 = dQx/dpt`` and
-``dq2 = dQy/dpt`` throughout. The measured values are fitted directly after
-converting every full-XImeter-export ``Dp/p`` point with the accelerator's
-``dp2pt`` method; the file's printed ``Xi`` summary is not used.
+Beta-beats are taken against the start model, the tune-matched lattice and omc3's model.
 
     uv run python scripts/measured_optics.py --campaign normal inverted
 
@@ -83,24 +61,9 @@ from psb_md.defaults import (  # noqa: E402
 )
 from psb_md.preprocessing import TbtPreprocessing  # noqa: E402
 
-#: The AC-dipole preprocessing chain ``psb_md``'s
-#: ``ACD_PREPROCESSING_ORDER_REPORT.md`` section 1 names as production:
-#: demodulate, remove the dispersive ripple, remove the per-BPM hardware lines,
-#: then SSA-clean each BPM's own stream (window 200, rank 4 --
-#: ``clean_psb_tbt_continuous``'s defaults, and what that report's held-out-turn
-#: test lands on).
-#:
-#: **Not** ``TbtPreprocessing()``. The library's defaults leave all three
-#: removals off and clean with SSA alone, which is the configuration that report
-#: measures as the weakest of the lot: over the 23 acquisitions of one orbit, 8
-#: pass the AC-dipole consistency guard with the full chain and *none* with SSA
-#: alone (its section 8.5).
-#:
-#: Two of the three removals are derived from AC-dipole-off blanks and return
-#: nothing without them, in which case they log and skip. The 2026-08-21 MD took
-#: no blanks, so what actually runs here is demodulation and SSA; the summary
-#: records which stages found their inputs rather than leaving a reader to assume
-#: all four ran.
+#: Production chain from psb_md's ``ACD_PREPROCESSING_ORDER_REPORT.md`` section 1
+#: (not the SSA-only ``TbtPreprocessing()`` default, which fails the AC-dipole consistency guard).
+#: Blank-derived removals skip without AC-dipole-off blanks; the summary records which stages ran.
 PRODUCTION_PREPROCESSING = TbtPreprocessing(
     demodulate=True,
     remove_energy_motion=True,
@@ -109,7 +72,6 @@ PRODUCTION_PREPROCESSING = TbtPreprocessing(
 )
 
 #: Turn window handed to harpy.
-#: hundred turns.
 DEFAULT_START_TURN = 2500
 DEFAULT_WINDOW = 7500
 
@@ -229,21 +191,14 @@ def model_optics(
 ) -> dict[str, object]:
     """One model lattice: beta at the BPMs, plus its tune and chromaticity.
 
-    ``match_to=None`` builds the model the fits actually start from -- the
-    machine's own circuit currents, nothing matched, the tune wherever those put
-    it. Passing the measured tune instead moves ``kbrqf``/``kbrqd`` until the
-    model sits on it, which is what a conventional optics reconstruction would
-    have used. Both are reported, so the cost of not matching is visible rather
-    than argued: the matched lattice is a different machine, and its beta says
-    how different.
+    ``match_to=None`` is the fit start model; a measured tune moves ``kbrqf``/``kbrqd`` onto it.
     """
     from scripts.predict_loco import open_full_interface  # noqa: PLC0415
 
     model = build_model(sequence_file=sequence_file, campaign=campaign)
     interface = open_full_interface(model)
     try:
-        # Every fitted family created and zeroed first, exactly as ``case_optics``
-        # does it, so this is the same lattice parametrisation the fits see.
+        # Create and zero every fitted family, as ``case_optics`` does.
         interface.update_knob_values(dict.fromkeys(interface.knob_names, 0.0))
         matched: dict[str, float] = {}
         if match_to is not None:
@@ -251,11 +206,7 @@ def model_optics(
                 str(name).lower(): float(value)
                 for name, value in interface.match_tunes(*match_to).items()
             }
-        # dq1/dq2 are exact DA/normal-form outputs with the default second-order
-        # map. ``chrom=True`` is unnecessary here; it additionally computes
-        # finite-difference chromatic-function columns that this report does not use.
-        # coupling=True buys the f1001/f1010 columns the measured RDTs are
-        # compared against; nothing else in the table changes.
+        # coupling=True adds the f1001/f1010 columns; chrom=True is unneeded (dq1/dq2 are exact).
         table = interface.run_twiss(observe=0, method=6, coupling=True)
     finally:
         interface.close()
@@ -273,23 +224,12 @@ def model_optics(
     }
 
 
-#: The two betas omc3 writes, and the suffix each one carries in the products.
-#: Phase is the primary: it needs no amplitude calibration of the drive, which is
-#: exactly what an AC-dipole measurement of this ring does not have. Amplitude is
-#: carried alongside because the two disagreeing is itself the diagnostic --
-#: agreement means the BPM gains are sane, disagreement localises the ones that
-#: are not, and neither can say so alone.
+#: The betas omc3 writes and the column suffix of each; phase is primary, amplitude a BPM-gain check.
 BETA_SOURCES = {"": "beta_phase", "_amp": "beta_amplitude"}
 
 
 def measured_frame(free_dir: Path) -> pd.DataFrame:
-    """Measured beta per BPM, both planes, from phase *and* from amplitude.
-
-    The error column is taken as whichever of omc3's spellings the file carries;
-    a version that writes neither loses the bar rather than the measurement. A
-    missing amplitude file is not an error either -- it drops those columns and
-    everything downstream keys off what is present.
-    """
+    """Measured beta per BPM, both planes, from phase and from amplitude (missing files are skipped)."""
     frames = []
     for suffix, stem in BETA_SOURCES.items():
         for plane in ("x", "y"):
@@ -304,8 +244,7 @@ def measured_frame(free_dir: Path) -> pd.DataFrame:
                 if candidate in table.columns:
                     columns[candidate] = f"beta_{plane}{suffix}_err"
                     break
-            # The model column is the same lattice in both files; keep the
-            # phase one and let the amplitude file not fight it for the name.
+            # The model column is identical in both files; keep the phase one.
             if not suffix and f"BET{upper}MDL" in table.columns:
                 columns[f"BET{upper}MDL"] = f"beta_{plane}_omc3_model"
             frames.append(table.rename(columns=columns)[list(columns.values())])
@@ -314,21 +253,12 @@ def measured_frame(free_dir: Path) -> pd.DataFrame:
     return merged
 
 
-#: The two coupling RDTs omc3 writes, and the name each keeps here. ``f1001``
-#: is the difference resonance -- the one a quadrupole roll drives and the one
-#: a fit given tilts has to reproduce; ``f1010`` is the sum resonance, far from
-#: this ring's working point and carried as the control.
+#: Coupling RDTs omc3 writes: ``f1001`` (difference, driven by quadrupole roll), ``f1010`` (sum, control).
 COUPLING_RDTS = {"f1001": "f1001", "f1010": "f1010"}
 
 
 def coupling_frame(free_dir: Path) -> pd.DataFrame | None:
-    """Measured coupling RDT amplitudes per BPM, with omc3's own model and bar.
-
-    ``|f1001|`` and ``|f1010|``, indexed by BPM the same way
-    :func:`measured_frame` is, so they join straight onto it. Absent files are
-    not an error: a run analysed before coupling was asked for simply has no
-    coupling columns and every figure keys off what is present.
-    """
+    """Measured coupling RDT amplitudes per BPM, indexed like :func:`measured_frame`; ``None`` if absent."""
     blocks = []
     for stem, name in COUPLING_RDTS.items():
         path = free_dir / f"{stem}.tfs"
@@ -347,11 +277,7 @@ def coupling_frame(free_dir: Path) -> pd.DataFrame | None:
 
 
 def measured_optics_frame(free_dir: Path) -> pd.DataFrame:
-    """Beta and the coupling RDTs: everything one optics run measures.
-
-    This, not :func:`measured_frame`, is what the kick bootstrap resamples, so
-    that the RDTs get a bar too -- omc3 reports ``ERRAMP`` as an exact zero.
-    """
+    """Beta and the coupling RDTs; what the kick bootstrap resamples (omc3's ``ERRAMP`` is zero)."""
     frame = measured_frame(free_dir)
     coupling = coupling_frame(free_dir)
     return frame if coupling is None else frame.join(coupling, how="left")
@@ -366,8 +292,7 @@ def phase_advance_frame(free_dir: Path) -> dict[str, float]:
         if f"PHASE{upper}" not in table.columns or f"PHASE{upper}MDL" not in table.columns:
             continue
         difference = table[f"PHASE{upper}"] - table[f"PHASE{upper}MDL"]
-        # A phase advance is modulo one turn; wrap before taking an RMS or a
-        # single interval that crossed the boundary dominates the number.
+        # Advance is modulo one turn.
         wrapped = (difference + 0.5) % 1.0 - 0.5
         result[f"phase_advance_rms_{plane}"] = float(np.sqrt(np.mean(wrapped**2)))
     return result
@@ -397,20 +322,13 @@ def preprocessing_for(args: argparse.Namespace) -> TbtPreprocessing:
     )
 
 
-#: Turns averaged for the folder-placement check. A folder saved at the wrong
-#: orbit is a full ~1.2e-3 dp/p step, so the check is not resolution-limited.
+#: Turns averaged for the folder-placement check (a wrong folder is a ~1.2e-3 dp/p step).
 MOMENTUM_CHECK_TURNS = 1000
 MOMENTUM_CHECK_TOLERANCE = 3e-4
 
 
 def check_acd_folder_momenta(campaign: Campaign, model, *, limit: int | None = None) -> None:
-    """Each AC-dipole folder's closed orbit must match its scan point's dp/p.
-
-    Catches a folder saved under the wrong orbit, which otherwise surfaces only
-    as a puzzling driven-tune warning. ``pt`` is an offset from the *measured*
-    0 mm orbit, never a modelled origin: a dipole error is degenerate with the
-    dispersive orbit at a single momentum.
-    """
+    """Each AC-dipole folder's closed orbit must match its scan point's dp/p (relative to the measured 0 mm orbit)."""
     from psb_md.measurements import compute_closed_orbit_dataframe  # noqa: PLC0415
 
     orbits: dict[float, pd.DataFrame] = {}
@@ -439,8 +357,7 @@ def check_acd_folder_momenta(campaign: Campaign, model, *, limit: int | None = N
     reference = expected_dpp[0.0]
     wrong = []
     for orbit_mm in sorted(orbits):
-        # Rebase to the 0 mm plateau before converting: subtracting two canonical
-        # pt values is not a coordinate transformation.
+        # Rebase to the 0 mm plateau before converting.
         relative = (1.0 + expected_dpp[orbit_mm]) / (1.0 + reference) - 1.0
         expected_pt = float(accelerator.dp2pt(relative))
         difference = estimated[orbit_mm] - expected_pt
@@ -469,15 +386,7 @@ def analyse_folder(
     *,
     optics: bool,
 ) -> dict[str, object]:
-    """One driven-tune setting: the drive always, the full optics chain if asked.
-
-    Every folder's *drive* is measured -- it is an FFT and a sub-bin fit, seconds
-    per acquisition, and it is the number the two folders exist to compare. The
-    harpy/omc3 chain is an hour per folder and measures the same machine either
-    way, so by default it runs on the reference folder alone (``--optics-folders
-    all`` for both). The two folders differ in how close the drive sits to the
-    tune, not in what lattice was being driven.
-    """
+    """One driven-tune setting: the drive always, the (hour-long) optics chain only if *optics*."""
     from psb_md.driven_tune_measurement import (
         measure_folder_driven_tunes,  # noqa: PLC0415
     )
@@ -492,17 +401,11 @@ def analyse_folder(
     model_dir, driven_dir, free_dir = root / "omc3_model", root / "driven", root / "free"
     root.mkdir(parents=True, exist_ok=True)
 
-    # psb_md owns the scan point each folder was dialled in at. The natural tune
-    # moves ~2e-3 per mm of orbit through the chromaticity, so a campaign-wide
-    # natural tune plus a constant offset hands every off-momentum folder a drive
-    # several 1e-3 out; both tunes must come from the same per-orbit point.
+    # Both tunes come from the same per-orbit scan point (natural tune moves ~2e-3 per mm).
     orbit = folder_to_orbit_map()[name]
     natural = orbit_natural_tunes(orbit, campaign.machine_config)
     configured, _ = orbit_driven_tune_and_dpp(orbit, campaign.machine_config)
-    # Built with the configured guess purely to locate the AC-dipole BPM
-    # window -- structural, not tune-dependent -- so the drive measurement can
-    # be cleaned before it is fitted. Rebuilt below, on the measured drive,
-    # if the optics chain runs.
+    # Configured tunes only locate the AC-dipole BPM window; rebuilt on the measured drive below.
     create_omc3_model(model_dir, nat_tunes=natural, drv_tunes=configured, force=args.force)
     _, first_bpm_after_acd = infer_ac_dipole_window(model_dir, "BR3.DES3L1")
     drive = measure_folder_driven_tunes(
@@ -551,7 +454,6 @@ def analyse_folder(
         "drive": drive,
         "optics": analysed,
         "preprocessing": preprocessing_for(args).describe(),
-        # The dispersive-ripple and interference removals are fitted from these.
         "blank_acquisitions": str(blanks),
         **({"harpy_tunes": measured_tunes(free_dir)} if analysed else {}),
         **(phase_advance_frame(free_dir) if analysed else {}),
@@ -571,11 +473,7 @@ def beat_statistics(measured: pd.Series, model: pd.Series) -> dict[str, float]:
 
 
 def phase_beat_statistics(measured: pd.Series, model: pd.Series) -> dict[str, float]:
-    """``measured - model`` phase advance as rms and peak, in units of 2π.
-
-    A phase advance wraps modulo one turn, the same reason
-    :func:`phase_advance_frame` wraps before its own rms.
-    """
+    """``measured - model`` phase advance as rms and peak, in units of 2π (wrapped)."""
     common = measured.index.intersection(model.index)
     difference = (measured.loc[common] - model.loc[common]).astype(float)
     wrapped = (difference + 0.5) % 1.0 - 0.5
@@ -587,15 +485,9 @@ def phase_beat_statistics(measured: pd.Series, model: pd.Series) -> dict[str, fl
 
 
 def phase_beat_frame(free_dir: Path, bpms_by_model: dict[str, pd.DataFrame]) -> pd.DataFrame | None:
-    """BPM-to-BPM phase advance, measured against every reference model.
+    """BPM-to-BPM phase advance, measured against every reference model, indexed by ``NAME2``.
 
-    omc3's own model advance comes straight from its ``PHASE{X,Y}MDL`` column;
-    the LOCO-start and tune-matched advances are read off the corresponding
-    model's own ``mu1``/``mu2`` twiss columns between the same named BPM pair,
-    the phase counterpart of how :func:`analyse_campaign` builds ``model_beta``.
-    Indexed by ``NAME2``, the downstream BPM of each pair, so it lines up with
-    :func:`measured_frame`. Persisted next to ``measured.parquet`` so a later
-    page is not limited to the rms this one plots.
+    omc3's model advance is its ``PHASE{X,Y}MDL`` column; the others come from each model's ``mu1``/``mu2``.
     """
     blocks = []
     for plane, mu_column in (("x", "mu1"), ("y", "mu2")):
@@ -610,9 +502,6 @@ def phase_beat_frame(free_dir: Path, bpms_by_model: dict[str, pd.DataFrame]) -> 
         block = pd.DataFrame(
             {
                 f"phase_{plane}": table[f"PHASE{upper}"],
-                # Kept beside the value: every figure that differences two
-                # campaigns' advances needs the bar to say whether the
-                # difference is one.
                 f"phase_{plane}_err": table.get(f"ERRPHASE{upper}"),
                 f"phase_{plane}_omc3_model": table.get(f"PHASE{upper}MDL"),
             }
@@ -635,10 +524,7 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
     measured_natural = (chroma["QH"], chroma["QV"])
     measured_chroma = (chroma["QPH"], chroma["QPV"])
 
-    # The reference folder has to be chosen before anything is analysed, since it
-    # is the one the optics chain runs on. "Closest drive to the tune" is not the
-    # criterion -- a drive nearer the tune is a larger driven beta-beat to
-    # compensate away -- so it is named, or the folder with the most acquisitions.
+    # Reference folder: named, or the one with the most acquisitions.
     files_per_folder = {
         name: len(sorted(folder.glob("*.sdds")))
         for name, folder in campaign.acd_dirs.items()
@@ -649,8 +535,6 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
             f"--reference {reference!r} is not a folder of the {campaign.slug} campaign; "
             f"expected one of {sorted(campaign.acd_dirs)}"
         )
-    # Before any model is built: a folder at the wrong orbit invalidates
-    # everything downstream of it.
     loco_model = build_model(sequence_file=args.sequence_file, campaign=campaign)
     check_acd_folder_momenta(campaign, loco_model, limit=args.limit)
     folders = {
@@ -661,8 +545,7 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
         for name, folder in campaign.acd_dirs.items()
     }
 
-    # Two lattices, same sequence and same circuits: the one the fits start from,
-    # and the one they would have started from had the tune been matched first.
+    # Fit start model, and the same lattice tune-matched.
     start = model_optics(campaign, args.sequence_file)
     matched = model_optics(campaign, args.sequence_file, match_to=measured_natural)
     measured_chroma_error = (chroma["QPH_error"], chroma["QPV_error"])
@@ -671,10 +554,7 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
     )
     free_dir = Path(folders[reference]["free_dir"])
     measured = measured_optics_frame(free_dir)
-    # omc3's bar is propagated from one pooled analysis, so it carries no repeat
-    # of the machine and is several times too small on beta and exactly zero on
-    # the coupling RDTs. Add the kick-to-kick bootstrap to it; 0 replicas keeps
-    # omc3's alone.
+    # omc3's bar is too small on beta and zero on the RDTs; add the kick bootstrap (0 replicas keeps omc3's).
     if args.bootstrap_replicas:
         measured = apply_bootstrap_errors(
             measured,
@@ -742,7 +622,6 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
                 start["tunes"][0] - measured_natural[0],
                 start["tunes"][1] - measured_natural[1],
             ],
-            # Conventional Q' = dQ/d(delta), not MAD-NG's raw dQ/dpt.
             "qprime": list(start["chromaticity"]),
             "dq_dpt": list(start["dq_dpt"]),
         },
@@ -766,9 +645,7 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
             }
             for plane in ("x", "y")
         },
-        # The same beatings again, from the amplitude beta rather than the phase
-        # one. Kept in their own block so nothing reading ``beta_beat`` can pick
-        # up an amplitude number by accident: the two are not interchangeable.
+        # Kept separate from ``beta_beat``: amplitude and phase beta are not interchangeable.
         "beta_beat_amplitude": {
             plane: {
                 f"vs_{reference_model}": beat_statistics(
@@ -780,16 +657,12 @@ def analyse_campaign(campaign: Campaign, args: argparse.Namespace) -> dict[str, 
             for plane in ("x", "y")
             if f"beta_{plane}_amp" in frame.columns
         },
-        # Phase against amplitude, at the same BPMs: a check on the BPM gains,
-        # since a calibration error moves the amplitude beta and leaves the phase
-        # one alone.
+        # BPM-gain check: a calibration error moves only the amplitude beta.
         "phase_vs_amplitude": {
             plane: beat_statistics(frame[f"beta_{plane}_amp"], frame[f"beta_{plane}"])
             for plane in ("x", "y")
             if f"beta_{plane}_amp" in frame.columns
         },
-        # BPM-to-BPM phase advance against the same three reference models as
-        # beta_beat, the phase counterpart of it.
         "phase_beat": (
             {
                 plane: {

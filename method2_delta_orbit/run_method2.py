@@ -1,11 +1,7 @@
 """Method 2 driver: fit quadrupole ``k1`` to measured delta closed orbits.
 
-One worker per (corrector, step) -- and, with ``--rf-offsets``, per momentum too.
-The worker count multiplies quickly (12 correctors x 4 steps x 5 RF settings is
-240 processes), so the corrector, step and RF subsets are all explicit and the
-defaults are modest. ``--batch-momenta`` removes the momentum factor by fitting
-every momentum of a trim in one process, which is how the full scan fits under
-the file-descriptor ceiling (README, "worker count").
+One worker per (corrector, step), and per momentum with ``--rf-offsets``;
+``--batch-momenta`` fits all momenta of a trim in one process.
 """
 
 from __future__ import annotations
@@ -13,12 +9,14 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
 from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
+from aba_optimiser.accelerators.selection import add_selection_args, parse_selection
 from aba_optimiser.training.config import OutputConfig, SequenceConfig
 from aba_optimiser.training_closed_twiss import (
     ClosedOrbitFitter,
@@ -58,10 +56,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-#: Labels for the settings that are not a corrector trim at all: the untrimmed
-#: orbit, entering as a target in its own right. They are not LSA parameter
-#: names and must never be handed to ``lsa_to_knob``; :func:`build_settings`
-#: gives them a knob name and a zero step directly.
+#: Untrimmed-orbit target labels; not LSA names, never pass to ``lsa_to_knob``.
 STATIC_ORBIT = "(static orbit)"
 DISPERSION = "(dispersion)"
 UNTRIMMED_SETTINGS: tuple[str, ...] = (STATIC_ORBIT, DISPERSION)
@@ -75,14 +70,43 @@ PRIOR_SUFFIXES: dict[str, str] = {
     "quad_k1s": "dk1sl",
 }
 
+#: The (family, attribute) selection each :data:`PRIOR_SUFFIXES` name stands for.
+PRIOR_FAMILIES: dict[str, tuple[str, str]] = {
+    "quadrupoles": ("quad", "k1"),
+    "bends": ("bend", "k0"),
+    "quad_dy": ("quad", "dy"),
+    "quad_tilt": ("quad", "tilt"),
+    "quad_k0s": ("quad", "k0s"),
+    "quad_k1s": ("quad", "k1s"),
+}
+
+#: Tilt prior strength (x median(diag H) of the tilt block); psb_sim seeds 1-3 tilt correlation
+#: with truth: 0.15 at 1e-4, 0.25 at 1e-3, 0.57 at 1e-2, 0.59 at 1e-1, 0.49 at 1.
+TILT_PRIOR_STRENGTH = 1e-2
+
+#: The fit this script runs when no selection is given: quadrupole gradients.
+DEFAULT_ERRORS: dict[str, set[str]] = {"quad": {"k1"}}
+
+
+def _selected(
+    errors: Mapping[str, Iterable[str]], misalignments: Mapping[str, Iterable[str]]
+) -> set[tuple[str, str]]:
+    return {
+        (family, attribute)
+        for selection in (errors, misalignments)
+        for family, attributes in selection.items()
+        for attribute in attributes
+    }
+
+
+def family_selection(args) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    """Turn ``--errors`` / ``--misalign`` into ``errors`` / ``misalignments`` selections."""
+    return parse_selection(args.errors), parse_selection(args.misalign)
+
 
 @dataclass
 class CorrectorSetting:
-    """One measured orbit and the model state at which it must be evaluated.
-
-    Every target keeps its own ``pt``. ``reference_pt`` is independent and is
-    zero for the PSB global reference even when the signal orbit is off-momentum.
-    """
+    """One measured orbit and the model state at which it must be evaluated."""
 
     corrector: str
     knob: str
@@ -102,34 +126,15 @@ class CorrectorSetting:
     def label(self) -> str:
         return f"{self.corrector}@{self.offset_k:+g},rf{self.rf_offset:+g}"
 
-#: The two corrector baselines the model can be put on, one per fit.
-#:
-#: ``zero``  -- every corrector at zero, the trimmed one at ``dk`` alone. What a
-#:              *quadrupole* fit wants: its target is a delta orbit, referred to
-#:              the untrimmed machine, and a delta is independent of where the
-#:              correctors were standing. Measured on the ring-3 model, changing
-#:              every standing corrector moves a delta orbit by 1e-3 relative
-#:              (sextupole feed-down). Taking the baseline to zero therefore
-#:              costs the quadrupole fit nothing and buys it complete
-#:              independence from settings it cannot see -- which is exactly why
-#:              those settings could be wrong for a whole campaign (ABSOLUTE_
-#:              ORBIT_STUDY.md section 2b) without any recorded result moving.
-#:
-#: ``machine`` -- every corrector at the value the machine actually sat at, the
-#:              trimmed one at ``nominal + dk``. What a *bends / quad dy* fit
-#:              needs: its target is the absolute closed orbit, and the standing
-#:              correctors generate a large part of that orbit. On the zero
-#:              baseline the model would attribute their kicks to the bends.
+#: ``zero``: every corrector at zero, the trimmed one at ``dk`` (quadrupole fits on delta orbits;
+#: standing correctors move a delta orbit by only 1e-3 relative).
+#: ``machine``: every corrector at its standing value, the trimmed one at ``nominal + dk``
+#: (bends / quad dy fits on the absolute orbit).
 CORRECTOR_BASELINES: tuple[str, ...] = ("zero", "machine")
 
 
 def corrector_baseline_knobs(model: LocoModel, baseline: str) -> dict[str, float]:
-    """The standing corrector settings the model is put on, per :data:`CORRECTOR_BASELINES`.
-
-    ``zero`` returns every corrector explicitly at zero rather than an empty
-    dict: an empty dict leaves the sequence's own values in place, which is not
-    the same thing and not something this should depend on.
-    """
+    """Standing corrector settings for *baseline*; ``zero`` is explicit, not an empty dict."""
     if baseline not in CORRECTOR_BASELINES:
         raise ValueError(f"Unknown corrector baseline {baseline!r}; expected {CORRECTOR_BASELINES}")
     if baseline == "machine":
@@ -138,12 +143,7 @@ def corrector_baseline_knobs(model: LocoModel, baseline: str) -> dict[str, float
 
 
 def default_corrector_baseline(absolute_planes: tuple[str, ...]) -> str:
-    """``machine`` once any plane keeps its closed orbit, ``zero`` otherwise.
-
-    The coupling is the physics, not a convenience: a plane whose reference has
-    been subtracted cannot see the standing correctors, and a plane that keeps
-    its closed orbit cannot do without them.
-    """
+    """``machine`` once any plane keeps its closed orbit, ``zero`` otherwise."""
     return "machine" if absolute_planes else "zero"
 
 
@@ -160,26 +160,18 @@ def build_settings(
     absolute_planes: tuple[str, ...] = (),
     corrector_baseline: str | None = None,
 ) -> list[CorrectorSetting]:
-    """Turn measured delta orbits into one :class:`CorrectorSetting` per worker.
-
-    *absolute_planes* is carried through to the model side, which has to skip the
-    same reference subtraction the data side skipped. *corrector_baseline* says
-    what the untrimmed correctors are set to; see :data:`CORRECTOR_BASELINES`.
-    """
+    """Turn measured delta orbits into one :class:`CorrectorSetting` per worker."""
     baseline = corrector_baseline or default_corrector_baseline(absolute_planes)
     standing = corrector_baseline_knobs(model, baseline)
     settings = []
     for (corrector, offset_k), orbit in sorted(orbits.items()):
         untrimmed = corrector in UNTRIMMED_SETTINGS
-        # The untrimmed orbit is not one corrector's measurement, so the
-        # --correctors/--offsets subsets do not apply to it: it is the machine.
+        # Untrimmed orbits ignore the --correctors/--offsets subsets.
         if not untrimmed and correctors and corrector not in correctors:
             continue
         if not untrimmed and offsets and not any(np.isclose(offset_k, o) for o in offsets):
             continue
-        # Any real knob will do for an untrimmed setting -- the worker needs a
-        # name to write, and dk = 0 leaves it at ``nominal``, which the baseline
-        # sets to the value the machine was actually standing at.
+        # Any knob will do for an untrimmed setting: dk = 0 leaves it at ``nominal``.
         knob = next(iter(model.corrector_knobs)) if untrimmed else lsa_to_knob(corrector)
         settings.append(
             CorrectorSetting(
@@ -203,30 +195,14 @@ def build_settings(
 def drop_zero_step_duplicates(
     orbits: dict[tuple[str, float], pd.DataFrame],
 ) -> dict[tuple[str, float], pd.DataFrame]:
-    """Drop the per-corrector untrimmed acquisitions from one RF setting's orbits.
-
-    ``measured_orbits`` keys an untrimmed acquisition by the corrector whose scan
-    it belongs to, so a non-zero RF setting carries twelve of them -- twelve
-    recordings of one machine state, not twelve measurements. The averaged
-    ``(dispersion)`` setting is where that orbit enters the fit; these would
-    weight it twelve times over.
-    """
+    """Drop the per-corrector untrimmed acquisitions; the averaged ``(dispersion)`` setting replaces them."""
     return {key: frame for key, frame in orbits.items() if key[1] != 0.0}
 
 
 def average_zero_step(
     orbits: dict[tuple[str, float], pd.DataFrame],
 ) -> dict[tuple[str, float], pd.DataFrame]:
-    """Fold one RF setting's untrimmed acquisitions into a single target.
-
-    The counterpart of :func:`drop_zero_step_duplicates` for absolute mode: the
-    untrimmed acquisitions are still twelve recordings of one machine state, but
-    now they carry signal (the static closed orbit) instead of being zero by
-    construction, so they are averaged rather than dropped.
-
-    Values are a plain mean, errors the error of the mean. No intershot term is
-    added: each input is already a ``measured_orbits`` average that carries it.
-    """
+    """Average one RF setting's untrimmed acquisitions into a single static-orbit target (absolute mode)."""
     zero = [frame for (_, offset), frame in orbits.items() if offset == 0.0]
     kept = {key: frame for key, frame in orbits.items() if key[1] != 0.0}
     if not zero:
@@ -247,22 +223,11 @@ def build_multi_pt_settings(
     campaign: Campaign,
     **kwargs,
 ) -> list[CorrectorSetting]:
-    """Settings across several RF-steering offsets, each at its calibrated ``pt``.
+    """Settings across several RF-steering offsets, each at its chroma-calibrated ``pt``.
 
-    The five RF settings are five momenta whose Jacobians are genuinely
-    independent, which lifts degeneracies a single momentum leaves. What they are
-    not is a momentum in the LOCO log itself. The fit always uses the RF-derived
-    ``Dp/p`` measured by the chroma scan at the same radial plateaus; the older
-    model-dispersion projection is computed alongside only as a logged
-    cross-check (``orbit_pt`` on each setting), never as the calibration the fit
-    actually runs on. Both use the nominal-RF orbit as exactly ``pt=0``.
-
-    Each non-zero RF setting was acquired untrimmed once *per corrector*: twelve
-    recordings of one machine state. They enter as the single averaged
-    ``(dispersion)`` setting below and are dropped individually, because passing
-    all twelve weights that one orbit twelve times over -- 11.4 % against 11.0 %
-    on the 2026-08-21 scan, for 48 more settings. ``zero_step_duplicates``
-    restores them for the comparison; it is not the way to run a fit.
+    The orbit-projected ``pt`` is only a logged cross-check (``orbit_pt``).
+    The twelve untrimmed acquisitions per RF setting enter as one averaged
+    ``(dispersion)`` setting; ``zero_step_duplicates`` restores them for comparison only.
     """
     from loco_common.momentum import chroma_pt_by_rf_offset, estimate_pt_by_rf_offset
 
@@ -287,12 +252,7 @@ def build_multi_pt_settings(
         }
         if not untrimmed:
             raise ValueError(f"RF offset {offset:+g} mm has no untrimmed-corrector acquisition")
-        # Average the untrimmed acquisitions: at offset_k = 0 every corrector's
-        # scan sat on the same machine, so these are repeats of one orbit.
-        # Not ``sum(...) / len(...)``: pandas addition hits ERRX/ERRY too, so
-        # that averages the error bars into ``mean(err)`` where the mean of N
-        # deserves ``err/sqrt(N)``, entering the fit sqrt(12) ~ 3.5x over-errored
-        # and so twelve-fold under-weighted.
+        # Not sum/len: that would average ERRX/ERRY instead of dividing by sqrt(N).
         absolute[offset] = average_orbit_frames(list(untrimmed.values()))
     orbit_momenta = estimate_pt_by_rf_offset(absolute, twiss)
     momentum_accelerator = OptimiserPSB(
@@ -303,8 +263,6 @@ def build_multi_pt_settings(
     chroma_momenta = chroma_pt_by_rf_offset(
         campaign.chroma_file, rf_offsets, momentum_accelerator
     )
-    # The fit always runs on the RF/chroma calibration; the orbit projection is
-    # kept only as a logged cross-check (see the docstring above).
     momenta = chroma_momenta
     differences = compare_momentum_calibrations(chroma_momenta, orbit_momenta)
     logger.warning(
@@ -342,26 +300,13 @@ def build_multi_pt_settings(
             **kwargs,
         )
         if not dispersion_workers or (offset == 0.0 and not absolute_planes):
-            # At nominal RF with every plane subtracted the untrimmed orbit is
-            # zero by construction. With an absolute plane it is the machine's
-            # static closed orbit, which is the whole point of that mode, so it
-            # is kept -- under a label that says it is not dispersion.
+            # Zero by construction at nominal RF unless a plane is absolute.
             continue
-        # The untrimmed orbit at this RF setting, minus the global reference, is
-        # this momentum's dispersion orbit. Under a per-RF reference it was
-        # identically zero and carried nothing; against the global reference it is
-        # a quadrupole-sensitive constraint that costs one extra worker, so it is
-        # added here rather than left on the floor.
+        # Untrimmed orbit minus the global reference: this momentum's dispersion orbit.
         settings.append(
             CorrectorSetting(
                 corrector=DISPERSION if offset != 0.0 else STATIC_ORBIT,
-                # No corrector moves here, but the worker still needs a knob
-                # name to write. Under a subtracted plane any real one would do,
-                # since dk = 0 leaves it at its nominal value on both sides of
-                # the difference -- but an *absolute* plane has no other side, so
-                # writing the wrong value here would zero that corrector out of
-                # the model's closed orbit. Hence ``nominal`` below is the
-                # baseline's value for this knob, not 0.
+                # ``nominal`` must be the baseline value: an absolute plane has no reference to cancel it.
                 knob=next(iter(model.corrector_knobs)),
                 offset_k=0.0,
                 orbit=subtract_reference(absolute[offset], reference, absolute_planes),
@@ -381,12 +326,7 @@ def build_multi_pt_settings(
 def closed_orbit_series(
     settings: list[CorrectorSetting], *, batch_momenta: bool
 ) -> list[ClosedOrbitSeries]:
-    """Translate PSB settings to independent upstream measurement series.
-
-    Batching changes process layout only. Each measurement retains its own
-    target, signal momentum, and reference momentum; the worker merely caches
-    repeated exact model states such as the shared global reference at ``pt=0``.
-    """
+    """Translate PSB settings to independent upstream measurement series."""
     usable = [
         setting
         for setting in settings
@@ -446,23 +386,14 @@ def prior_strengths_by_suffix(
     *,
     default: float,
     overrides: dict[str, float],
-    optimise_quadrupoles: bool,
-    optimise_bends: bool,
-    optimise_quad_dy: bool,
-    optimise_quad_tilt: bool,
-    optimise_quad_k0s: bool = False,
-    optimise_quad_k1s: bool = False,
+    errors: Mapping[str, Iterable[str]],
+    misalignments: Mapping[str, Iterable[str]] | None = None,
 ) -> dict[str, float] | None:
     """Scale priors independently for enabled families with different units."""
-    enabled = {
-        "quadrupoles": optimise_quadrupoles,
-        "bends": optimise_bends,
-        "quad_dy": optimise_quad_dy,
-        "quad_tilt": optimise_quad_tilt,
-        "quad_k0s": optimise_quad_k0s,
-        "quad_k1s": optimise_quad_k1s,
-    }
-    families = [family for family, value in enabled.items() if value]
+    selected = _selected(errors, misalignments or {})
+    families = [
+        family for family, selection in PRIOR_FAMILIES.items() if selection in selected
+    ]
     if len(families) == 1 and not overrides:
         return None
     return {
@@ -480,12 +411,8 @@ def run(
     batch_momenta: bool = False,
     prior_strength: float = PRIOR_STRENGTH,
     prior_strengths: dict[str, float] | None = None,
-    optimise_quadrupoles: bool = True,
-    optimise_bends: bool = False,
-    optimise_quad_dy: bool = False,
-    optimise_quad_tilt: bool = False,
-    optimise_quad_k0s: bool = False,
-    optimise_quad_k1s: bool = False,
+    errors: Mapping[str, Iterable[str]] | None = None,
+    misalignments: Mapping[str, Iterable[str]] | None = None,
     group_quadrupoles_by_cell: bool = False,
     initial_knob_strengths: dict[str, float] | None = None,
     output_path: Path = Path("results/method2"),
@@ -493,31 +420,18 @@ def run(
 ) -> tuple[dict[str, float], dict[str, float], dict[str, object]]:
     """Run the summed-gradient delta-orbit fit over the selected knob families.
 
-    The model is put on the corrector baseline the settings were built with --
-    every corrector at zero for a quadrupole fit, at the machine's own values for
-    a bends / quad ``dy`` fit. See :data:`CORRECTOR_BASELINES`.
-
-    Which families are free is a physics decision, not a default:
-    ``psb_md.closed_orbit_fitting`` documents that the closed orbit constrains
-    bends and quadrupole ``dy`` and barely responds to gradients, so freeing
-    quadrupoles alongside bends lets the solve absorb bend residual into the
-    gradients. Delta orbits invert that -- they constrain gradients and say
-    almost nothing about ``k0`` or ``dy`` -- which is why the absolute-plane mode
-    and these families belong together.
+    The model sits on the corrector baseline the settings were built with.
     """
-    if not (
-        optimise_quadrupoles
-        or optimise_bends
-        or optimise_quad_dy
-        or optimise_quad_tilt
-        or optimise_quad_k0s
-        or optimise_quad_k1s
-    ):
+    if errors is None and misalignments is None:
+        errors = DEFAULT_ERRORS
+    errors = {family: set(attrs) for family, attrs in (errors or {}).items() if attrs}
+    misalignments = {
+        family: set(attrs) for family, attrs in (misalignments or {}).items() if attrs
+    }
+    if not (errors or misalignments):
         raise ValueError("No knob family enabled: there is nothing to fit")
     baselines = {setting.corrector_baseline for setting in settings}
     if len(baselines) > 1:
-        # Half the fit would be comparing the model against a machine the other
-        # half says was not there.
         raise ValueError(
             f"Every setting must share one corrector baseline, got {sorted(baselines)}"
         )
@@ -526,23 +440,15 @@ def run(
         ring=model.ring,
         sequence_file=model.sequence_file,
         kinetic_energy=model.kinetic_energy,
-        optimise_quadrupoles=optimise_quadrupoles,
-        optimise_bends=optimise_bends,
-        optimise_quad_dy=optimise_quad_dy,
-        optimise_quad_tilt=optimise_quad_tilt,
-        optimise_quad_k0s=optimise_quad_k0s,
-        optimise_quad_k1s=optimise_quad_k1s,
+        errors=errors,
+        misalignments=misalignments,
         group_quadrupoles_by_cell=group_quadrupoles_by_cell,
     )
     family_priors = prior_strengths_by_suffix(
         default=prior_strength,
         overrides=prior_strengths or {},
-        optimise_quadrupoles=optimise_quadrupoles,
-        optimise_bends=optimise_bends,
-        optimise_quad_dy=optimise_quad_dy,
-        optimise_quad_tilt=optimise_quad_tilt,
-        optimise_quad_k0s=optimise_quad_k0s,
-        optimise_quad_k1s=optimise_quad_k1s,
+        errors=errors,
+        misalignments=misalignments,
     )
     series = closed_orbit_series(settings, batch_momenta=batch_momenta)
     if extra_series:
@@ -557,18 +463,9 @@ def run(
             initial_lambda=initial_lambda,
         ),
         initial_knob_strengths=initial_knob_strengths,
-        # Not a tuning parameter: psb_md.closed_orbit_fitting documents that both
-        # the shape and the scale of this prior are what pick the answer out of a
-        # large null space. Overridable only so the sensitivity to it can be
-        # measured (HANDOVER.md §10); the default is the one to use.
-        # Per family, because k1, k0 and dy do not share a unit and one global
-        # median(diag H) would move the quadrupole prior off its measured knee
-        # as soon as another family is enabled.
+        # Per family: k1, k0 and dy differ in unit, and a global median(diag H) would move the k1 knee.
         prior_strengths=family_priors,
         tune_knobs=model.tune_knobs or None,
-        # Not model.corrector_knobs: on the ``zero`` baseline every corrector is
-        # explicitly zeroed, so a quadrupole fit depends on nothing but its own
-        # trims. See CORRECTOR_BASELINES.
         corrector_knobs=standing or None,
         output_config=OutputConfig(tensorboard_root=output_path / "tensorboard"),
     )
@@ -576,35 +473,21 @@ def run(
         knobs, uncertainties = fitter.run()
         return knobs, uncertainties, dict(fitter.diagnostics)
     finally:
-        # Without this MAD's ``__del__`` tears the main-process pipe down
-        # mid-message at exit; the same guard psb_md.fit_closed_orbit_knobs uses.
+        # Otherwise MAD's ``__del__`` tears the pipe down mid-message at exit.
         mad_iface = getattr(fitter.config_manager, "mad_iface", None)
         if mad_iface is not None:
             mad_iface.close()
 
 
 def warn_family_mismatch(absolute_planes: tuple[str, ...], args) -> None:
-    """Warn when a knob family and the plane that constrains it are not paired.
-
-    Neither case is an error. A family without its plane is a legitimate way to
-    ask how much the delta orbits say about it (the answer is expected to be
-    "almost nothing", leaving the prior to decide); a plane without its family is
-    the control that measures how much static orbit the gradients absorb, which
-    is exactly the effect ``psb_md.closed_orbit_fitting`` warns about.
-    """
-    # Tilt sits with dy, and k1s/k0s (their additive-multipole replacements) sit
-    # with them too: a rolled quadrupole -- or its skew-multipole equivalent --
-    # is a skew source, so it shows up in the vertical plane, and is the only
-    # kind of family here that can make vertical dispersion without making the
-    # vertical orbit that caps it (docs/studies/quadrupole-roll.md).
-    vertical = (
-        args.optimise_quad_dy
-        or args.optimise_quad_tilt
-        or args.optimise_quad_k0s
-        or args.optimise_quad_k1s
+    """Warn when a knob family and the plane that constrains it are not paired."""
+    # Tilt, k0s and k1s are skew sources and sit with dy in the vertical plane.
+    selected = _selected(*family_selection(args))
+    vertical = bool(
+        selected & {("quad", "dy"), ("quad", "tilt"), ("quad", "k0s"), ("quad", "k1s")}
     )
     for plane, flag, family in (
-        ("x", args.optimise_bends, "bends"),
+        ("x", ("bend", "k0") in selected, "bends"),
         ("y", vertical, "quadrupole dy/tilt/k0s/k1s"),
     ):
         if flag and plane not in absolute_planes:
@@ -717,63 +600,12 @@ def main(argv: list[str] | None = None) -> None:
             "Planes whose closed orbit is NOT referred to the global reference "
             "orbit, so the target is the machine's absolute orbit. The static "
             "orbit is generated by dipole errors (x) and quadrupole vertical "
-            "misalignments (y), so pair this with --optimise-bends and/or "
-            "--optimise-quad-dy; on its own it hands the fit an orbit only the "
+            "misalignments (y), so pair this with --errors bend:k0 and/or "
+            "--misalign quad:dy; on its own it hands the fit an orbit only the "
             "gradients can absorb."
         ),
     )
-    parser.add_argument(
-        "--no-optimise-quadrupoles",
-        dest="optimise_quadrupoles",
-        action="store_false",
-        help=(
-            "Free no quadrupole k1. With --optimise-bends or --optimise-quad-dy "
-            "this is the pure orbit-geometry control: it measures what the "
-            "static orbit asks for when no gradient can absorb it."
-        ),
-    )
-    parser.add_argument(
-        "--optimise-bends",
-        action="store_true",
-        help="Free the sbend/rbend k0. Constrained by an absolute x plane.",
-    )
-    parser.add_argument(
-        "--optimise-quad-dy",
-        action="store_true",
-        help="Free the quadrupole vertical offsets. Constrained by an absolute y plane.",
-    )
-    parser.add_argument(
-        "--optimise-quad-tilt",
-        action="store_true",
-        help=(
-            "Free the quadrupole rolls about the beam axis. The only skew source "
-            "in the fit, and so the only family that can make vertical dispersion "
-            "without making the vertical orbit that caps it; constrained by an "
-            "absolute y plane. See docs/studies/quadrupole-roll.md."
-        ),
-    )
-    parser.add_argument(
-        "--optimise-quad-k0s",
-        action="store_true",
-        help=(
-            "Free an additive skew dipole error (dk0sl) per quadrupole, in place "
-            "of the geometric dy offset. Unlike dy it does not scale with the "
-            "element's own k1, so it does not share a Jacobian column with the "
-            "gradient fit. Constrained by an absolute y plane."
-        ),
-    )
-    parser.add_argument(
-        "--optimise-quad-k1s",
-        action="store_true",
-        help=(
-            "Free an additive skew gradient error (dk1sl) per quadrupole, in "
-            "place of the geometric tilt. Unlike tilt it does not scale with the "
-            "element's own k1, so it does not share a Jacobian column with the "
-            "gradient fit. A skew source, like tilt: the only families here that "
-            "can make vertical dispersion without making the vertical orbit that "
-            "caps it."
-        ),
-    )
+    add_selection_args(parser, accelerator=OptimiserPSB, errors_default=["quad:k1"])
     parser.add_argument(
         "--group-quadrupoles-by-cell",
         action="store_true",
@@ -794,8 +626,8 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument(
         "--prior-strength-quad-tilt",
         type=float,
-        default=None,
-        help="Prior strength for the quadrupole tilts; defaults to --prior-strength.",
+        default=TILT_PRIOR_STRENGTH,
+        help="Prior strength for the quadrupole tilts (default: TILT_PRIOR_STRENGTH = 1e-2).",
     )
     parser.add_argument(
         "--prior-strength-quad-dy",
@@ -871,9 +703,7 @@ def main(argv: list[str] | None = None) -> None:
             **subset,
         )
     elif absolute_planes:
-        # Not cached_orbits: that parquet holds the fully-subtracted orbits and
-        # is keyed by RF offset alone, so it cannot represent this mode. The
-        # expensive SDDS read is cached upstream of it by cached_scan().
+        # Not cached_orbits: its parquet holds fully-subtracted orbits and cannot represent this mode.
         orbits = average_zero_step(
             measured_orbits(
                 args.rf_offset,
@@ -944,6 +774,7 @@ def main(argv: list[str] | None = None) -> None:
     }
     prior_strengths = {k: v for k, v in prior_strengths.items() if v is not None}
 
+    errors, misalignments = family_selection(args)
     fitted_knobs, fitted_uncertainties, diagnostics = run(
         settings,
         model,
@@ -951,12 +782,8 @@ def main(argv: list[str] | None = None) -> None:
         batch_momenta=args.batch_momenta,
         prior_strength=args.prior_strength,
         prior_strengths=prior_strengths,
-        optimise_quadrupoles=args.optimise_quadrupoles,
-        optimise_bends=args.optimise_bends,
-        optimise_quad_dy=args.optimise_quad_dy,
-        optimise_quad_tilt=args.optimise_quad_tilt,
-        optimise_quad_k0s=args.optimise_quad_k0s,
-        optimise_quad_k1s=args.optimise_quad_k1s,
+        errors=errors,
+        misalignments=misalignments,
         group_quadrupoles_by_cell=args.group_quadrupoles_by_cell,
         initial_knob_strengths=initial_knob_strengths,
         output_path=args.output,
@@ -970,9 +797,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     summary = {
         "method": "delta_orbit",
-        # MAD-NG can reject every trial state before the optimiser takes a step;
-        # upstream then returns the zero/tilt-seed vector without raising. Do not
-        # let a campaign runner or report mistake that for a fitted lattice.
+        # If MAD-NG rejects every trial state, upstream returns the seed vector without raising.
         "status": (
             "complete"
             if int(diagnostics.get("accepted_evaluations", 0)) >= 2
@@ -1011,10 +836,10 @@ def main(argv: list[str] | None = None) -> None:
         },
         "absolute_planes": list(absolute_planes),
         "corrector_baseline": baseline,
-        "optimise_quadrupoles": bool(args.optimise_quadrupoles),
-        "optimise_bends": bool(args.optimise_bends),
-        "optimise_quad_dy": bool(args.optimise_quad_dy),
-        "optimise_quad_tilt": bool(args.optimise_quad_tilt),
+        "errors": {family: sorted(attrs) for family, attrs in errors.items()},
+        "misalignments": {
+            family: sorted(attrs) for family, attrs in misalignments.items()
+        },
         "group_quadrupoles_by_cell": bool(args.group_quadrupoles_by_cell),
         "prior_strength": float(args.prior_strength),
         "prior_strengths": {k: float(v) for k, v in prior_strengths.items()},

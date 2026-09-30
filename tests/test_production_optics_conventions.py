@@ -14,9 +14,7 @@ def production_python_files():
         yield from (ROOT / directory).rglob("*.py")
 
 
-#: The two integration orders a production ``run_twiss`` call may pin. 8 exists
-#: only for the skew-multipole (k0s/k1s) case and must be paired with
-#: ``nslice=2`` -- see :func:`test_every_production_method_8_call_pins_nslice_2`.
+#: The integration orders a production ``run_twiss`` may pin; 8 is for the skew-multipole case and needs ``nslice=2``.
 ALLOWED_METHODS = (6, 8)
 
 

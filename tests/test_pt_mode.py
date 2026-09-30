@@ -1,10 +1,4 @@
-"""Method 2's optional multi-momentum mode, and what a wrong ``pt`` costs.
-
-The five RF-steering settings are five momenta, but the scan records a radial
-offset in millimetres, not a ``dp/p``. Everything here is about the consequence
-of that: the momentum has to be estimated, so these tests check both that the
-estimate is right and what happens when it is not.
-"""
+"""Method 2's multi-momentum mode: the momentum has to be estimated (the scan records mm, not ``dp/p``), so test the estimate and the cost of a wrong one."""
 
 from __future__ import annotations
 
@@ -22,11 +16,8 @@ KNOWN_PT = (-1e-3, -5e-4, 5e-4, 1e-3)
 def _ng_twiss(line, bpms, *, pt: float = 0.0):
     """The line's twiss at a known ``pt``, in MAD-NG conventions.
 
-    xsuite's ``delta0`` is ``dp/p``; MAD-NG's ``pt`` is not. At PSB flat bottom
-    ``beta0`` is 0.52, so the two differ by nearly a factor of two. The
-    conversion goes through :func:`pymadng_utils.physics.pt2dp` -- the same
-    closed form MAD-NG's own ``gphys`` uses -- rather than a series expanded
-    here, so the test pins the production convention and not a copy of it.
+    xsuite's ``delta0`` is ``dp/p``, which differs from ``pt`` by nearly a factor of two at PSB flat
+    bottom; converted with :func:`pymadng_utils.physics.pt2dp`, MAD-NG's own closed form.
     """
     import xtrack_tools as xtt
     from pymadng_utils.physics import pt2dp
@@ -69,13 +60,8 @@ def test_the_estimate_is_monotonic_in_momentum(psb_line, bpms):
 def test_a_retained_plane_needs_fitted_angles(psb_line, bpms):
     """The frame refuses to invent the closed-orbit angles it is not given.
 
-    This mode relies on the momentum being an offset from a *measured* orbit
-    zero: a dipole error is exactly degenerate with the dispersive orbit at a
-    single momentum, so a modelled origin would bias ``pt`` by tens of percent
-    while looking perfectly reasonable. :func:`frame_from_orbit` makes both
-    planes dynamic, which subtracts that measured orbit and needs no angles;
-    the moment a plane is retained instead, ``tmom_recon`` demands explicitly
-    fitted momenta rather than falling back to a model or to zero.
+    Momentum is an offset from a *measured* orbit zero (a modelled one biases ``pt`` by tens of percent).
+    :func:`frame_from_orbit` makes both planes dynamic; a retained plane needs explicitly fitted momenta.
     """
     from tmom_recon import ReconstructionFrame
 
@@ -108,11 +94,8 @@ def test_the_frame_subtracts_the_measured_origin(psb_line, bpms):
 def _delta_settings(line, bpms, correctors, dk, pt):
     """Measured delta orbits at one momentum, as Method-2 settings.
 
-    The reference subtracted is the *global* one -- untrimmed correctors at
-    ``pt = 0`` -- not the untrimmed orbit at this momentum, matching what
-    ``loco_common.measured_response`` does to the real data. Each delta therefore
-    carries this momentum's dispersion orbit on top of the corrector response,
-    which is precisely why the momentum has to be right.
+    The reference is the *global* one (``pt = 0``), as in ``loco_common.measured_response``, so each
+    delta carries this momentum's dispersion orbit.
     """
     from method2_delta_orbit.run_method2 import CorrectorSetting
 
@@ -147,12 +130,7 @@ def _delta_settings(line, bpms, correctors, dk, pt):
 
 
 def _distance_to_truth(knobs: dict[str, float], truth_errors, psb_line) -> float:
-    """Euclidean distance from a fitted knob set to the errors that were installed.
-
-    The knobs are ``dk1l`` -- integrated -- so the truth is each quadrupole's
-    ``k1`` error times its length. Quadrupoles with no installed error count too:
-    inventing gradient where there was none is exactly the failure being measured.
-    """
+    """Euclidean distance from a fitted knob set to the installed errors (``dk1l`` = ``k1`` error times length; unerrored quadrupoles count)."""
     truth = {
         f"{name.lower()}.dk1l": error * float(psb_line[name].length)
         for name, error in truth_errors.items()
@@ -163,18 +141,11 @@ def _distance_to_truth(knobs: dict[str, float], truth_errors, psb_line) -> float
 def test_a_wrong_pt_costs_more_than_it_gains(
     truth_line, truth_errors, psb_line, bpms, sequence_file, tmp_path
 ):
-    """Bound the price of a bad estimate: it is a bias, not extra noise.
+    """Bound the price of a bad estimate: a bias, not extra noise.
 
-    With the global reference the delta orbit at a non-zero momentum *contains*
-    that momentum's dispersion, so telling the model the wrong ``pt`` hands the
-    quadrupoles a first-order orbit that has nothing to do with them. The
-    measurable consequence is a fit that lands further from the installed errors,
-    which is why the multi-momentum mode is opt-in rather than the default.
-
-    The margin here is deliberately modest -- a 20% error in the estimate. Larger
-    ones do not degrade gracefully: a sign error walks the quadrupoles into an
-    unstable lattice and MAD's normal form fails rather than returning a bad
-    answer.
+    A wrong ``pt`` hands the quadrupoles a first-order dispersion orbit, so the fit lands further from
+    the installed errors (hence the mode is opt-in). The margin is modest (20% error); a sign error
+    makes the lattice unstable and MAD's normal form fails.
     """
     from loco_common.model import LocoModel
     from method2_delta_orbit.run_method2 import run
@@ -187,10 +158,7 @@ def test_a_wrong_pt_costs_more_than_it_gains(
     correct, _, _ = run(settings, model, max_iterations=8, output_path=tmp_path / "right")
 
     for setting in settings:
-        # A plausibly-bad estimate, not an absurd one: 20% low. Flipping the sign
-        # drives the quadrupoles far enough to make the lattice unstable and MAD's
-        # normal form fail outright, which is a real result about how unforgiving
-        # this is but not something a test can assert on.
+        # 20% low; a sign flip makes the lattice unstable and MAD's normal form fail.
         setting.pt = 0.8 * true_pt
     wrong, _, _ = run(settings, model, max_iterations=8, output_path=tmp_path / "wrong")
 

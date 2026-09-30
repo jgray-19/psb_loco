@@ -1,15 +1,6 @@
-"""What the fitted correction actually looks like around the ring.
+"""Plot the fitted knobs themselves, per element against ``s``, in ``psb_md.plotting``'s house style.
 
-An rms and a max per option -- which is all a scoreboard row can carry -- hides
-the thing worth looking at: a gradient pattern that alternates magnet by magnet
-and one with a smooth 16-period shape have the same rms and make completely
-different claims about the machine.
-
-So these figures plot the knobs themselves, per element, against ``s``, in the
-house style ``psb_md.plotting`` already uses for the same job: bars at the
-element position, QFO/QDE by colour, the fit's own error bars on top.
-``style_axis`` and ``finalize_figure`` are imported from there rather than
-re-written, so a change to the house style reaches these too.
+Bars at the element position, QFO/QDE by colour, the fit's own error bars on top.
 
     uv run python scripts/plot_knobs.py --options xy__k1+b+dy+t__dy32-t32-k1free
 """
@@ -30,26 +21,25 @@ import pandas as pd
 from matplotlib.patches import Patch
 from psb_md.plotting import finalize_figure, style_axis
 
-from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_element_positions
+from loco_common.model import (
+    DEFAULT_SEQUENCE_FILE,
+    build_model,
+    model_element_positions,
+)
 
 logger = logging.getLogger(__name__)
 
-#: Wong palette, shared with ``report_cases``: distinguishable under the common
-#: colour-vision deficiencies, and validated as a categorical set. QFO and QDE
-#: take the first two slots, and the element labels underneath each bar are the
-#: secondary encoding, so identity never rests on colour alone.
+#: Wong palette, shared with ``report_cases``; QFO and QDE take the first two slots (element labels are the secondary encoding).
 QFO_COLOUR = "#0072B2"
 QDE_COLOUR = "#D55E00"
 OTHER_COLOUR = "#009E73"
 OVERLAY_COLOURS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9")
 
-#: Nominal integrated strengths, matching ``report_cases``: k1 = 0.7289 over a
-#: 0.5036 m QFO, and 2*pi/32 over 32 dipoles.
+#: Nominal integrated strengths, as ``report_cases``: k1 = 0.7289 over a 0.5036 m QFO, 2*pi/32 per dipole.
 NOMINAL_K1L = 0.36705
 NOMINAL_BEND_ANGLE = 0.19635
 
-#: One panel per knob family: suffix -> (axis label, scale from raw units).
-#: The order is the order the panels are stacked in.
+#: One panel per knob family, in stacking order: suffix -> (axis label, scale from raw units).
 PANELS: dict[str, tuple[str, float]] = {
     ".dk1l": ("quadrupole $\\Delta k_1 L / k_1 L$ [%]", 100 / NOMINAL_K1L),
     ".dk0l": ("bend $\\Delta k_0 L / \\theta$ [%]", 100 / NOMINAL_BEND_ANGLE),
@@ -58,31 +48,19 @@ PANELS: dict[str, tuple[str, float]] = {
 }
 
 
-#: The 16 BPMs the scan actually reads, by name. ``BR3.BPMT3L1`` is in the
-#: sequence but is not part of the measured set, so it never marks a figure.
+#: The 16 BPMs the scan reads; ``BR3.BPMT3L1`` is in the sequence but not measured.
 MEASURED_BPM_RE = re.compile(r"^BR3\.BPM\d+L3$")
 
 
 def bpm_positions(positions: dict[str, float]) -> list[float]:
-    """``s`` of the 16 measured BPMs, in order.
-
-    The 17th monitor in the sequence, ``BR3.BPMT3L1``, is not part of the
-    measured set and is left out: the figures mark where the ring is *read*, and
-    a line at a monitor no orbit came from would say the opposite.
-    """
+    """``s`` of the 16 measured BPMs, in order (``BR3.BPMT3L1`` excluded)."""
     return sorted(
         s for name, s in positions.items() if MEASURED_BPM_RE.match(name.upper())
     )
 
 
 def mark_bpms(axis, positions: dict[str, float], *, label: bool = False) -> None:
-    """Dashed verticals at the BPMs, behind everything else.
-
-    Every quantity in these figures is constrained only through what the BPMs
-    read, so where they sit is the difference between a feature the data can
-    see and one it cannot. A knob group is one cell between two of these lines;
-    a beta-beating peak between them is not measured, whatever the curve does.
-    """
+    """Dashed verticals at the BPMs, behind everything else."""
     for index, s in enumerate(bpm_positions(positions)):
         axis.axvline(
             s, color="0.55", linestyle="--", linewidth=0.7, alpha=0.7, zorder=0,
@@ -110,12 +88,7 @@ def element_colour(element: str) -> str:
 
 
 def read_knobs(path: Path, positions: dict[str, float]) -> pd.DataFrame:
-    """``knobs.csv`` joined to the element ``s`` the sequence puts it at.
-
-    Knob names are ``<element><suffix>``; ``s`` comes from the model rather than
-    from anything stored beside the fit, so a figure can never be drawn against
-    a lattice the fit did not use.
-    """
+    """``knobs.csv`` joined to the element ``s`` from the model sequence (``<element><suffix>`` knob names)."""
     frame = pd.read_csv(path)
     lowered = {name.casefold(): s for name, s in positions.items()}
     rows = []
@@ -132,12 +105,7 @@ def figure_knobs_by_s(
     knobs: pd.DataFrame, option: str, output: Path,
     bpm_s: dict[str, float] | None = None,
 ) -> None:
-    """One panel per free family: the fitted value of every magnet, against ``s``.
-
-    Error bars are the fit's own ``JᵀWJ`` uncertainties. A lumped family shows
-    as neighbouring bars at identical height -- which is the point of lumping,
-    and worth being able to see rather than take on trust.
-    """
+    """One panel per free family: the fitted value of every magnet against ``s``, with the fit's ``JᵀWJ`` errors."""
     present = [suffix for suffix in PANELS if (knobs["suffix"] == suffix).any()]
     if not present:
         logger.warning("%s: no plottable knob families", option)
@@ -180,12 +148,7 @@ def figure_knob_overlay(
     matrix: Path, options: list[str], suffix: str, positions: dict[str, float],
     output: Path,
 ) -> None:
-    """One family, every option overlaid element by element.
-
-    An rms says two options ask for a correction of the same size. This says
-    whether they ask for the *same* correction, which is the question that
-    decides whether the answer is real.
-    """
+    """One family, every option overlaid element by element."""
     label, scale = PANELS[suffix]
     figure, axis = plt.subplots(figsize=(14, 5.0), constrained_layout=True)
     mark_bpms(axis, positions, label=True)
@@ -217,15 +180,7 @@ def figure_tilt_vs_dispersion(
     matrix: Path, predictions: Path, option: str, positions: dict[str, float],
     output: Path,
 ) -> None:
-    """The figure the roll spec predicted: fitted tilt against vertical dispersion.
-
-    ``docs/studies/quadrupole-roll.md`` argues the measured 0.164 m of
-    vertical dispersion needs a skew source, because every other family in the
-    fit makes vertical dispersion only through the vertical orbit that caps it.
-    Tilt is that source, so the test of the argument is whether freeing it moves
-    the modelled vertical dispersion onto the measurement -- not whether the loss
-    went down.
-    """
+    """Fitted tilt against vertical dispersion (``docs/studies/quadrupole-roll.md``)."""
     knobs_path = matrix / option / "knobs.csv"
     dispersion_path = predictions / f"{option}.dispersion.parquet"
     if not knobs_path.exists() or not dispersion_path.exists():

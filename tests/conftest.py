@@ -1,10 +1,6 @@
 """Fake PSB ring-3 data for the LOCO tests, generated with xsuite.
 
-The truth is made by ``xtrack``/``xtrack_tools`` and fitted by MAD-NG. That is
-the point of the arrangement: a convention error shared between the model and the
-data -- a sign on a corrector kick, a factor between ``pt`` and ``dp/p`` -- would
-cancel out of the answer if one twiss produced both, and would not be caught by
-any assertion. Making the data in a different code means it cannot cancel.
+Truth comes from ``xtrack`` and is fitted by MAD-NG, so a convention error shared by data and model cannot cancel.
 """
 
 from __future__ import annotations
@@ -64,12 +60,7 @@ def psb_env(sequence_file, tmp_path_factory):
 
 @pytest.fixture
 def psb_line(psb_env):
-    """A private copy of the unperturbed ring-3 line.
-
-    A copy per test, not the session environment's line: every fixture below
-    installs errors or trims a corrector, and a shared line would carry those
-    into whichever test happened to run next.
-    """
+    """A private copy of the unperturbed ring-3 line, per test (fixtures install errors or trim correctors)."""
     return psb_env.lines[SEQ_NAME].copy()
 
 
@@ -86,11 +77,7 @@ def quad_names(psb_line) -> list[str]:
 
 @pytest.fixture
 def truth_errors(psb_line, quad_names) -> dict[str, float]:
-    """Known individual-quadrupole ``k1`` errors: the answer a fit must recover.
-
-    A realistic ~1e-3 relative gradient error on a named subset. Returned rather
-    than applied, so a test can compare against it.
-    """
+    """Known individual-quadrupole ``k1`` errors (~1e-3 relative on a named subset), returned so a test can compare against them."""
     rng = np.random.default_rng(20260821)
     return {
         name: float(psb_line[name].k1) * float(rng.normal(0.0, 1e-3))
@@ -100,12 +87,7 @@ def truth_errors(psb_line, quad_names) -> dict[str, float]:
 
 @pytest.fixture
 def truth_line(psb_env, truth_errors):
-    """The perturbed machine: :func:`truth_errors` plus a vertical misalignment.
-
-    The misalignment is what keeps the *nominal* closed orbit from being flat,
-    which is what makes Method 2's delta subtraction load-bearing rather than
-    trivially true -- subtracting a flat orbit changes nothing.
-    """
+    """The perturbed machine: :func:`truth_errors` plus a vertical misalignment (so the nominal closed orbit is not flat)."""
     xtt = _require("xtrack_tools")
     line = psb_env.lines[SEQ_NAME].copy()
     for name, error in truth_errors.items():
@@ -115,12 +97,7 @@ def truth_line(psb_env, truth_errors):
 
 
 def orbit_frame(line, bpm_names: list[str], *, noise: float = 0.0, seed: int = 0) -> pd.DataFrame:
-    """Closed orbit at the BPMs as the ``X/ERRX/Y/ERRY`` frame the fitters take.
-
-    Converted through ``xsuite_tws_to_ng`` rather than read straight off the
-    xsuite table, so the column names, signs and momentum convention are the ones
-    MAD-NG uses instead of ones assumed to match.
-    """
+    """Closed orbit at the BPMs as the ``X/ERRX/Y/ERRY`` frame the fitters take, via ``xsuite_tws_to_ng``."""
     xtt = _require("xtrack_tools")
     twiss = xtt.xsuite_tws_to_ng(line.twiss(method="4d"))
     names = [name.upper() for name in bpm_names]
@@ -139,8 +116,7 @@ def orbit_frame(line, bpm_names: list[str], *, noise: float = 0.0, seed: int = 0
 def fake_orbits(bpm_names):
     """``fake_orbits(line, corrector, dk, ...)`` -> the orbit at that corrector setting.
 
-    The sign convention is xsuite's and is pinned by ``test_naming.py``:
-    ``knl[0] = -hkick`` horizontally, ``ksl[0] = +vkick`` vertically.
+    Sign convention is xsuite's, pinned by ``test_naming.py``: ``knl[0] = -hkick``, ``ksl[0] = +vkick``.
     """
 
     def _orbits(line, corrector: str | None = None, dk: float = 0.0, **kwargs) -> pd.DataFrame:
@@ -161,18 +137,10 @@ def fake_orbits(bpm_names):
 
 @pytest.fixture
 def fake_response(fake_orbits, bpm_names):
-    """``fake_response(line, correctors, dk)`` -> the response frame Method 1 fits.
+    """``fake_response(line, correctors, dk)`` -> the response frame Method 1 fits, as a central difference.
 
-    Built as a central difference so it is the derivative at the nominal setting,
-    matching what a symmetric ``0, +-dk, +-2dk`` scan measures rather than a
-    one-sided slope.
-
-    ``dk`` is an LSA ``/K`` step, because that is what the fitters are handed and
-    what the machine reports -- not a MAD kick. ``fake_orbits`` works in MAD's
-    convention, so the step is converted through :func:`lsa_k_to_rad` on the way
-    in and the slope back out. This matters: the two differ by a sign in the
-    horizontal plane, and a fixture that skipped the conversion would be testing
-    the fit against data no machine would ever produce.
+    ``dk`` is an LSA ``/K`` step, converted through :func:`lsa_k_to_rad` to MAD's convention and back
+    (the two differ by a sign horizontally).
     """
     from loco_common.naming import lsa_k_to_rad  # noqa: PLC0415
 
@@ -201,14 +169,9 @@ def fake_response(fake_orbits, bpm_names):
 
 @pytest.fixture
 def fake_scan():
-    """``fake_scan(slopes, noise=..)`` -> the ``(points, orbit_by_path)`` pair.
+    """``fake_scan(slopes, noise=..)`` -> the ``(points, orbit_by_path)`` pair, without writing SDDS.
 
-    Stands in for the SDDS side of a real scan without writing SDDS: the loaders
-    that read the files are exercised separately, and everything downstream of
-    them takes exactly this pair. Each BPM's orbit is linear in ``offset_k`` with
-    a known slope, so the fitted slope has an exact right answer. As in the real
-    scan, each corrector ends with a ``reset`` to zero, so the untrimmed machine
-    is acquired more than once.
+    Each BPM's orbit is linear in ``offset_k`` with a known slope; each corrector ends with a ``reset`` to zero, as in the real scan.
     """
     from loco_common.measured_response import ScanPoint  # noqa: PLC0415
 
@@ -234,8 +197,7 @@ def fake_scan():
                 path = Path(f"/fake/{corrector}_{step}_{rf_offset:+g}.sdds")
                 orbit = {}
                 for label in ("X", "Y"):
-                    # A static, corrector-independent baseline orbit: the
-                    # reference subtraction has to remove it exactly.
+                    # Static baseline orbit the reference subtraction must remove exactly.
                     values = np.full(len(bpms), baseline)
                     if label.lower() == plane:
                         values = values + offset_k * np.array([per_bpm[b] for b in bpms])

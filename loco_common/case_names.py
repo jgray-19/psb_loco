@@ -1,23 +1,14 @@
-"""The one place a result directory's name is turned into English.
+"""Turns a result directory slug (``<planes>__<families>__<lump>``) into English.
 
-A fit lives in ``results/matrix/<planes>__<families>__<lump>`` -- ``none__k1__none``,
-``xy__k1+b+dy+t__bpm-family``. That slug is an address, not a description: it
-says nothing to a reader about what the fit was allowed to move, and a report
-built out of it asks the reader to hold a three-part code in their head while
-comparing rows.
-
-So the slug never reaches a page. Every heading, table row, figure title, axis
-tick and legend entry goes through :func:`case_sentence` or one of the shorter
-forms here. Keeping it in one module rather than a dict per renderer is the
-point: the reports, the figures and the correlation axes have to agree on what a
-case is called, and three copies of the mapping is how two of them go stale.
+Every heading, table row, figure title, axis tick and legend entry goes through
+:func:`case_sentence` or one of the shorter forms here.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-#: What each free-family letter lets the fit move, as the word the reports use.
+#: Word the reports use for each free-family letter.
 FAMILY_WORD = {
     "k1": "gradients",
     "b": "bends",
@@ -27,30 +18,25 @@ FAMILY_WORD = {
     "k1s": "skew gradient errors",
 }
 
-#: The orbit-matching mode, in words. ``none`` subtracts a reference orbit from
-#: both planes; ``xy`` keeps the machine's own closed orbit in both, which is the
-#: only thing a bend or a quadrupole offset can be fitted against.
+#: Orbit-matching mode in words: ``none`` subtracts a reference orbit, ``xy`` keeps the closed orbit.
 PLANES_PHRASE = {
     "none": "both planes as delta orbits",
     "xy": "both planes absolute",
 }
 
-#: Short form of the same, for a figure title that has no room for the long one.
+#: Short form for figure titles.
 PLANES_SHORT = {
     "none": "delta orbit",
     "xy": "absolute orbit",
 }
 
-#: How the per-magnet families were parametrised. ``none`` is one knob per
-#: magnet; ``bpm-family`` ties them by lattice cell and QFO/QDE family. The
-#: counts are for the 48 ring quadrupoles: 16 cells, each one QDE between two
-#: QFO, one BPM per cell.
+#: Parametrisation: ``none`` is one knob per magnet, ``bpm-family`` ties them by cell and QFO/QDE family (48 quadrupoles, 16 cells).
 LUMP_PHRASE = {
     "none": "one knob per magnet",
     "bpm-family": "lumped to 32 knobs by cell",
 }
 
-#: Knob count per per-magnet family, as a bare number for a narrow table column.
+#: Knob count per lump, for narrow table columns.
 LUMP_COUNT = {
     "none": "48",
     "bpm-family": "32",
@@ -108,29 +94,20 @@ class Case:
 
 
 def parse_case(slug: str) -> Case:
-    """``xy__k1+b+dy__bpm-family`` -> the :class:`Case` describing it.
-
-    A slug that is not three parts is not a fitted option -- the start model is
-    the one that reaches here -- and comes back with empty fields so callers can
-    fall back to :func:`display_name` without a special case of their own.
-    """
+    """``xy__k1+b+dy__bpm-family`` -> the :class:`Case`; a non-three-part slug (start model) gets empty fields."""
     parts = slug.split("__")
     if len(parts) != 3:
         return Case(slug=slug, planes="", families="", lump="")
     return Case(slug=slug, planes=parts[0], families=parts[1], lump=parts[2])
 
 
-#: Options that are not a Method-2 case slug, and what they are called instead.
-#: ``method1`` is the MAD-NG parametric-twiss fit. It writes the same
-#: cell-grouped ``.dk1l`` knobs into the same results root, so every figure and
-#: table reads it exactly as it reads a case -- only its name comes from here.
+#: Options that are not a Method-2 case slug, and their names.
 OTHER_OPTIONS = {
     "method1": "Method 1, lumped to 32 knobs by cell",
     "start-model": "start model",
 }
 
-#: The one Method-1 option, as it is named on disk under a campaign's results
-#: root. It is not produced by ``run_method2`` and is not a case slug.
+#: The Method-1 option's on-disk name; not a case slug.
 METHOD1_OPTION = "method1"
 
 
@@ -170,12 +147,7 @@ class Page:
 
     @property
     def mixed_planes(self) -> bool:
-        """Whether the page's options were fitted with different orbit modes.
-
-        Three pages hold one mode each and never say so in a case name; the
-        per-magnet page holds one option from each mode, where the mode is the
-        thing that distinguishes them and has to be in the label.
-        """
+        """Whether the page's options were fitted with different orbit modes (then labels name the mode)."""
         return len({case.planes for case in self.case_objects if case.planes}) > 1
 
     def label(self, slug: str) -> str:
@@ -189,25 +161,11 @@ class Page:
 
 
 def _cases(planes: str, families: tuple[str, ...]) -> tuple[str, ...]:
-    """The cases of a page: gradients lumped to 32, then further families beside them.
-
-    The lumping arm is ``bpm-family`` throughout, which ties *every* free
-    per-magnet family to 32 -- so a page's rolls are always lumped to whatever
-    its gradients are, which is the comparison the study is set up to make.
-
-    Neither arm frees a per-magnet knob. Rolls per magnet were never a case;
-    gradients per magnet were, and have been moved off these pages onto
-    :data:`PER_MAGNET_PAGE`, which is where 48 gradients against 16 BPMs per
-    plane is shown for what it is rather than compared as an equal.
-    """
+    """The cases of a page, all lumped ``bpm-family``; per-magnet fits live on :data:`PER_MAGNET_PAGE`."""
     return tuple(f"{planes}__{family}__bpm-family" for family in families)
 
 
-#: The delta-orbit page. A reference orbit is subtracted from both planes, so
-#: the fit sees a pure response and a constant kick is invisible to it -- which
-#: is why neither bends nor quadrupole ``dy`` appear here. Rolls do not cancel:
-#: a rolled quadrupole's skew kick goes as the beam position at the magnet, the
-#: very thing the correctors move, so ``tilt`` belongs with ``k1``.
+#: Delta-orbit page: a constant kick cancels, so no bends or ``dy``; rolls do not cancel.
 DELTA_PAGE = Page(
     slug="delta",
     planes="none",
@@ -224,10 +182,7 @@ DELTA_PAGE = Page(
     cases=_cases("none", ("k1", "k1+t")),
 )
 
-#: The absolute-orbit page. Both planes keep the machine's own closed orbit, so
-#: bends and quadrupole offsets are constrained and have to be free: the static
-#: orbit is the measurement they exist to explain, and freezing either leaves
-#: the gradients absorbing it.
+#: Absolute-orbit page: bends and offsets are constrained by the static orbit and must be free.
 ABSOLUTE_PAGE = Page(
     slug="absolute",
     planes="xy",
@@ -244,11 +199,7 @@ ABSOLUTE_PAGE = Page(
     cases=_cases("xy", ("k1+b+dy", "k1+b+dy+t")),
 )
 
-#: The per-magnet page: the option every other page used to carry as its first
-#: case, one per retained orbit mode, collected where the comparison is between them and
-#: not with the lumped fits. 48 gradients against 16 BPMs per plane is the
-#: parametrisation the study is set up to reject, so it is shown once, together,
-#: rather than three times beside the answer.
+#: Per-magnet page: one option per orbit mode.
 PER_MAGNET_PAGE = Page(
     slug="per-magnet",
     planes="",
@@ -262,14 +213,7 @@ PER_MAGNET_PAGE = Page(
     cases=("none__k1__none", "xy__k1+b+dy__none"),
 )
 
-#: The Method-1 page. Method 1 fits the measured response matrix directly, with
-#: MAD-NG's parametric twiss and the same 32 cell-grouped knobs Method 2 lumps
-#: to, so it is a delta-orbit fit by construction and has no absolute-plane form
-#: -- it appears on this page and nowhere else. Its neighbour is the Method-2
-#: delta-orbit fit at that same parametrisation, which is the comparison the page
-#: exists for: two solvers, two objectives, one set of knobs. The per-magnet fit
-#: is not on it, because it is not the same parametrisation and the page is not
-#: where that argument is made.
+#: Method-1 page: delta-orbit only, beside the Method-2 fit at the same 32 knobs.
 METHOD1_PAGE = Page(
     slug="method1",
     planes="none",
@@ -282,21 +226,15 @@ METHOD1_PAGE = Page(
     cases=(METHOD1_OPTION, "none__k1__bpm-family"),
 )
 
-#: The two orbit-matching modes, in nav order. Method 2 throughout: these are
-#: the pages ``run_campaign_fits`` fits.
+#: The pages ``run_campaign_fits`` fits, in nav order.
 PAGES = (DELTA_PAGE, ABSOLUTE_PAGE)
 
-#: Every page that gets rendered, including the two that only re-show options
-#: fitted for the pages above.
+#: Every rendered page, including those that re-show options fitted for the above.
 ALL_PAGES = (*PAGES, PER_MAGNET_PAGE, METHOD1_PAGE)
 
 
 def every_page_case() -> list[str]:
-    """Every Method-2 case any page shows, deduplicated, in page order.
-
-    Method 1 is not in it: it is not produced by ``run_method2`` and has no
-    case slug, so a driver that turns a slug into fitter flags must not see it.
-    """
+    """Every Method-2 case any page shows, deduplicated, in page order (Method 1 excluded)."""
     return list(
         dict.fromkeys(
             slug
@@ -308,30 +246,18 @@ def every_page_case() -> list[str]:
 
 
 def every_option() -> list[str]:
-    """Every fitted option a page shows, Method 1 included.
-
-    What the scoring and the optics cache work over: both read a directory of
-    knobs under a campaign's results root and neither cares which fitter wrote
-    it.
-    """
+    """Every fitted option a page shows, Method 1 included."""
     return list(dict.fromkeys(slug for page in ALL_PAGES for slug in page.cases))
 
 
-#: Which fit mode the scenario-comparison perturbation figures' fitted half is
-#: drawn from. Named once here rather than argued in each script: that page is
-#: not per-mode, so the choice has to be the same for every campaign or the
-#: difference between two of them is a difference of fits.
+#: Fit mode the perturbation figures' fitted half is drawn from; fixed across campaigns.
 LOCO_OPTICS_MODE = "multi"
 
-#: The fits that half is drawn from, as ``(slug, case, what the fit could
-#: move)``. Two of them, on two pages rather than two curves on one: whether
-#: the fit was allowed quadrupole rolls decides whether it can put anything in
-#: the coupling panels at all, and a page mixing the two answers neither
-#: question. The slug names both the figure folder and the page.
+#: ``(slug, case, what the fit could move)``; the slug names the figure folder and page.
 LOCO_OPTICS_FITS = (
     ("gradients", "none__k1__bpm-family", "gradients only"),
     ("rolls", "none__k1+t__bpm-family", "gradients and rolls"),
 )
 
-#: The default of the two, for a caller that wants one.
+#: Default fit.
 LOCO_OPTICS_CASE = LOCO_OPTICS_FITS[0][1]

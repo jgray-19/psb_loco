@@ -1,10 +1,4 @@
-"""The campaigns are exactly psb_md's, and each keeps its products apart.
-
-The failure this guards against is quiet and expensive: a fit that reads one
-configuration's acquisitions against another's model, or writes over another's
-parquet cache. Nothing about either would raise -- the fit would converge and the
-numbers would be wrong -- so the separation is asserted rather than inspected.
-"""
+"""The campaigns are exactly psb_md's, and each keeps its products apart (no cross-reading of acquisitions or caches)."""
 
 from __future__ import annotations
 
@@ -88,20 +82,26 @@ def test_build_model_takes_circuits_and_correctors_from_the_campaign(monkeypatch
     assert built[P17_P23_FINAL.slug].corrector_knobs != built[P23_P13_FINAL.slug].corrector_knobs
 
 
+def _values_after(argv: list[str], flag: str) -> list[str]:
+    """The values after *flag*, up to the next flag."""
+    rest = argv[argv.index(flag) + 1 :]
+    end = next((i for i, value in enumerate(rest) if value.startswith("--")), len(rest))
+    return rest[:end]
+
+
 def test_page_case_commands_match_the_matrix_script():
     """The page cases map to the flags ``run_loco_matrix.sh`` would use."""
     from scripts.run_campaign_fits import command
 
     argv = command("xy__k1+b+dy+t__bpm-family", "p23_p13_final", "seq", Path("out"))
     assert "--absolute-planes" in argv and argv[argv.index("--absolute-planes") + 1 : ][:2] == ["x", "y"]
-    assert "--optimise-bends" in argv
-    assert "--optimise-quad-dy" in argv
-    assert "--optimise-quad-tilt" in argv
-    assert "--no-optimise-quadrupoles" not in argv
+    assert _values_after(argv, "--errors") == ["quad:k1", "bend:k0"]
+    assert _values_after(argv, "--misalign") == ["quad:dy", "quad:tilt"]
     assert "--group-quadrupoles-by-cell" in argv
 
     frozen = command("none__t__none", "p17_p23_final", "seq", Path("out"))
-    assert "--no-optimise-quadrupoles" in frozen
+    assert _values_after(frozen, "--errors") == ["none"]
+    assert _values_after(frozen, "--misalign") == ["quad:tilt"]
     assert "--group-quadrupoles-by-cell" not in frozen
 
 
@@ -126,8 +126,7 @@ def test_momentum_commands_use_the_campaigns_rf_offsets_and_batch(mode):
     assert expected == (-2.0, 0.0, 2.0)
     assert _offsets_in(argv) == [f"{value:g}" for value in expected]
     assert "--batch-momenta" in argv
-    # Warm-started from the nominal-momentum fit: PREVIOUS_MODE sends both staged
-    # modes back to SINGLE, which is what the method page describes.
+    # Warm-started from the nominal-momentum fit: PREVIOUS_MODE sends both staged modes back to SINGLE.
     assert argv[argv.index("--initial-knobs") + 1].endswith(
         "results/matrix_p23_p13_final/xy__k1+b+dy+t__bpm-family/knobs.csv"
     )

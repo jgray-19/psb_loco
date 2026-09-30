@@ -1,33 +1,18 @@
 """Measured orbit response of PSB ring 3 to its DHZ/DVT correctors.
 
-``psb_md/scan_psb_loco.py`` steps each of six DHZ and six DVT correctors through
-``offset_k = 0, +dk, -dk, +2dk, -2dk`` and writes it back to its start-up value
-(a ``reset``) before the next one, once per RF-steering offset. The BPM
-acquisition runs independently of it, so the scan log only records *when* each
-setting was written. This module turns those acquisitions plus the logs of a
-campaign (:mod:`loco_common.campaign`) into the two things the fitters need:
+``psb_md/scan_psb_loco.py`` steps each corrector through ``offset_k = 0, +dk, -dk, +2dk, -2dk``
+(with a ``reset`` between correctors), once per RF-steering offset. The scan log records only when
+each setting was written; this module joins it to the BPM acquisitions of a campaign
+(:mod:`loco_common.campaign`) and produces:
 
-* :func:`measured_orbits` -- the closed orbit *change* at each scan point, which
-  is Method 2's target;
-* :func:`measured_response` -- the per-BPM slope ``d(orbit)/d(k)`` of those
-  changes, which is Method 1's target.
+* :func:`measured_orbits` -- the closed orbit change at each scan point (Method 2's target);
+* :func:`measured_response` -- the per-BPM slope ``d(orbit)/d(k)`` (Method 1's target).
 
-Both come from the same acquisitions and the same reference subtraction, so the
-two methods are fitting the same measurement in two different shapes rather than
-two differently-prepared datasets.
+Both use one reference for the whole scan, :func:`global_reference_orbit` (untrimmed, nominal RF):
+a per-RF reference would subtract away the dispersion signal. Method 1's slopes are independent of
+the reference (free intercept); Method 2's model side must take its own reference at ``pt = 0``.
 
-That reference is *one* orbit for the whole scan --
-:func:`global_reference_orbit`, the untrimmed machine at nominal RF -- not each
-corrector's own ``offset_k = 0`` point and not each RF setting's own. Using a
-per-RF reference would subtract the off-momentum orbit away, and the
-off-momentum orbit is dispersion: a real, quadrupole-sensitive signal that the
-multi-momentum mode exists to fit. Method 1's slopes are unchanged by the
-choice (its fit keeps the intercept free, so any constant reference cancels);
-Method 2's targets are not, and the model side has to match it by taking its own
-reference at ``pt = 0`` with the correctors nominal.
-
-Reading the SDDS files dominates the runtime (~650 acquisitions per campaign), so
-both products are cached to parquet under the campaign's cache files.
+Reading the SDDS files dominates the runtime (~650 acquisitions per campaign), so both products are cached to parquet.
 """
 
 from __future__ import annotations
@@ -54,10 +39,7 @@ logger = logging.getLogger(__name__)
 MEASUREMENT_PATTERN = "MULTITURN_ACQ__*.sdds"
 READ_WORKERS = 8
 
-#: The longest the scan holds one setting between two writes: two 10.8 s
-#: supercycles. The scan log does not record when the RF was changed for the next
-#: run, so an acquisition later than this after a log's final write is not a scan
-#: acquisition.
+#: Longest the scan holds one setting between writes (two 10.8 s supercycles); later acquisitions after a log's final write are not scan acquisitions.
 MAX_HOLD = pd.Timedelta(seconds=21.6)
 
 #: Value and error columns of each plane, in the orbit frames this module builds.
@@ -103,13 +85,7 @@ def load_measurements(measurements_path: Path) -> dict[pd.Timestamp, Path]:
 
 
 def read_scan_log(json_path: Path) -> list[dict]:
-    """Every setting one scan log wrote, in time order: ``scan_point`` and ``reset``.
-
-    A reset writes the corrector back to its start-up value, so it is the
-    untrimmed machine (``offset_k = 0``) and its acquisitions count like any
-    other. The ``restore`` events after the scan rewrite the same start-up values
-    and change nothing.
-    """
+    """Every setting one scan log wrote, in time order: ``scan_point`` and ``reset`` (a reset is the untrimmed machine)."""
     entries = [json.loads(line) for line in json_path.read_text().splitlines() if line.strip()]
     entries = [entry for entry in entries if entry["event"] in ("scan_point", "reset")]
     return sorted(entries, key=lambda entry: pd.to_datetime(entry["write_started_utc"]))
@@ -118,16 +94,11 @@ def read_scan_log(json_path: Path) -> list[dict]:
 def find_scan_measurements(
     entries: list[dict], measurements: dict[pd.Timestamp, Path], rf_offset: float
 ) -> list[ScanPoint]:
-    """Tag every acquisition taken while one of a log's settings was held.
+    """Tag every acquisition taken while one of a log's settings was held (repeats are all kept).
 
-    A setting holds from its write to the next write. The cycle that triggered a
-    write still measured the previous setting, and its file is stamped just before
-    that cycle, so the write time separates the two on both sides. Repeat
-    acquisitions of one setting are all kept. Two ends of the log differ:
-
-    * the first setting is offset zero, the start-up state the machine was
-      already in, so it also owns the cycles since the scan's first cycle stamp;
-    * no write ends the last setting, so it is held for at most :data:`MAX_HOLD`.
+    A setting holds from its write to the next write; the file of the cycle that triggered a write is
+    stamped just before it. The first setting (offset zero, the start-up state) also owns the cycles
+    since the scan's first cycle stamp; the last is held for at most :data:`MAX_HOLD`.
     """
     times = list(measurements)
     points = []
@@ -154,11 +125,7 @@ def find_scan_measurements(
 def load_scan(
     campaign: Campaign,
 ) -> tuple[list[ScanPoint], dict[Path, dict[str, tuple[pd.Series, pd.Series]]]]:
-    """Read every scan log of *campaign* and every acquisition they point at.
-
-    Each distinct file is read exactly once and reused for both planes and every
-    RF setting; that read is the whole cost of this module.
-    """
+    """Read every scan log of *campaign* and every acquisition they point at, each file once."""
     measurements = load_measurements(campaign.measurements_path)
     points = [
         point
@@ -178,13 +145,7 @@ def load_scan(
 def cached_scan(
     campaign: Campaign, *, refresh: bool = False
 ) -> tuple[list[ScanPoint], dict[Path, dict[str, tuple[pd.Series, pd.Series]]]]:
-    """:func:`load_scan`, cached to parquet: the same ``(points, orbit_by_path)``.
-
-    The SDDS read is ~10 minutes for a whole campaign and every derived product --
-    both methods, every RF offset, the plots -- starts from it, so it is cached
-    whole rather than per product. Pass *refresh* if the acquisitions or the
-    association have changed.
-    """
+    """:func:`load_scan`, cached whole to parquet (the SDDS read is ~10 minutes); pass *refresh* if the acquisitions changed."""
     orbit_cache = campaign.cache_file("scan_orbits.parquet")
     point_cache = campaign.cache_file("scan_points.parquet")
     if orbit_cache.exists() and point_cache.exists() and not refresh:
@@ -250,19 +211,11 @@ def pooled_intershot_noise(
 ) -> pd.DataFrame:
     """Per-BPM shot-to-shot orbit jitter, pooled over every untrimmed repeat group.
 
-    The untrimmed acquisitions (``offset_k = 0``) at one RF offset are repeats of
-    one machine state: 24 at nominal RF (the global reference), 12 at each other
-    RF setting. Their scatter is what one acquisition's turn-averaged error
-    (``ERRX``/``ERRY``, ~0.2 um) misses -- shot-to-shot jitter and corrector
-    hysteresis, measured at 3-5 um in x. Grouping by RF offset keeps each
-    acquisition in exactly one group.
-
-    Groups have different means but share one noise process, so the variance is
-    pooled over degrees of freedom, ``sum((n_g - 1) s_g**2) / sum(n_g - 1)``,
-    rather than an RMS of per-group values that would weight a 12-frame group like
-    the 24-frame one. The mean turn-noise variance is then subtracted: each frame's
-    scatter already contains it, and :func:`average_orbit_frames` adds it back in
-    quadrature.
+    Untrimmed acquisitions at one RF offset repeat one machine state (24 at nominal RF, 12 elsewhere).
+    Their scatter captures jitter and corrector hysteresis (3-5 um in x) that the turn-averaged
+    ``ERRX``/``ERRY`` (~0.2 um) misses. Variance is pooled over degrees of freedom,
+    ``sum((n_g - 1) s_g**2) / sum(n_g - 1)``, and the mean turn-noise variance subtracted
+    (:func:`average_orbit_frames` adds it back).
 
     Returns ``ERRX``/``ERRY`` per BPM, in metres.
     """
@@ -299,15 +252,9 @@ def average_orbit_frames(
 ) -> pd.DataFrame:
     """Average acquisitions of one machine state: plain mean, error of the mean.
 
-    Two independent noise sources, added in quadrature:
-
-    - *turn* noise, ``sqrt(sum(err**2)) / N`` from each frame's ``ERRX``/``ERRY``;
-    - *intershot* noise, ``intershot / sqrt(N)``, the per-BPM jitter from
-      :func:`pooled_intershot_noise`. It applies to single acquisitions too
-      (``N = 1``), which have no scatter of their own to estimate it from.
-
-    Pass *intershot* only for raw acquisitions. Frames that are already averages
-    (``average_zero_step``, the per-RF absolute orbits) carry it in their errors.
+    Errors add in quadrature: *turn* noise ``sqrt(sum(err**2)) / N`` and *intershot* noise
+    ``intershot / sqrt(N)`` (from :func:`pooled_intershot_noise`, which also applies at ``N = 1``).
+    Pass *intershot* only for raw acquisitions; already-averaged frames carry it.
     """
     frames = list(frames)
     n = len(frames)
@@ -326,10 +273,8 @@ def global_reference_orbit(
 ) -> pd.DataFrame:
     """The one orbit every measurement is referred to: no trim, nominal RF.
 
-    Every untrimmed acquisition at ``rf_offset = 0`` -- each corrector's zero
-    step and every reset -- sat on the same machine, so these are repeats of a
-    single orbit and are averaged; the error of the mean shrinks accordingly.
-    *intershot* defaults to :func:`pooled_intershot_noise` of the same scan.
+    All untrimmed acquisitions at ``rf_offset = 0`` are averaged. *intershot* defaults to
+    :func:`pooled_intershot_noise` of the same scan.
     """
     if intershot is None:
         intershot = pooled_intershot_noise(points, orbit_by_path)
@@ -349,12 +294,8 @@ def subtract_reference(
 ) -> pd.DataFrame:
     """``frame - reference`` per plane, errors added in quadrature.
 
-    A plane named in *absolute_planes* is passed through untouched: no reference
-    is removed and no reference error is added, because there is no reference
-    orbit on that side of the fit. That plane's target is then the machine's
-    *absolute* closed orbit, which is what dipole errors and quadrupole
-    misalignments -- not gradients -- have to explain. The model side has to
-    match, via ``ClosedOrbitSeries.absolute_planes``.
+    A plane in *absolute_planes* passes through untouched (no reference, no added error), so its
+    target is the absolute closed orbit; the model side must match via ``ClosedOrbitSeries.absolute_planes``.
     """
     unknown = set(absolute_planes) - set(PLANE_COLUMNS)
     if unknown:
@@ -383,31 +324,20 @@ def measured_orbits(
 ) -> dict[tuple[str, float], pd.DataFrame]:
     """Closed orbits per ``(corrector, offset_k)``, as ``X/ERRX/Y/ERRY`` in metres.
 
-    Pass either a campaign or its ``(points, orbit_by_path)``. Repeat
-    acquisitions of one ``(corrector, offset_k)`` -- a setting held over two
-    cycles, or a corrector's zero step and its reset -- are averaged first.
+    Pass a campaign or its ``(points, orbit_by_path)``. Repeat acquisitions of one key are averaged first.
 
-    With *delta* (the default, and what Method 2 fits) the single global
-    reference orbit -- untrimmed correctors at nominal RF -- is subtracted from
-    every acquisition and its error added in quadrature. At ``rf_offset = 0``
-    the ``offset_k = 0`` points are then zero to within noise and are dropped;
-    at any other RF setting they are *not*, they are that momentum's dispersion
-    orbit, and they are kept under the key ``(corrector, 0.0)``.
+    With *delta* (default; Method 2's target) the global reference is subtracted from every
+    acquisition. At ``rf_offset = 0`` the ``offset_k = 0`` points are then zero and dropped; at other
+    RF settings they are that momentum's dispersion orbit, kept under ``(corrector, 0.0)``.
 
-    *absolute_planes* exempts a plane from that subtraction. Two consequences:
-    the exempted plane keeps the machine's static closed orbit, and the
-    ``rf_offset = 0, offset_k = 0`` acquisitions stop being zero by
-    construction -- they become the untrimmed static orbit itself, the single
-    most direct constraint on bends and quadrupole ``dy``, so they are kept
-    rather than dropped.
+    *absolute_planes* exempts a plane from the subtraction; the ``rf_offset = 0, offset_k = 0``
+    acquisitions then carry the static closed orbit and are kept.
 
-    Every acquisition's error includes *intershot* noise, which defaults to
-    :func:`pooled_intershot_noise` of the scan; pass it to compute it once.
+    Every error includes *intershot* noise (default :func:`pooled_intershot_noise`; pass it to compute it once).
     """
     if points is None or orbit_by_path is None:
         points, orbit_by_path = cached_scan(campaign)
-    # Pass *reference* and *intershot* when *points* has been pre-filtered: both
-    # need the untrimmed acquisitions of every RF offset.
+    # Pass *reference* and *intershot* when *points* is pre-filtered: both need every RF offset's untrimmed acquisitions.
     if intershot is None:
         intershot = pooled_intershot_noise(points, orbit_by_path)
     if delta and reference is None:
@@ -431,12 +361,7 @@ def measured_orbits(
 def _weighted_slope(
     offsets: np.ndarray, values: np.ndarray, errors: np.ndarray
 ) -> tuple[float, float, float]:
-    """Weighted straight-line fit; return slope, its error, and the intercept.
-
-    A free intercept is kept even though the reference point is zero by
-    construction: forcing the line through it would give that one acquisition the
-    weight of the whole fit.
-    """
+    """Weighted straight-line fit; return slope, its error, and the intercept (free, so the zero point is not over-weighted)."""
     finite = np.isfinite(values) & np.isfinite(errors) & (errors > 0)
     if finite.sum() < 2 or len(np.unique(offsets[finite])) < 2:
         return float("nan"), float("nan"), float("nan")
@@ -459,21 +384,14 @@ def measured_response(
 ) -> pd.DataFrame:
     """Per-BPM orbit response ``d(orbit)/d(k)`` in m/rad, one row per (BPM, corrector).
 
-    Columns: ``NAME``, ``CORRECTOR``, ``PLANE`` (the BPM channel), ``SLOPE``,
-    ``ERRSLOPE`` and ``INTERCEPT`` (which the fit keeps free and the methods
-    ignore; it is there so a plot can draw the line that was actually fitted).
-    Both BPM channels are retained for every corrector, giving the conventional
-    ``(2*N_BPM) x N_corrector`` orbit-response matrix. Every acquisition enters
-    the line fit, repeats included, each with the *intershot* noise
-    (default :func:`pooled_intershot_noise`) added to its turn error.
+    Columns: ``NAME``, ``CORRECTOR``, ``PLANE``, ``SLOPE``, ``ERRSLOPE``, ``INTERCEPT`` (unused by
+    the methods; lets a plot draw the fitted line). Both BPM channels are kept per corrector. Every
+    acquisition enters the fit, each with *intershot* noise (default :func:`pooled_intershot_noise`).
     """
     if points is None or orbit_by_path is None:
         points, orbit_by_path = cached_scan(campaign)
     selected = [p for p in points if p.rf_offset == rf_offset]
-    # Any constant reference gives the same slope -- the fit keeps the intercept
-    # free -- so this only has to be *a* consistent orbit. It is the global one
-    # for the sake of the intercept a plot draws, and so both methods can say
-    # they subtracted the same thing.
+    # The slope is reference-independent (free intercept); use the global one for the plotted intercept and consistency.
     if intershot is None:
         intershot = pooled_intershot_noise(points, orbit_by_path)
     if reference is None:

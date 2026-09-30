@@ -71,8 +71,7 @@ def family_by_s(results: Results, page: Page, suffix: str, output: Path) -> list
         return []
 
     family = FAMILIES[suffix]
-    # More cases than the panel cap allows spill into numbered figures rather
-    # than into a taller one.
+    # Cases beyond the panel cap spill into numbered figures.
     items = list(blocks.items())
     chunks = [items[i:i + MAX_PANELS] for i in range(0, len(items), MAX_PANELS)]
     written = []
@@ -118,8 +117,7 @@ def family_significance(results: Results, page: Page, suffix: str,
     for slug in results.valid(page.cases):
         block = results.knobs(slug)
         block = block[block["suffix"] == suffix].sort_values("s")
-        # Method 1 comes off MAD.match and reports no covariance (NaN sigma), so it
-        # has no significance to draw.
+        # Method 1 reports no covariance (NaN sigma), so it has no significance to draw.
         if not block.empty and (block["uncertainty"].to_numpy() > 0).any():
             blocks[slug] = block
     if not blocks:
@@ -181,8 +179,7 @@ def prefit_vs_matched(start: pd.DataFrame,
         values = start[column].to_numpy() if column in start.columns else np.zeros(len(start))
         out[f"dispersion_{plane}"] = (s, values)
     for rdt in ("f1001", "f1010"):
-        # The machine-knob model's own coupling: an RDT amplitude minus another is not
-        # a meaningful subtraction.
+        # An RDT amplitude minus another is not meaningful, so draw the model's own coupling.
         if rdt in start.columns:
             out[f"coupling_{rdt}"] = (s, start[rdt].to_numpy())
     out["_elements"] = (s, common.to_numpy())
@@ -248,8 +245,7 @@ def optics(results: Results, page: Page, output: Path) -> list[Path]:
     if fitted is None:
         return []
     frames, start, matched = fitted
-    # Only the tune-matched reference: the machine-knob model is on every panel
-    # already, as the dotted un-fitted curve.
+    # Only the tune-matched reference; the machine-knob model is already the dotted curve.
     measured = results.measured_optics
     if not measured.empty and f"beat_x_{MEASURED_REFERENCE}" not in measured.columns:
         return []
@@ -267,13 +263,7 @@ def optics(results: Results, page: Page, output: Path) -> list[Path]:
 
 
 def _phase_advance_from_mu(mu: pd.Series, s: pd.Series) -> tuple[np.ndarray, np.ndarray]:
-    """The BPM-to-BPM phase advance an absolute per-element mu implies.
-
-    Only the 16 measured BPMs count as a station; everything the model twisses
-    in between (drifts, magnets, the unmeasured tune BPM) is not a phase-advance
-    endpoint. Returned at the *downstream* BPM's ``s``, matching
-    ``measured_phase.parquet``.
-    """
+    """The BPM-to-BPM phase advance of the 16 measured BPMs, at the downstream BPM's ``s``."""
     bpms = [name for name in mu.index if MEASURED_BPM_RE.match(str(name).upper())]
     ordered = sorted(bpms, key=lambda name: s.loc[name])
     values = mu.loc[ordered].to_numpy()
@@ -558,12 +548,7 @@ def case_tunes(results: Results, page: Page, output: Path) -> list[Path]:
         axis.axhline(0.0, color="k", linewidth=1.4)
         axis.axhspan(-spread[plane], spread[plane], color="0.5", alpha=0.25, zorder=0)
         axis.set_ylabel(f"$Q_{name}$ - measured\n({measured[plane]:.4f})", fontsize=8)
-        # ``annotate`` does not participate in Matplotlib's autoscaling.  That
-        # is barely noticeable for the normal-tune lattice, whose errors are
-        # all small and positive, but the larger, two-sided inverted-tune
-        # errors put the labels outside the axes and into the neighbouring
-        # panel.  Include the measurement band and leave asymmetric room for
-        # the labels at both ends of the bars.
+        # ``annotate`` does not autoscale: include the measurement band and leave room for labels at both ends.
         low = min(0.0, -spread[plane], *values)
         high = max(0.0, spread[plane], *values)
         span = max(high - low, 1e-9)
@@ -574,8 +559,7 @@ def case_tunes(results: Results, page: Page, output: Path) -> list[Path]:
     return [_save(figure, output / f"{page.slug}_case_tunes.png")]
 
 
-#: The two Dp/p calibrations the measured chromaticity is scored against. A
-#: case's own fit is one number; only the reference it is judged against moves.
+#: The two Dp/p calibrations the measured chromaticity is scored against.
 CALIBRATIONS = (
     ("dq_dpt", "dq_dpt_error", "XImeter Dp/p", ""),
     ("dq_dpt_closed_orbit", "dq_dpt_closed_orbit_error", "closed-orbit Dp/p", "//"),
@@ -649,8 +633,7 @@ def case_chromaticity(results: Results, page: Page, output: Path) -> list[Path]:
     return [_save(figure, output / f"{page.slug}_case_chromaticity.png")]
 
 
-#: The reference lattice the measured optics is drawn against: the same
-#: lattice, tunes matched to the measurement.
+#: The reference lattice the measured optics is drawn against (tunes matched).
 MEASURED_REFERENCE = "matched_model"
 MEASURED_REFERENCE_LABEL = "model, tunes matched to the measurement"
 
@@ -706,8 +689,7 @@ def _measured_beat(results, frame, path) -> Path:
     for index, (axis, plane) in enumerate(zip(axes, ("x", "y"), strict=True)):
         mark_bpms(axis, results.positions, label=index == 0)
         axis.axhline(0.0, color="k", linewidth=0.8, alpha=0.5)
-        # The reference is a model, so the beating's bar is the measured beta's
-        # divided by that model: the same fraction, moved.
+        # Bar is the measured beta's error over the model beta.
         beat = f"beat_{plane}_{MEASURED_REFERENCE}"
         if beat in frame.columns:
             axis.errorbar(frame["s"], 100 * frame[beat],

@@ -1,11 +1,6 @@
-"""Draw the cross-campaign comparison figures from stored analysis.
+"""Draw the cross-campaign comparison figures from ``results/cross_campaign/``.
 
-Plotting, not analysis: every input here was already combined across
-campaigns by ``scripts/analyse_cross_campaign.py`` and written under
-``results/cross_campaign/``. Nothing in this script reads a per-campaign
-``summary.json``/``knobs.csv``/benchmark record directly, and nothing here
-recomputes a comparison -- run ``analyse_cross_campaign.py`` again first if
-the underlying per-campaign results changed.
+Run ``analyse_cross_campaign.py`` first; nothing here reads per-campaign results.
 
     uv run python scripts/analyse_cross_campaign.py
     uv run python scripts/plot_cross_campaign.py
@@ -54,12 +49,7 @@ def _campaign_summaries(campaigns: tuple, summaries_by_slug: dict) -> list[tuple
 
 
 def plot_direction(direction: str, page_campaigns: tuple, analysis_root: Path, output: Path) -> None:
-    """Every cross-campaign figure for one direction, in one folder.
-
-    ``scenarios/<direction>``, not ``<direction>``: ``normal`` and ``inverted``
-    are campaign slugs, so ``Campaign.figures_dir`` already owns those folders
-    and writing here would mix a campaign's own page figures with these.
-    """
+    """Every cross-campaign figure for one direction, in ``scenarios/<direction>`` (``<direction>`` is a campaign figures folder)."""
     root = analysis_root / direction
     scenario_output = output / "scenarios" / direction
     scenario_output.mkdir(parents=True, exist_ok=True)
@@ -68,18 +58,14 @@ def plot_direction(direction: str, page_campaigns: tuple, analysis_root: Path, o
     summaries = _campaign_summaries(page_campaigns, summaries_by_slug)
     beats_path = root / "scenario_optics_beat_along_s.parquet"
     beats = pd.read_parquet(beats_path) if beats_path.exists() else pd.DataFrame()
-    # Both are written by the current analyse_cross_campaign.py. An analysis
-    # directory from before they existed still draws: no beating frame skips
-    # the two along-s figures, no positions drops only their BPM markers.
+    # Older analysis directories lack these: no beating frame skips the along-s figures, no positions drops the BPM markers.
     positions_path = root / "element_positions.json"
     positions = _read_json(positions_path) if positions_path.exists() else {}
     figure_beta_beat_summary(summaries, beats, positions, scenario_output)
     figure_scenario_tunes_chromas(summaries, scenario_output)
     values_path = root / "scenario_optics_values.parquet"
     values = pd.read_parquet(values_path) if values_path.exists() else pd.DataFrame()
-    # One folder per fit, one page per folder: the two differ only in whether
-    # the fit could roll a quadrupole, so figures of the same name have to be
-    # kept apart rather than overwrite each other.
+    # One folder per fit so same-named figures do not overwrite each other.
     for fit in LOCO_OPTICS_FITS:
         fit_output = scenario_output / fit[0]
         fit_output.mkdir(parents=True, exist_ok=True)
@@ -97,8 +83,7 @@ def plot_direction(direction: str, page_campaigns: tuple, analysis_root: Path, o
                 continue
             frame = pd.read_parquet(path)
             base = frame[frame["campaign"] == baseline.slug]
-            # groupby() would sort alphabetically; keep ``scenarios`` order so
-            # the legend/colour assignment matches OVERLAY_COLOURS as before.
+            # groupby() would sort alphabetically; keep ``scenarios`` order for OVERLAY_COLOURS.
             blocks = [
                 (scenario, frame[frame["campaign"] == scenario.slug])
                 for scenario in scenarios

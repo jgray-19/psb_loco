@@ -306,7 +306,9 @@ These were explicit and should be treated as still in force unless re-negotiated
 - **The acquisition mount is read-only.** All generated output stays in `psb_loco`.
 - **`PRIOR_STRENGTH = 1e-4` is not a tuning parameter.** `psb_md`'s docstring is
   emphatic that the prior's shape *and* scale are what pick the answer out of a
-  large null space. Do not retune it to improve a residual.
+  large null space. Do not retune it to improve a residual. The one exception is the tilt
+  prior, `TILT_PRIOR_STRENGTH = 1e-2` in `run_method2.py` (2026-09-29, from the psb_sim simulated
+  scans: tilt correlation with the truth 0.15 -> 0.57 at 1e-2, quadrupoles unchanged).
 - **No monkeypatching in tests** without explicit approval.
 - Prefer behavioural/physics validation over implementation-pinning tests.
 - Remove focused debug scripts once the diagnosis is done.

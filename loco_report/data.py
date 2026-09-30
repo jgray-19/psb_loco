@@ -164,15 +164,7 @@ def measured_phase(campaign: Campaign, positions: dict[str, float]) -> pd.DataFr
 
 
 def measured_dispersion(predictions: Path, positions: dict[str, float]) -> pd.DataFrame:
-    """Measured ``d orbit / dpt`` at each BPM, with model ``s`` positions.
-
-    The uncertainty comes straight from ``measured_error`` in the parquet --
-    written by ``scripts/predict_loco.py`` from
-    ``tmom_recon.physics.closed_orbit.measure_dispersion``, propagating the
-    repeat-acquisition orbit scatter and the chroma pt uncertainty -- rather
-    than refitted here from the handful of RF-steering points, which leaves
-    too few degrees of freedom to be a meaningful residual estimate.
-    """
+    """Measured ``d orbit / dpt`` at each BPM, with model ``s``; uncertainty is ``measured_error`` from ``scripts/predict_loco.py``."""
     columns = ["plane", "bpm", "measured", "uncertainty", "s"]
     frame = read_parquet(predictions / "start-model.dispersion.parquet")
     if frame.empty:

@@ -1,15 +1,10 @@
-"""Evidence for docs/studies/quadrupole-roll.md, reproducible today.
+"""Evidence for docs/studies/quadrupole-roll.md.
 
-Nothing here needs the knob family the spec asks for: every case is applied by
-writing element attributes directly, so this runs against the current
-``aba_optimiser``. It answers three questions in order.
+Cases are applied by writing element attributes directly, so no new ``aba_optimiser`` knob family is needed. Questions:
 
-1. Can *any* magnet roll produce the measured vertical dispersion, and at what
-   cost to the vertical closed orbit the fits already reproduce to 0.2 %?
-2. Do the three PSB skew-quadrupole circuits explain it? (They are at zero on
-   the machine, but the model's sensitivity is worth having on record.)
-3. Is ``dpsi`` through MAD-NG's deferred misalignment table the same thing as
-   rolling the element -- the assumption the whole spec rests on?
+1. Can *any* magnet roll produce the measured vertical dispersion, and at what cost to the vertical closed orbit?
+2. Do the three PSB skew-quadrupole circuits (zero on the machine) explain it?
+3. Is ``dpsi`` through MAD-NG's deferred misalignment table the same as rolling the element?
 
     uv run python scripts/check_quad_roll.py
 """
@@ -29,17 +24,13 @@ from loco_common.model import build_model
 
 logger = logging.getLogger(__name__)
 
-#: The 2026-08-21 scan, reduced the same way the option matrix reduced it:
-#: dispersion is the slope of the untrimmed orbit against pt over the five
-#: RF-steering settings, and the closed orbit is the untrimmed orbit itself.
+#: The 2026-08-21 scan: dispersion is the slope of the untrimmed orbit against pt over the five RF settings.
 MEASURED = {"dy": 0.1639, "y_co": 1.416e-3, "dx": 2.8958, "x_co": 1.017e-3}
 
 #: One dipole's bending angle: 2*pi over 32 main bends.
 BEND_ANGLE = 0.19634954084936207
 
-#: Extends the deferred misalignment table with ``dpsi``. This is exactly the
-#: change section 4.3 of the spec asks ``aba_optimiser`` to make; applying it by
-#: hand here is what lets the claim be checked before the change exists.
+#: Extends the deferred misalignment table with ``dpsi`` (spec section 4.3), applied by hand.
 ATTACH_DPSI = r"""
 for i, e in loaded_sequence:siter() do
   if e.kind == 'quadrupole' and string.match(e.name, '^BR%.Q[FD][OE]%d+$') then

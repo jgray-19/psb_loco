@@ -1,10 +1,6 @@
-"""The absolute-orbit mode: which plane keeps its closed orbit, and what pays for it.
+"""The absolute-orbit mode: which plane keeps its closed orbit.
 
-Method 2's default subtracts the global reference orbit from both the data and
-the model, which makes it a pure response fit and throws the machine's static
-closed orbit away. These tests cover the mode that keeps that orbit in a chosen
-plane, and -- more importantly -- pin that switching it on changes *nothing* in
-the plane that stayed a delta, and nothing at all when it is off.
+Pins that switching it on changes nothing in the plane that stayed a delta, and nothing when off.
 """
 
 from __future__ import annotations
@@ -188,12 +184,7 @@ def test_knobs_are_sorted_into_families_by_their_suffix():
 
 
 def test_one_family_reproduces_upstreams_isotropic_alpha():
-    """The regression that says the default fit did not quietly change.
-
-    Upstream's prior is ``alpha = strength x median(diag H)`` over every knob.
-    With a single family this must return exactly that, or moving the prior into
-    this class has moved the answer.
-    """
+    """Regression: with a single family the prior must equal upstream's ``strength x median(diag H)``."""
     from aba_optimiser.training_closed_twiss.fitter import _prior_alphas
 
     names = [f"BR3.QNO{i}.dk1l" for i in range(5)]
@@ -234,13 +225,7 @@ def test_a_family_with_zero_strength_is_unregularised():
 
 @pytest.mark.slow
 def test_the_quad_circuit_choice_moves_the_response(sequence_file):
-    """The counterpart of the corrector test: this one is *not* invisible.
-
-    A standing corrector cancels out of a delta orbit; a quadrupole circuit does
-    not, because it changes the optics. This pins that the two sources really do
-    give different answers, so nothing fitted on a tune-matched start model can
-    be compared with something fitted on the machine's currents.
-    """
+    """A quadrupole circuit, unlike a standing corrector, changes a delta orbit (it changes the optics)."""
     from loco_common.campaign import P23_P13_FINAL
     from loco_common.model import build_model
     from tests.madng_helpers import closed_orbit, open_interface, set_knob
@@ -349,13 +334,9 @@ def test_a_fit_cannot_mix_baselines(sequence_file):
 
 @pytest.mark.slow
 def test_a_delta_orbit_is_the_same_on_either_baseline(sequence_file):
-    """Why a quadrupole fit may trim from zero, and an absolute fit may not.
+    """A quadrupole fit may trim from zero, an absolute fit may not.
 
-    ``co(k + dk) - co(k)`` is independent of ``k`` for a linear machine, so the
-    quadrupole fit loses nothing by zeroing the standing correctors and gains
-    independence from settings it cannot see. The same model, read absolutely
-    rather than differenced, moves by millimetres -- which is the other half of
-    the pairing in ``CORRECTOR_BASELINES``.
+    ``co(k + dk) - co(k)`` is independent of ``k`` for a linear machine, but the absolute orbit moves by millimetres.
     """
     from method2_delta_orbit.run_method2 import corrector_baseline_knobs
     from tests.madng_helpers import closed_orbit, open_interface, set_knob
@@ -382,12 +363,7 @@ def test_a_delta_orbit_is_the_same_on_either_baseline(sequence_file):
 
 
 def test_the_untrimmed_setting_survives_build_settings(sequence_file):
-    """The single-RF absolute path folds the untrimmed orbit in as a target.
-
-    ``average_zero_step`` labels it ``(static orbit)``, which is not an LSA
-    parameter name; handing it to ``lsa_to_knob`` raised, so this whole path was
-    broken. It gets a real knob name, a zero step, and the baseline's value.
-    """
+    """The single-RF absolute path folds the untrimmed orbit in as a target (``(static orbit)`` is not an LSA name)."""
     from method2_delta_orbit.run_method2 import STATIC_ORBIT, build_settings
 
     model = _model(sequence_file)
@@ -401,8 +377,7 @@ def test_the_untrimmed_setting_survives_build_settings(sequence_file):
     static = next(s for s in settings if s.corrector == STATIC_ORBIT)
     assert static.dk == 0.0
     assert static.knob in model.corrector_knobs
-    # It must sit at the machine's value for that knob, not at zero: an absolute
-    # plane has no second side for a wrong nominal to cancel against.
+    # Must sit at the machine's value for that knob: an absolute plane has no second side to cancel a wrong nominal.
     assert static.nominal == model.corrector_knobs[static.knob] != 0.0
 
 

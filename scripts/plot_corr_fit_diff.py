@@ -1,9 +1,7 @@
 """Plot the difference between two campaigns' measured closed-orbit response.
 
-Same panel layout as :mod:`scripts.plot_corr_fit` (one panel per BPM, one
-colour per corrector, x-axis corrector offset, y-axis orbit change) but the
-y-axis is *campaign B's orbit change minus campaign A's*, at matching
-correctors and offsets, with both campaigns' error bars added in quadrature.
+Layout as :mod:`scripts.plot_corr_fit`; y is campaign B minus campaign A at matching correctors and
+offsets, errors added in quadrature.
 """
 
 from __future__ import annotations

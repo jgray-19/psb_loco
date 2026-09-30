@@ -1,9 +1,4 @@
-"""Small MAD-NG helpers shared by the slow tests.
-
-The production code stands its own interfaces up; these exist so a test can ask
-the model a direct question (what is the closed orbit with this corrector at this
-value?) without going through a fitter.
-"""
+"""Small MAD-NG helpers shared by the slow tests, for asking the model a direct question."""
 
 from __future__ import annotations
 
@@ -15,13 +10,9 @@ def open_interface(
 ):
     """A MAD-NG interface on the ring-3 sequence, BPMs observed.
 
-    With no ``optimise_*`` kwargs this is the bare model: no knobs, and the
-    element attributes are whatever the sequence says. Pass a family
-    (``optimise_quad_dy=True``) to get the knob-creating interface instead, which
-    is the only way to *set* a misalignment: ``dy`` needs MAD-NG's deferred
-    misalignment table attached to the element, which happens during knob
-    creation. Setting ``loaded_sequence[element].dy`` on a bare interface is
-    silently ignored.
+    With no ``errors`` / ``misalignments`` this is the bare model. Pass a family
+    (``misalignments={"quad": {"dy"}}``) to get the knob-creating interface, the only way to
+    *set* a misalignment (a bare interface silently ignores ``element.dy``).
     """
     from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
     from aba_optimiser.mad import GenericMadInterface, GradientDescentMadInterface
@@ -43,7 +34,7 @@ def open_response_interface(sequence_file, *, ring: int = 3, kinetic_energy: flo
         ring=ring,
         sequence_file=sequence_file,
         kinetic_energy=kinetic_energy,
-        optimise_quadrupoles=True,
+        errors={"quad": {"k1"}},
         group_quadrupoles_by_cell=True,
     )
     return GradientDescentMadInterface(accelerator=accelerator)

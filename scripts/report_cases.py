@@ -1,10 +1,4 @@
-"""Cross-campaign analysis and figures, for one direction at a time.
-
-Per-page figures live in :mod:`loco_report`. This module compares whole
-campaigns rather than the cases within one: the tidy-frame builders :mod:`scripts.analyse_cross_campaign`
-persists, and the figures :mod:`scripts.plot_cross_campaign` draws from them.
-Neither has a CLI here; both are driven by those two scripts.
-"""
+"""Cross-campaign tidy-frame builders and figures, driven by ``analyse_cross_campaign`` and ``plot_cross_campaign``."""
 
 from __future__ import annotations
 
@@ -41,9 +35,7 @@ from scripts.plot_knobs import (
 
 logger = logging.getLogger(__name__)
 
-#: Wong palette; one colour per case, in page order. Four cases, four colours,
-#: and the pairing is fixed across every figure on a page so a reader learns it
-#: once.
+#: Wong palette; one colour per case, in page order.
 CASE_COLOURS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7")
 
 #: Knob family -> (axis label, scale from raw units to the plotted ones).
@@ -54,9 +46,7 @@ FAMILY_AXIS = {
     ".tilt": ("quadrupole roll [mrad]", 1e3),
 }
 
-#: The measured quantities every case is scored against, as (file, axis label).
-#: ``delta`` is the corrector response; ``absolute`` is the machine's own closed
-#: orbit at each RF setting, which only an absolute-plane fit sees.
+#: Measured quantities every case is scored against, as (file, axis label).
 RESIDUAL_TARGETS = {
     "delta": "delta-orbit residual [mm]",
     "absolute": "closed-orbit residual [mm]",
@@ -77,37 +67,13 @@ def _wrap(text: str, width: int = 22) -> str:
     return "\n".join(lines)
 
 
-
-
-
-
-
-
-
-
-#: The two reference models a page's lattice figure puts the measured points
-#: against, as (summary key, file-name suffix). Same pair as
-#: :data:`MEASURED_REFERENCES`, named for the page figures rather than the
-#: measured-optics ones.
+#: Reference models a page's lattice figure uses, as (summary key, file-name suffix).
 PAGE_OPTICS_REFERENCES = (("loco_model", ""), ("matched_model", "_matched"))
-
-
 
 
 def measured_dispersion_frame(predictions_dir: Path,
                               positions: dict[str, float]) -> pd.DataFrame:
-    """Measured ``d orbit / dpt`` at each BPM, with model ``s`` positions.
-
-    Every prediction cache contains the same measured column. The start-model
-    cache is used because it exists independently of which fitted cases are
-    valid and makes that invariance explicit. The uncertainty comes straight
-    from ``measured_error`` in the cache -- written by
-    ``scripts/predict_loco.py`` from
-    ``tmom_recon.physics.closed_orbit.measure_dispersion``, propagating the
-    repeat-acquisition orbit scatter and the chroma pt uncertainty -- rather
-    than refitted here from the handful of RF-steering points, which leaves
-    too few degrees of freedom to be a meaningful residual estimate.
-    """
+    """Measured ``d orbit / dpt`` at each BPM (from the start-model cache), with model ``s``."""
     path = predictions_dir / "start-model.dispersion.parquet"
     if not path.exists():
         logger.warning("No measured dispersion cache; run scripts/predict_loco.py")
@@ -126,13 +92,7 @@ def measured_dispersion_frame(predictions_dir: Path,
 
 
 def measured_optics_frame(campaign, positions: dict[str, float]) -> pd.DataFrame | None:
-    """The measured-optics table, with each BPM's ``s`` from the model sequence.
-
-    The measured frame is keyed by BPM name as omc3 writes it; the model's
-    element positions come off the MAD sequence. Both are ``BR3.BPM1L3`` today,
-    but only one of them is under this repository's control, so match on case
-    rather than assume.
-    """
+    """The measured-optics table, with each BPM's ``s`` from the model sequence (case-insensitive match)."""
     path = campaign.optics_dir / "measured.parquet"
     if not path.exists():
         logger.warning("%s: no measured optics; run scripts/measured_optics.py", campaign.slug)
@@ -149,10 +109,7 @@ def optics_summary(campaign) -> dict:
     return json.loads(path.read_text()) if path.exists() else {}
 
 
-
-
-#: The model each measured-optics figure is drawn against: summary key, file
-#: name, legend label, and what the figure is called.
+#: Per measured-optics figure: summary key, file name, legend label, description.
 MEASURED_REFERENCES = (
     ("loco_model", "measured_optics.png", "LOCO start model (un-matched)",
      "the model the fits start from"),
@@ -162,27 +119,10 @@ MEASURED_REFERENCES = (
 )
 
 
-#: Legend label per reference model, so the two figures name the same lattice
-#: the same way whichever of them it is the subject of.
+#: Legend label per reference model.
 REFERENCE_LABELS = {key: label for key, _, label, _ in MEASURED_REFERENCES}
 
 
-
-
-
-
-
-
-
-
-
-
-
-#: Bars over tables, per instruction: a tune is one number per lattice per
-#: plane, and a reader comparing five of them wants the ordering at a glance,
-#: not five rows to subtract in their head. Every bar chart below is drawn
-#: against a baseline -- the measured value -- so the bar *is* the error and a
-#: bar of zero length is agreement.
 MEASURED_COLOUR = "#000000"
 MODEL_NAMES = {
     "loco_model": "model, $k_1$ as sent",
@@ -196,11 +136,8 @@ def _rms(values) -> float:
     return float(np.sqrt(np.mean(values**2))) if values.size else float("nan")
 
 
-
-
-
 def _bar_labels(axis, bars, values, fmt: str) -> None:
-    """Print each bar's own value at its end, inside or outside as it fits."""
+    """Print each bar's value at its end."""
     for bar, value in zip(bars, values, strict=True):
         axis.annotate(
             fmt.format(value),
@@ -211,45 +148,22 @@ def _bar_labels(axis, bars, values, fmt: str) -> None:
         )
 
 
-
-
-#: The two Dp/p calibrations a case's fitted chromaticity is scored against:
-#: the RF-derived chroma export, and the closed-orbit projection. A case's own
-#: fitted dq1/dq2 does not depend on either -- only which measurement it is
-#: compared to does -- so the two calibrations move the "measured" reference,
-#: not the case bars, and are drawn as paired bars rather than separate figures.
+#: Dp/p calibrations the measured chromaticity reference is drawn for (paired bars).
 CHROMATICITY_CALIBRATIONS = (
     ("dq_dpt", "dq_dpt_error", "chroma, XImeter Dp/p", ""),
     ("dq_dpt_closed_orbit", "dq_dpt_closed_orbit_error", "chroma, closed-orbit Dp/p", "//"),
 )
 
 
-
-
-
-
-
-
 def figure_beta_beat_summary(
     summaries: list[tuple[object, dict]], beats: pd.DataFrame,
     positions: dict[str, float], output: Path,
 ) -> None:
-    """Measured beta-beating along ``s`` against every reference, every campaign.
+    """Measured beta-beating along ``s`` against every reference, one row per campaign.
 
-    One row per campaign, one column per plane; within a panel, one curve per
-    reference model, filled markers for beta from phase and open ones for beta
-    from amplitude -- same measurement, weaker claim, the way the per-campaign
-    optics figure draws the pair. Drawn once for the whole page rather than
-    once per tab: nothing here depends on which model tab is open, and a figure
-    repeated in four tabs reads as four different figures.
-
-    Along ``s`` rather than an rms bar per reference: the rms hides whether two
-    references disagree everywhere or at one magnet. Each rms is kept in its
-    curve's legend entry.
-
-    ``summaries`` is ``[(campaign, optics_summary(campaign)), ...]`` and
-    ``beats`` is :func:`optics_beat_along_s` for every campaign concatenated;
-    both are persisted by ``scripts/analyse_cross_campaign.py``.
+    Filled markers are beta from phase, open ones from amplitude; each rms is in the legend.
+    ``summaries`` is ``[(campaign, optics_summary(campaign)), ...]``; ``beats`` is
+    :func:`optics_beat_along_s` concatenated over campaigns.
     """
     if not summaries or beats.empty:
         return
@@ -257,10 +171,7 @@ def figure_beta_beat_summary(
         ("from phase", "beta_beat", "o", "full"),
         ("from amplitude", "beta_beat_amplitude", "^", "none"),
     ]
-    # Widest first, thinnest last. On a well-matched lattice all three
-    # references land on top of each other, which is the result; drawn at one
-    # width the last one plotted would hide the other two and read as a curve
-    # having been dropped.
+    # Widest first so overlapping references stay visible.
     references = [
         ("omc3_model", "omc3's own matched model", "#D55E00", 3.4),
         ("matched_model", MODEL_NAMES["matched_model"], "#009E73", 2.0),
@@ -302,8 +213,7 @@ def figure_beta_beat_summary(
             axis.set_title(f"{campaign.label}, plane {name}", fontsize=11)
             axis.legend(fontsize=6, loc="upper left", ncols=2)
             style_axis(axis)
-    # Once per column, not once per panel: the columns share a y axis, so a
-    # per-panel call would compound the headroom row by row.
+    # Once per column: columns share a y axis, so per-panel calls would compound.
     for axis in axes[0]:
         _legend_headroom(axis, 0.26)
     for axis in axes[-1]:
@@ -315,18 +225,9 @@ def figure_beta_beat_summary(
 
 
 def scenario_dispersion_beat(campaign) -> dict[str, float]:
-    """This campaign's own measured dispersion against its own un-matched
-    (nominal, no injected error) model, ``{"x": ..., "y": ...}`` rms fractions.
+    """Measured dispersion against the un-matched model, ``{"x": ..., "y": ...}`` rms fractions.
 
-    Read straight from ``scripts/predict_loco.py``'s scoreboard start-model
-    row (``dispersion_{x,y}_rel``) rather than re-derived here -- that
-    scoreboard is where the RF-offset-orbit dispersion fit and its
-    against-the-model residual already live, from a wholly different
-    measurement (the corrector scan) than the AC-dipole beta and phase. Read
-    from the single-momentum matrix: the start-model row does not depend on
-    the momentum-fit mode. Reads every ``scoreboard*.csv`` shard rather than
-    requiring ``--merge`` to have been run: the start-model row is written by
-    shard 1 regardless of how many shards there are.
+    Read from the start-model row of every ``scoreboard*.csv`` shard (single-momentum matrix).
     """
     predictions = fit_mode_by_slug("single").results_root(campaign) / "predictions"
     shards = sorted(predictions.glob("scoreboard*.csv"))
@@ -344,9 +245,7 @@ def scenario_dispersion_beat(campaign) -> dict[str, float]:
     }
 
 
-#: The stored units of every :func:`optics_beat_along_s` quantity, as
-#: ``quantity -> (axis label, scale from stored units to plotted ones)``.
-#: Beta and dispersion beating are stored as fractions, phase in units of 2pi.
+#: ``quantity -> (axis label, scale from stored units to plotted ones)`` for :func:`optics_beat_along_s`.
 BEAT_AXIS = {
     "beta_beat": ("$\\Delta\\beta/\\beta$ [%]", 100.0),
     "beta_beat_amplitude": ("$\\Delta\\beta/\\beta$ [%]", 100.0),
@@ -356,12 +255,7 @@ BEAT_AXIS = {
 
 
 def _legend_headroom(axis, fraction: float) -> None:
-    """Grow the axis upward so an in-axes legend does not sit on the curves.
-
-    An along-s beating panel is full width and its legend carries an entry per
-    campaign or per reference model, so ``loc="best"`` has nowhere to go: the
-    room has to be made rather than found.
-    """
+    """Grow the axis upward so an in-axes legend does not sit on the curves."""
     low, high = axis.get_ylim()
     axis.set_ylim(low, high + fraction * (high - low))
 
@@ -369,17 +263,9 @@ def _legend_headroom(axis, fraction: float) -> None:
 def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
     """This campaign's measured beating per BPM, tidy, with model ``s``.
 
-    The per-BPM counterpart of the rms in ``summary.json`` and of
-    :func:`scenario_dispersion_beat`: same measurements, same references,
-    before the rms is taken, so a comparison figure can show where around the
-    ring a scenario's error sits rather than only how large it is. Columns are
-    ``campaign, quantity, reference, plane, name, s, value, uncertainty``; beta and phase
-    beating carry one row per reference model, dispersion only the un-matched
-    one the scoreboard fits. A phase advance belongs to a BPM pair, not a BPM,
-    and sits at the downstream one -- ``NAME2``, the same key ``summary.json``
-    takes its phase rms over.
-
-    Empty if the campaign has no measured optics yet.
+    Columns: ``campaign, quantity, reference, plane, name, s, value, uncertainty``.
+    Dispersion has only the un-matched reference; a phase advance sits at its
+    downstream BPM (``NAME2``). Empty if the campaign has no measured optics.
     """
     blocks: list[pd.DataFrame] = []
     by_name = {name.upper(): s for name, s in positions.items()}
@@ -395,8 +281,7 @@ def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
                 ):
                     if column not in frame.columns:
                         continue
-                    # The reference is a model, so the beating's bar is the
-                    # measured beta's over that model.
+                    # Bar is the measured beta's error over the model beta.
                     bar = frame.get(f"{beta}_err")
                     blocks.append(pd.DataFrame({
                         "quantity": quantity, "reference": reference, "plane": plane,
@@ -416,8 +301,7 @@ def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
                 column = f"phase_{plane}_{reference}"
                 if column not in phase.columns:
                     continue
-                # Wrapped the same way phase_beat_statistics wraps before its
-                # rms: an advance is modulo one turn.
+                # Advance is modulo one turn.
                 difference = phase[f"phase_{plane}"] - phase[column]
                 blocks.append(pd.DataFrame({
                     "quantity": "phase_beat", "reference": reference, "plane": plane,
@@ -434,9 +318,7 @@ def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
     if not dispersion.empty:
         model = pd.read_parquet(predictions / "start-model.dispersion.parquet")
         merged = dispersion.merge(model[["plane", "bpm", "model"]], on=["plane", "bpm"])
-        # Absolute, not relative: the model's vertical dispersion is ~0, so a
-        # D_y beating divided by it is a number about the divisor. Same choice
-        # as the phase beating, which is also stored as a difference.
+        # Absolute: the model's vertical dispersion is ~0.
         blocks.append(pd.DataFrame({
             "quantity": "dispersion_beat", "reference": "loco_model",
             "plane": merged["plane"].to_numpy(), "name": merged["bpm"].to_numpy(),
@@ -454,10 +336,7 @@ def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
     return result.dropna(subset=["s"]).sort_values(["quantity", "plane", "s"])
 
 
-#: What the perturbation-effect figure draws, as ``quantity -> (column label,
-#: whether the scenario-minus-baseline difference is taken relative to the
-#: baseline)``. Beta is relative because a beta difference means nothing
-#: without the beta it is a fraction of; phase and dispersion are absolute.
+#: ``quantity -> (column label, difference taken relative to the baseline)``.
 PERTURBATION_AXIS = {
     "beta": ("$\\Delta\\beta/\\beta$ [%]", True),
     "phase": ("$\\Delta\\mu$ [$2\\pi$]", False),
@@ -465,8 +344,7 @@ PERTURBATION_AXIS = {
     "coupling": ("$\\Delta|f|$", False),
 }
 
-#: What a quantity's two rows are. Coupling has no planes: its two rows are the
-#: difference and the sum resonance, which is the same slot in the table.
+#: Each quantity's two rows; coupling uses the difference and sum resonances.
 PERTURBATION_PLANES = {
     "beta": ("x", "y"), "phase": ("x", "y"), "dispersion": ("x", "y"),
     "coupling": ("f1001", "f1010"),
@@ -476,26 +354,12 @@ PERTURBATION_PLANES = {
 def optics_values_along_s(
     campaign, positions: dict[str, float], model_bpms: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """This campaign's measured optics and its tune-matched model's, per BPM.
+    """This campaign's measured optics and its tune-matched model's, per BPM (raw values).
 
-    Values, not beatings: the perturbation-effect figure subtracts one
-    campaign's measurement from another's, which only means anything if both
-    sides are the raw quantity. Columns are
-    ``campaign, source, quantity, plane, name, s, value, uncertainty``, the
-    last being the measurement's own one-sigma bar and ``NaN`` for a model,
-    with ``source`` one
-    of ``measured``/``model`` and ``quantity`` one of ``beta`` (m), ``phase``
-    (BPM-to-BPM advance, units of 2pi, at the downstream BPM) and
-    ``dispersion`` (m). Beta has a second measured source, ``measured_amp``:
-    the same quantity from the BPM amplitudes rather than the phase, which
-    needs the BPM gains and is the reason it is kept as its own column
-    everywhere rather than averaged in.
-
-    ``model_bpms`` is the tune-matched model's BPM twiss -- the model's beta
-    and phase advance are already stored beside the measurement, but its
-    dispersion is not, so that one column has to be twissed by the caller
-    (:mod:`scripts.analyse_cross_campaign`) and handed in. Without it the
-    model's dispersion rows are simply absent.
+    Columns: ``campaign, source, quantity, plane, name, s, value, uncertainty``.
+    ``source`` is ``measured``, ``measured_amp`` (beta from BPM amplitudes) or ``model``;
+    ``quantity`` is ``beta`` (m), ``phase`` (2pi, at the downstream BPM) or ``dispersion`` (m).
+    ``model_bpms`` supplies the model dispersion; without it those rows are absent.
     """
     blocks: list[pd.DataFrame] = []
     by_name = {name.upper(): s for name, s in positions.items()}
@@ -523,9 +387,7 @@ def optics_values_along_s(
                 if column in frame.columns:
                     block(source, "beta", plane, frame.index, frame[column],
                           frame.get(f"{column}_err"))
-        # The coupling RDTs ride in the same table, one "plane" per resonance:
-        # they are per BPM and per campaign like everything else here, and the
-        # figures index them the same way.
+        # Coupling RDTs ride in the same table, one "plane" per resonance.
         for rdt in ("f1001", "f1010"):
             for source, column in (
                 ("measured", rdt),
@@ -555,10 +417,7 @@ def optics_values_along_s(
             block("measured", "dispersion", plane, rows["bpm"], rows["measured"],
                   rows["uncertainty"])
         if model_bpms is not None and f"d{plane}" in model_bpms.columns:
-            # Restricted to the BPMs the measurement has: the model twiss also
-            # carries BR3.BPMT3L1, which no orbit came from, and a model row
-            # with a point the measured row above it cannot have is a
-            # difference the reader has no way to check.
+            # Only BPMs the measurement has (the twiss also carries BR3.BPMT3L1).
             measured_names = {str(name).upper() for name in rows["bpm"]}
             model = model_bpms[
                 [str(name).upper() in measured_names for name in model_bpms.index]
@@ -579,16 +438,10 @@ def loco_optics_values_along_s(
     mode_slug: str = LOCO_OPTICS_MODE, case_slug: str = LOCO_OPTICS_CASE,
     source: str = "loco",
 ) -> pd.DataFrame:
-    """The LOCO-fitted lattice's optics at the BPMs, in the same tidy form as
-    :func:`optics_values_along_s`, with ``source`` set to ``loco``.
+    """The LOCO-fitted lattice's optics at the BPMs, tidy as in :func:`optics_values_along_s`.
 
-    The cache holds the fitted beta and dispersion outright but the phase only
-    as ``mu_fit - mu_start``. That is enough: the start model is the ``k1`` sent
-    to the magnets, which is the same lattice for every campaign of a direction,
-    so a campaign-minus-baseline difference of this column is the difference of
-    the fitted phase itself. It is turned into the BPM-to-BPM advance the
-    measurement reports before being stored, so the two halves of the figure are
-    the same quantity.
+    The cache stores phase as ``mu_fit - mu_start``; the start model is common to a
+    direction, so campaign differences are unaffected. Converted to BPM-to-BPM advance.
     """
     path = fit_mode_by_slug(mode_slug).results_root(campaign) / "optics" / f"{case_slug}.optics.parquet"
     if not path.exists():
@@ -601,8 +454,7 @@ def loco_optics_values_along_s(
     names = frame["element"].astype(str)
     keep = names.str.upper().str.contains("BPM")
     if measured_names:
-        # The twiss carries BR3.BPMT3L1, which no orbit came from. Dropping it
-        # keeps the fitted BPM pairs the same pairs the measured advance uses.
+        # Drop BR3.BPMT3L1 so BPM pairs match the measured advance.
         keep &= names.str.upper().isin({n.upper() for n in measured_names})
     bpms = frame[keep].sort_values("s")
     blocks: list[pd.DataFrame] = []
@@ -612,8 +464,7 @@ def loco_optics_values_along_s(
             "source": source, "quantity": quantity, "plane": plane,
             "name": rows["element"].astype(str).to_numpy(), "s": rows["s"].to_numpy(),
             "value": np.asarray(values, dtype=float),
-            # A fitted lattice has no measurement bar; the column exists so the
-            # two halves of the figure concatenate.
+            # No measurement bar for a lattice.
             "uncertainty": np.nan,
         }))
 
@@ -628,11 +479,7 @@ def loco_optics_values_along_s(
     return pd.concat(blocks, ignore_index=True).assign(campaign=campaign.slug)
 
 
-#: One entry per perturbation figure, as
-#: ``(file-name stem, quantity, measured source, what the figure is called)``.
-#: Beta is two figures rather than one three-column figure: it is measured two
-#: ways, the amplitude one carries the BPM gains so neither stands in for the
-#: other, and side by side the panels are too small to read a BPM off.
+#: One entry per perturbation figure: ``(file-name stem, quantity, measured source, description)``.
 PERTURBATION_FIGURES = (
     ("beta", "beta", "measured", "beta, measured from the phase"),
     ("beta_amp", "beta", "measured_amp", "beta, measured from the amplitude"),
@@ -647,28 +494,11 @@ def figure_perturbation_effect(
     positions: dict[str, float], output: Path,
     fit: tuple[str, str, str] = LOCO_OPTICS_FITS[0],
 ) -> None:
-    """What each perturbation did, measurement against measurement, and the
-    same difference in the fitted lattice underneath.
+    """Each campaign minus the baseline at the same BPM, measured (left) and in the fitted lattice (right).
 
-    One figure per entry in :data:`PERTURBATION_FIGURES`, each two rows (the
-    planes) by two columns (measured, then the LOCO fit), so a panel is large
-    enough to read a BPM-by-BPM feature off. Every curve is one campaign minus the unperturbed
-    baseline of its own direction, at the same BPM: no model enters the left
-    column at all, so a feature there is something the machine did, not
-    something a reference lattice disagrees about. The right column asks the
-    same question of the fitted lattices and is the comparison the figure
-    exists for -- if LOCO found the perturbation, the two columns look alike.
-
-    Measured points carry the two campaigns' bars added in quadrature, so a
-    difference smaller than its own bar reads as one. The fitted column has no
-    bar to carry: it is a lattice, not a measurement.
-
-    ``values`` is :func:`optics_values_along_s` and
-    :func:`loco_optics_values_along_s` for every campaign, concatenated and
-    persisted by ``scripts/analyse_cross_campaign.py``. ``fit`` is the entry of
-    :data:`LOCO_OPTICS_FITS` the fitted column is taken from; it names the
-    source column to read and goes in the title, so the two pages cannot be
-    told apart only by their file path.
+    One figure per :data:`PERTURBATION_FIGURES` entry; measured bars add in quadrature.
+    ``values`` is :func:`optics_values_along_s` and :func:`loco_optics_values_along_s`
+    concatenated over campaigns; ``fit`` is the :data:`LOCO_OPTICS_FITS` entry used.
     """
     if len(summaries) < 2 or values.empty:
         return
@@ -680,10 +510,7 @@ def figure_perturbation_effect(
             (measured_source, "measured"),
             (f"loco_{fit_slug}", f"fitted model, {fit_label}"),
         )
-        # sharey="row": the measurement and the fit are the same quantity in the
-        # same plane, and the point of the figure is how far apart they are.
-        # Separate scales made a fit six times too small look identical to one
-        # that had found the perturbation.
+        # sharey="row": separate scales hid a fit six times too small.
         figure, axes = plt.subplots(
             2, len(sources), sharex=True, sharey="row", constrained_layout=True,
             figsize=(9.0 * len(sources), 9.0), squeeze=False,
@@ -705,9 +532,7 @@ def figure_perturbation_effect(
                     block = values[selection & (values["campaign"] == campaign.slug)]
                     if block.empty or base.empty:
                         continue
-                    # Matched on BPM name, not on row order: a campaign whose
-                    # analysis dropped a BPM would otherwise be subtracted from
-                    # the wrong one and every point after it would shift.
+                    # Match on BPM name; a dropped BPM would shift row order.
                     pair = block.merge(
                         base[["name", "value", "uncertainty"]], on="name",
                         suffixes=("", "_base"),
@@ -715,9 +540,7 @@ def figure_perturbation_effect(
                     if pair.empty:
                         continue
                     difference = pair["value"] - pair["value_base"]
-                    # Two independent measurements, so the bars add in
-                    # quadrature; the relative form carries the baseline's own
-                    # bar through the division as well.
+                    # Independent measurements: errors add in quadrature.
                     error = np.hypot(pair["uncertainty"], pair["uncertainty_base"])
                     if relative:
                         error = 100 * np.hypot(
@@ -740,8 +563,7 @@ def figure_perturbation_effect(
                 if drawn:
                     axis.legend(fontsize=8, loc="upper left")
                 style_axis(axis)
-            # Once per row, not once per panel: the row shares its y axis, so
-            # applying it per panel would compound the headroom.
+            # Once per row: rows share a y axis.
             _legend_headroom(axes[row][0], 0.30)
         for axis in axes[-1]:
             axis.set_xlabel("s [m]")
@@ -758,13 +580,7 @@ def figure_perturbation_effect(
 
 
 def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path) -> None:
-    """The same difference for tune and chromaticity, as bars.
-
-    Measured only: where each fit put the tune is already a figure of its own
-    on every case page, against this same measurement.
-
-    ``summaries`` is persisted by ``scripts/analyse_cross_campaign.py``.
-    """
+    """Measured tune and chromaticity difference to the baseline, as bars."""
     if len(summaries) < 2:
         return
     (baseline, base_summary), *scenarios = summaries
@@ -780,8 +596,7 @@ def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path
             summary["measured"][key][plane] - base_summary["measured"][key][plane]
             for _, summary in scenarios
         ]
-        # Scenario and baseline are independent measurements, so their errors
-        # add in quadrature.
+        # Independent measurements: errors add in quadrature.
         errors = [
             float(np.hypot(summary["measured"][error_key][plane],
                             base_summary["measured"][error_key][plane]))
@@ -816,11 +631,7 @@ def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path
 
 
 def figure_scenario_tunes_chromas(summaries: list[tuple[object, dict]], output: Path) -> None:
-    """Absolute measured tune and chromaticity, one group of bars per scenario
-    campaign, four panels: $Q_x$, $Q_y$, $dq1$, $dq2$.
-
-    ``summaries`` is persisted by ``scripts/analyse_cross_campaign.py``.
-    """
+    """Absolute measured tune and chromaticity, one bar per campaign, four panels."""
     if not summaries:
         return
     series = [
@@ -866,13 +677,7 @@ def figure_scenario_knob_diffs(
 ) -> None:
     """Each scenario's fitted knobs minus the baseline's, per magnet, per family.
 
-    The baseline campaign carries no injected error; a scenario's diff against
-    it is the fit's estimate of that scenario's error, magnet by magnet.
-
-    ``base`` (the baseline campaign's own ``read_knobs`` frame) and
-    ``blocks`` (``[(scenario, read_knobs(...)), ...]``) are the raw per-magnet
-    fits persisted by ``scripts/analyse_cross_campaign.py``, which is also
-    where a missing baseline/scenario file is logged and skipped.
+    ``base`` is the baseline's ``read_knobs`` frame; ``blocks`` is ``[(scenario, read_knobs(...)), ...]``.
     """
     if not blocks:
         return
@@ -931,13 +736,7 @@ def benchmark_records(root: Path, campaigns) -> list[dict]:
 
 
 def figure_benchmark_speed(records: list[dict], output: Path) -> None:
-    """What each method cost to reach its answer, wall clock and CPU.
-
-    Both numbers, because the two methods spend time differently: Method 1 is
-    one MAD-NG process and its wall clock *is* its CPU, while Method 2 fans the
-    same fit over one worker per corrector setting, so wall clock alone would
-    report the hardware it was given rather than the work it did.
-    """
+    """Wall clock and CPU per method."""
     if not records:
         return
     figure, axes = plt.subplots(
@@ -977,13 +776,7 @@ def figure_benchmark_speed(records: list[dict], output: Path) -> None:
 
 
 def figure_benchmark_agreement(records: list[dict], output: Path) -> None:
-    """The two answers against each other, one point per magnet.
-
-    On the diagonal the methods asked for the same gradient. The correlation and
-    the rms difference are printed rather than left to the eye, and the axes are
-    shared and square so a point's distance from the line is the disagreement in
-    the units the rest of the study uses.
-    """
+    """Method 1 against Method 2 gradients, one point per magnet."""
     if not records:
         return
     figure, axes = plt.subplots(
