@@ -58,10 +58,3 @@ scoreboard the machine-knob model is still keyed `start-model`.
 
 `knl[0] = -hkick`, `ksl[0] = +vkick`. Pinned by `tests/test_naming.py`.
 
-## Method 1
-
-Method 1 is a first-order response-matrix fit: one parametric twiss builds the
-full `(2*N_BPM) x N_corrector` matrix, and every cell is one weighted
-`MAD.match` equality against the same 32 cell-grouped `dk1l` knobs Method 2
-lumps to. It reports no covariance, so its knobs carry no error bar and it does
-not appear on any significance figure.

@@ -31,16 +31,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS = REPO_ROOT / "docs"
 FIGURE_ROOT = DOCS / "assets" / "figures"
 SCENARIO_ROOT = FIGURE_ROOT / "scenarios"
-BENCHMARK_ROOT = REPO_ROOT / "results" / "benchmark"
 
 DIRECTIONS = {
     "inverted": INVERTED_PAGE_CAMPAIGNS,
     "normal": NORMAL_PAGE_CAMPAIGNS,
 }
-MODES = ("single", "multi")
-
-#: Method 1 fits the nominal-RF response matrix and has no multi-momentum form.
-SINGLE_ONLY = {"method1"}
+MODES = ("multi",)
 
 
 def draw(results: Results, spec: PageSpec, output: Path) -> list[Path]:
@@ -55,6 +51,7 @@ def draw(results: Results, spec: PageSpec, output: Path) -> list[Path]:
         written += figures.family_by_s(results, page, suffix, output)
     for suffix in (".dk1l", ".tilt", ".dk0sl", ".dk1sl"):
         written += figures.family_significance(results, page, suffix, output)
+    written += figures.gains(results, page, output)
     written += figures.optics(results, page, output)
     written += figures.phase_advance(results, page, output)
     written += figures.case_tunes(results, page, output)
@@ -115,9 +112,8 @@ def cached_positions(campaign: Campaign, mode: FitMode) -> dict[str, float]:
 
 def specs_for(mode: FitMode, specs: list[PageSpec]) -> list[PageSpec]:
     """The pages this momentum mode has fits for."""
-    if mode.slug == "single":
-        return specs
-    return [spec for spec in specs if spec.slug not in SINGLE_ONLY]
+    del mode
+    return specs
 
 
 def _planes(spec: PageSpec) -> str:
@@ -129,7 +125,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--direction", choices=sorted(DIRECTIONS), required=True)
     parser.add_argument("--momentum-mode", choices=MODES, default=None,
-                        help="Default: every mode.")
+                        help="Default: multi.")
     parser.add_argument("--page", nargs="+", default=None,
                         help="Page slugs to build. Default: every page.")
     parser.add_argument("--figures-only", action="store_true")
@@ -215,21 +211,18 @@ def render_index(campaigns, modes, specs, positions) -> str:
 
 
 def page_path_name(mode: FitMode, spec: PageSpec) -> str:
-    part = "" if mode.slug == "single" else f"{mode.slug}/"
-    return f"{part}{spec.slug}.md"
+    del mode
+    return f"{spec.slug}.md"
 
 
 def write_studies(direction: str, campaigns, modes) -> None:
-    """The three pages that are not per-case."""
+    """The pages that are not per-case."""
     tree = DOCS / f"{direction}_tunes"
     scenario_root = SCENARIO_ROOT / direction
     targets = (
         (tree / "studies" / "measured-optics.md",
          lambda path: studies.render_optics_page(
              campaigns, FIGURE_ROOT, scenario_root, path)),
-        (tree / "reports" / "benchmark.md",
-         lambda path: studies.render_benchmark_page(
-             campaigns, BENCHMARK_ROOT, scenario_root, path)),
         (tree / "reports" / "scenarios.md",
          lambda path: studies.render_scenario_page(
              campaigns, scenario_root, modes, path)),

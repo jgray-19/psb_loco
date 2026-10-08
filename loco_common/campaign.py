@@ -92,11 +92,6 @@ class Campaign:
         return REPO_ROOT / "results" / f"matrix_{self.slug}"
 
     @property
-    def method1_dir(self) -> Path:
-        """Where ``run_method1`` writes this campaign's Method-1 fit (same ``.dk1l`` knobs as Method 2)."""
-        return self.results_root / "method1"
-
-    @property
     def optics_dir(self) -> Path:
         """Where the measured-optics products of this campaign are written."""
         return REPO_ROOT / "results" / "optics" / self.slug

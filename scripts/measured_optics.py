@@ -78,7 +78,7 @@ DEFAULT_WINDOW = 7500
 
 def build_accelerator(sequence_file: Path):
     """The MAD-NG accelerator ``read_chroma_summary`` needs for its ``dp2pt``/``beta``."""
-    from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: PLC0415, N811
+    from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
 
     return OptimiserPSB(ring=3, sequence_file=str(sequence_file), kinetic_energy=0.16)
 

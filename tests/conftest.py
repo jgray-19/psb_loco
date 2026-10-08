@@ -136,38 +136,6 @@ def fake_orbits(bpm_names):
 
 
 @pytest.fixture
-def fake_response(fake_orbits, bpm_names):
-    """``fake_response(line, correctors, dk)`` -> the response frame Method 1 fits, as a central difference.
-
-    ``dk`` is an LSA ``/K`` step, converted through :func:`lsa_k_to_rad` to MAD's convention and back
-    (the two differ by a sign horizontally).
-    """
-    from loco_common.naming import lsa_k_to_rad  # noqa: PLC0415
-
-    def _response(line, correctors: list[str], dk: float = 5e-5) -> pd.DataFrame:
-        rows = []
-        for corrector in correctors:
-            kick = dk * lsa_k_to_rad(corrector)
-            plus = fake_orbits(line, corrector, kick)
-            minus = fake_orbits(line, corrector, -kick)
-            for plane in ("x", "y"):
-                slope = (plus[plane.upper()] - minus[plane.upper()]) / (2.0 * dk)
-                for bpm in slope.index:
-                    rows.append(
-                        {
-                            "NAME": bpm,
-                            "CORRECTOR": corrector,
-                            "PLANE": plane,
-                            "SLOPE": float(slope[bpm]),
-                            "ERRSLOPE": 1.0,
-                        }
-                    )
-        return pd.DataFrame(rows)
-
-    return _response
-
-
-@pytest.fixture
 def fake_scan():
     """``fake_scan(slopes, noise=..)`` -> the ``(points, orbit_by_path)`` pair, without writing SDDS.
 

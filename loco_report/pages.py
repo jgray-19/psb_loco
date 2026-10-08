@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from loco_common.case_names import ALL_PAGES, Page
+from loco_common.case_names import PAGES, Page
 
 
 @dataclass(frozen=True)
@@ -49,6 +49,10 @@ KNOB_TABLE = SectionSpec("Fitted knobs, per family", (), table="knob_table")
 KNOBS = SectionSpec("Fitted knobs", (
     _figure("dk1l_by_s", "gradient error per magnet against s",
             "Fitted gradient error per magnet, one panel per case."),
+    _figure("dk1l_by_s_1", "gradient error per magnet against s, first cases",
+            "Fitted gradient error per magnet, one panel per case (continued below)."),
+    _figure("dk1l_by_s_2", "gradient error per magnet against s, remaining cases",
+            "Fitted gradient error per magnet, one panel per case."),
     _figure("dk1l_significance", "gradient error over its own error bar",
             "The same gradients as |value| / sigma, log scale."),
     _figure("dk0l_by_s", "bend error per magnet against s",
@@ -67,6 +71,16 @@ KNOBS = SectionSpec("Fitted knobs", (
             "Fitted skew gradient error per magnet, where k1s was free."),
     _figure("dk1sl_significance", "skew gradient error over its own error bar",
             "The same skew gradient errors as |value| / sigma, log scale."),
+))
+
+GAINS = SectionSpec("Gains", (
+    _figure("gains", "fitted corrector and BPM gains",
+            "Fitted corrector kick gain per corrector, and BPM gain per BPM and plane, "
+            "where gains were free. Only differences between correctors of one plane "
+            "are determined. A plane's overall scale is shared between its BPM gains and "
+            "corrector gains, so read the product (1 + b)(1 + g), not the two separately: "
+            "with off-momentum data the vertical BPM gains move far from zero while the "
+            "vertical corrector gains move the opposite way."),
 ))
 
 LATTICE = SectionSpec("Fitted lattice, against the tune-matched model", (
@@ -101,8 +115,8 @@ RESIDUALS = SectionSpec("Residuals", (
             "amplitude, log scale."),
 ))
 
-SECTIONS = (KNOB_TABLE, KNOBS, LATTICE, TUNE, RESIDUALS)
+SECTIONS = (KNOB_TABLE, KNOBS, GAINS, LATTICE, TUNE, RESIDUALS)
 
 #: Every rendered page, one per case_names Page.
-PAGE_SPECS = tuple(PageSpec(page=page, sections=SECTIONS) for page in ALL_PAGES)
+PAGE_SPECS = tuple(PageSpec(page=page, sections=SECTIONS) for page in PAGES)
 

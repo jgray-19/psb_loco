@@ -6,7 +6,7 @@ import ast
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCTION_ROOTS = ("loco_common", "method1_madng_da", "method2_delta_orbit", "scripts")
+PRODUCTION_ROOTS = ("loco_common", "poco", "scripts")
 
 
 def production_python_files():

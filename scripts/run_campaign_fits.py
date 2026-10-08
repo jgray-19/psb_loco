@@ -1,11 +1,11 @@
-"""Run the nine cases the report pages show, for one campaign.
+"""Run the cases the report pages show, for one campaign (multi-momentum by default).
 
 The cases are declared in :mod:`loco_common.case_names`; the slug ``<planes>__<families>__<lump>``
 maps to the fitter's flags one-for-one. Serial by construction: each fit spawns one MAD-NG process
 per corrector setting.
 
-    uv run python scripts/run_campaign_fits.py --campaign inverted
-    uv run python scripts/run_campaign_fits.py --campaign inverted --dry-run
+    uv run python scripts/run_campaign_fits.py --campaign p23_p13_final
+    uv run python scripts/run_campaign_fits.py --campaign p23_p13_final --dry-run
 """
 
 from __future__ import annotations
@@ -23,11 +23,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from loco_common.campaign import add_campaign_argument, campaign_by_slug
-from loco_common.case_names import PAGES, PER_MAGNET_PAGE, every_page_case, parse_case
+from loco_common.case_names import every_page_case, parse_case
 from loco_common.fit_mode import (
     MULTI,
     SINGLE,
-    THREE,
     add_fit_mode_argument,
     fit_mode_by_slug,
     result_is_valid,
@@ -35,8 +34,8 @@ from loco_common.fit_mode import (
 
 logger = logging.getLogger(__name__)
 
-#: Both staged modes warm-start from ``single``: every campaign scanned -2/0/+2 mm, so ``three`` has no intermediate offsets.
-PREVIOUS_MODE = {THREE.slug: SINGLE, MULTI.slug: SINGLE}
+#: The multi-momentum absolute cases warm-start from the single-momentum fit of the same case.
+PREVIOUS_MODE = {MULTI.slug: SINGLE}
 
 #: Which case family letter frees which ``--errors`` token.
 ERROR_TOKENS = {"k1": "quad:k1", "b": "bend:k0", "k0s": "quad:k0s", "k1s": "quad:k1s"}
@@ -60,7 +59,7 @@ def command(
     if phase_constraint and mode.slug != "multi":
         raise ValueError("--phase-constraint requires --momentum-mode multi")
     argv = [
-        sys.executable, "-m", "method2_delta_orbit.run_method2",
+        sys.executable, "-m", "poco.run_poco",
         "--campaign", campaign,
         "--sequence-file", str(sequence_file),
         "--output", str(output_root / slug),
@@ -72,6 +71,8 @@ def command(
     argv += ["--errors", *(errors or ["none"])]
     if misalign:
         argv += ["--misalign", *misalign]
+    if "g" in case.family_list:
+        argv += ["--fit-gains"]
     if case.lump != "none":
         argv += ["--group-quadrupoles-by-cell"]
     if rf_offsets != (0.0,):
@@ -100,7 +101,7 @@ def staged_result_is_valid(
     if not require_warm_start:
         return True
     summary = json.loads((directory / "summary.json").read_text())
-    recorded = summary.get("initial_knobs")
+    recorded = summary.get("args", {}).get("initial_knobs")
     if not recorded:
         return False
     if expected_initial is None:
@@ -160,7 +161,7 @@ def main() -> None:
         "--phase-weight",
         type=float,
         default=1.0,
-        help="Passed through to run_method2.py's --phase-weight; see its help.",
+        help="Passed through to run_poco.py's --phase-weight; see its help.",
     )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -180,10 +181,7 @@ def main() -> None:
     output_root = args.output or default_root
     args.log_dir.mkdir(parents=True, exist_ok=True)
 
-    multi_cases = list(
-        dict.fromkeys(slug for page in (*PAGES, PER_MAGNET_PAGE) for slug in page.cases)
-    )
-    cases = args.cases or (multi_cases if mode.slug == "multi" else every_page_case())
+    cases = args.cases or every_page_case()
     for slug in cases:
         case = parse_case(slug)
         warm_start = mode.slug != "single" and case.planes != "none"

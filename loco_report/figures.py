@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
-from psb_md.plotting import finalize_figure, style_axis
+from psb_md.plots import save_figure, style_axis
 
 from loco_common.case_names import Page
 from loco_report import metrics
@@ -55,7 +55,7 @@ AXIS_LABEL = {
 
 
 def _save(figure, path: Path) -> Path:
-    finalize_figure(figure, path)
+    save_figure(figure, path)
     return path
 
 
@@ -110,6 +110,44 @@ def _family_panel(results, page, family, blocks, path) -> Path:
     return _save(figure, path)
 
 
+def gains(results: Results, page: Page, output: Path) -> list[Path]:
+    """Corrector gains by corrector, and BPM gains against s, for the cases that fitted them."""
+    fitted = {slug: results.gains(slug) for slug in results.valid(page.cases)}
+    fitted = {slug: gain for slug, gain in fitted.items() if not gain.empty}
+    if not fitted:
+        return []
+    figure, axes = panels(2, sharex=False)
+    correctors = sorted(
+        {name for gain in fitted.values() for name in gain.index if name.startswith("corrgain.")},
+        key=lambda name: (name.split(".")[1][:3] != "DHZ", name),
+    )
+    positions = np.arange(len(correctors))
+    width = 0.8 / len(fitted)
+    for index, ((slug, gain), colour) in enumerate(zip(fitted.items(), CASE_COLOURS, strict=False)):
+        axes[0].bar(positions + (index - (len(fitted) - 1) / 2) * width,
+                    [gain.get(name, np.nan) for name in correctors],
+                    width=width, color=colour, alpha=0.85, label=page.label(slug))
+    axes[0].axhline(0.0, color="k", linewidth=0.8, alpha=0.5)
+    axes[0].set_xticks(positions, [name.split(".")[1] for name in correctors], rotation=45, fontsize=7)
+    axes[0].set_ylabel("corrector kick gain $g$", fontsize=8)
+    axes[0].legend(fontsize=7)
+    legend_headroom(axes[0])
+    style_axis(axes[0])
+    for (slug, gain), colour in zip(fitted.items(), CASE_COLOURS, strict=False):
+        for plane, marker in (("x", "o"), ("y", "s")):
+            names = [n for n in gain.index if n.startswith(f"bpmgain.{plane}.")]
+            s = [results.positions.get(n.split(".", 2)[2], np.nan) for n in names]
+            axes[1].plot(s, gain[names].to_numpy(), marker, color=colour, alpha=0.85,
+                         label=f"{PLANE_WORD[plane]}")
+    axes[1].axhline(0.0, color="k", linewidth=0.8, alpha=0.5)
+    axes[1].set_xlabel("s [m]")
+    axes[1].set_ylabel("BPM gain $b$", fontsize=8)
+    axes[1].legend(fontsize=7, ncols=2)
+    legend_headroom(axes[1])
+    style_axis(axes[1])
+    return [_save(figure, output / f"{page.slug}_gains.png")]
+
+
 def family_significance(results: Results, page: Page, suffix: str,
                         output: Path) -> list[Path]:
     """The same family as |value| / sigma: whether the data produced the number."""
@@ -117,7 +155,7 @@ def family_significance(results: Results, page: Page, suffix: str,
     for slug in results.valid(page.cases):
         block = results.knobs(slug)
         block = block[block["suffix"] == suffix].sort_values("s")
-        # Method 1 reports no covariance (NaN sigma), so it has no significance to draw.
+        # A fit with no covariance (NaN sigma) has no significance to draw.
         if not block.empty and (block["uncertainty"].to_numpy() > 0).any():
             blocks[slug] = block
     if not blocks:

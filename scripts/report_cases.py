@@ -15,7 +15,7 @@ mpl.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from psb_md.plotting import finalize_figure, style_axis
+from psb_md.plots import save_figure, style_axis
 
 from loco_common.case_names import (
     LOCO_OPTICS_CASE,
@@ -221,15 +221,15 @@ def figure_beta_beat_summary(
     figure.suptitle(
         "Measured beta-beating along $s$ against each reference model", fontsize=12
     )
-    finalize_figure(figure, output / "comparison_beta_beat.png")
+    save_figure(figure, output / "comparison_beta_beat.png")
 
 
 def scenario_dispersion_beat(campaign) -> dict[str, float]:
     """Measured dispersion against the un-matched model, ``{"x": ..., "y": ...}`` rms fractions.
 
-    Read from the start-model row of every ``scoreboard*.csv`` shard (single-momentum matrix).
+    Read from the start-model row of every ``scoreboard*.csv`` shard (multi-momentum matrix).
     """
-    predictions = fit_mode_by_slug("single").results_root(campaign) / "predictions"
+    predictions = fit_mode_by_slug("multi").results_root(campaign) / "predictions"
     shards = sorted(predictions.glob("scoreboard*.csv"))
     if not shards:
         return {}
@@ -313,7 +313,7 @@ def optics_beat_along_s(campaign, positions: dict[str, float]) -> pd.DataFrame:
                     ).to_numpy(float),
                 }))
 
-    predictions = fit_mode_by_slug("single").results_root(campaign) / "predictions"
+    predictions = fit_mode_by_slug("multi").results_root(campaign) / "predictions"
     dispersion = measured_dispersion_frame(predictions, positions)
     if not dispersion.empty:
         model = pd.read_parquet(predictions / "start-model.dispersion.parquet")
@@ -409,7 +409,7 @@ def optics_values_along_s(
                     block(source, "phase", plane, phase.index, phase[column],
                           phase.get(f"{column}_err"))
 
-    predictions = fit_mode_by_slug("single").results_root(campaign) / "predictions"
+    predictions = fit_mode_by_slug("multi").results_root(campaign) / "predictions"
     measured_dispersion = measured_dispersion_frame(predictions, positions)
     for plane in ("x", "y"):
         rows = measured_dispersion[measured_dispersion["plane"] == plane]
@@ -574,7 +574,7 @@ def figure_perturbation_effect(
             fontsize=13,
         )
         if any_drawn:
-            finalize_figure(figure, output / f"scenario_perturbation_{stem}.png")
+            save_figure(figure, output / f"scenario_perturbation_{stem}.png")
         else:
             plt.close(figure)
 
@@ -627,7 +627,7 @@ def figure_perturbation_tunes(summaries: list[tuple[object, dict]], output: Path
         f"against {baseline.label}",
         fontsize=12,
     )
-    finalize_figure(figure, output / "scenario_perturbation_tunes.png")
+    save_figure(figure, output / "scenario_perturbation_tunes.png")
 
 
 def figure_scenario_tunes_chromas(summaries: list[tuple[object, dict]], output: Path) -> None:
@@ -668,7 +668,7 @@ def figure_scenario_tunes_chromas(summaries: list[tuple[object, dict]], output: 
             axis.set_ylim(low - 0.1 * span, high + 0.3 * span)
         style_axis(axis)
     figure.suptitle("Measured tune and chromaticity, absolute, every scenario", fontsize=12)
-    finalize_figure(figure, output / "scenario_tunes_chromas.png")
+    save_figure(figure, output / "scenario_tunes_chromas.png")
 
 
 def figure_scenario_knob_diffs(
@@ -717,100 +717,6 @@ def figure_scenario_knob_diffs(
         )
         axis.legend(fontsize=8, ncols=len(blocks))
         style_axis(axis)
-        finalize_figure(figure, output / f"knob_diffs_{suffix.lstrip('.')}.png")
+        save_figure(figure, output / f"knob_diffs_{suffix.lstrip('.')}.png")
 
 
-#: One colour per method, fixed across both benchmark figures.
-METHOD_COLOURS = {"method1": "#0072B2", "method2": "#D55E00"}
-METHOD_NAMES = {"method1": "Method 1", "method2": "Method 2"}
-
-
-def benchmark_records(root: Path, campaigns) -> list[dict]:
-    """Each configuration's benchmark record, for the configurations that have one."""
-    records = []
-    for campaign in campaigns:
-        path = root / f"{campaign.slug}.json"
-        if path.exists():
-            records.append(json.loads(path.read_text()))
-    return records
-
-
-def figure_benchmark_speed(records: list[dict], output: Path) -> None:
-    """Wall clock and CPU per method."""
-    if not records:
-        return
-    figure, axes = plt.subplots(
-        1, len(records), figsize=(4.6 * len(records) + 1.6, 4.4),
-        sharey=True, constrained_layout=True, squeeze=False,
-    )
-    for axis, record in zip(axes[0], records, strict=True):
-        positions = np.arange(2)
-        width = 0.38
-        for offset, (key, label) in zip(
-            (-width / 2, width / 2), (("wall_s", "wall clock"), ("cpu_s", "CPU, whole tree")),
-            strict=True,
-        ):
-            values = [record[method][key] for method in ("method1", "method2")]
-            bars = axis.bar(
-                positions + offset, values, width, label=label,
-                color=[METHOD_COLOURS[m] for m in ("method1", "method2")],
-                alpha=1.0 if key == "wall_s" else 0.55,
-                edgecolor="white", linewidth=0.6,
-            )
-            _bar_labels(axis, bars, values, "{:.1f} s")
-        axis.set_xticks(
-            positions,
-            [f"{METHOD_NAMES['method1']}\n1 process",
-             f"{METHOD_NAMES['method2']}\n{record['method2']['processes']} processes"],
-            fontsize=9,
-        )
-        axis.set_title(record["label"], fontsize=10, loc="left")
-        style_axis(axis)
-    axes[0][0].set_ylabel("seconds")
-    axes[0][0].legend(fontsize=8)
-    figure.suptitle(
-        "What each method cost for the same fit — 32 cell-grouped knobs, delta orbits",
-        fontsize=12,
-    )
-    finalize_figure(figure, output / "benchmark_speed.png")
-
-
-def figure_benchmark_agreement(records: list[dict], output: Path) -> None:
-    """Method 1 against Method 2 gradients, one point per magnet."""
-    if not records:
-        return
-    figure, axes = plt.subplots(
-        1, len(records), figsize=(4.6 * len(records) + 1.2, 4.6),
-        constrained_layout=True, squeeze=False,
-    )
-    scale = 100 / NOMINAL_K1L
-    for axis, record in zip(axes[0], records, strict=True):
-        directory = Path(record["method1"]["log"]).parent
-        first = pd.read_csv(directory / "method1" / "knobs.csv").set_index("knob")["value"]
-        second = pd.read_csv(directory / "method2" / "knobs.csv").set_index("knob")["value"]
-        common = first.index.intersection(second.index)
-        x = scale * first.loc[common].to_numpy(dtype=float)
-        y = scale * second.loc[common].to_numpy(dtype=float)
-        limit = 1.1 * max(np.abs(np.concatenate([x, y])).max(), 1e-9)
-        axis.plot([-limit, limit], [-limit, limit], color="0.6", linewidth=1.0,
-                  linestyle="--", label="the same answer")
-        axis.scatter(x, y, s=26, color=METHOD_COLOURS["method1"], alpha=0.85,
-                     edgecolor="white", linewidth=0.5)
-        agreement = record["agreement"]
-        axis.annotate(
-            f"correlation {agreement['correlation']:+.4f}\n"
-            f"rms difference {agreement['rms_difference_pct']:.2f} %\n"
-            f"largest {agreement['max_difference_pct']:.2f} %",
-            (0.04, 0.96), xycoords="axes fraction", va="top", fontsize=8,
-        )
-        axis.set_xlim(-limit, limit)
-        axis.set_ylim(-limit, limit)
-        axis.set_aspect("equal")
-        axis.set_xlabel("Method 1, $\\Delta k_1 L / k_1 L$ [%]")
-        axis.set_title(record["label"], fontsize=10, loc="left")
-        style_axis(axis)
-    axes[0][0].set_ylabel("Method 2, $\\Delta k_1 L / k_1 L$ [%]")
-    axes[0][-1].legend(fontsize=8, loc="lower right")
-    figure.suptitle("Do the two methods ask the same magnets for the same thing?",
-                    fontsize=12)
-    finalize_figure(figure, output / "benchmark_agreement.png")

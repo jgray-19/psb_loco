@@ -16,6 +16,7 @@ FAMILY_WORD = {
     "t": "rolls",
     "k0s": "skew dipole errors",
     "k1s": "skew gradient errors",
+    "g": "BPM and corrector gains",
 }
 
 #: Orbit-matching mode in words: ``none`` subtracts a reference orbit, ``xy`` keeps the closed orbit.
@@ -30,15 +31,13 @@ PLANES_SHORT = {
     "xy": "absolute orbit",
 }
 
-#: Parametrisation: ``none`` is one knob per magnet, ``bpm-family`` ties them by cell and QFO/QDE family (48 quadrupoles, 16 cells).
+#: Parametrisation: ``bpm-family`` ties the quadrupoles by cell and QFO/QDE family (48 quadrupoles, 16 cells).
 LUMP_PHRASE = {
-    "none": "one knob per magnet",
     "bpm-family": "lumped to 32 knobs by cell",
 }
 
 #: Knob count per lump, for narrow table columns.
 LUMP_COUNT = {
-    "none": "48",
     "bpm-family": "32",
 }
 
@@ -101,14 +100,10 @@ def parse_case(slug: str) -> Case:
     return Case(slug=slug, planes=parts[0], families=parts[1], lump=parts[2])
 
 
-#: Options that are not a Method-2 case slug, and their names.
+#: Options that are not a POCO case slug, and their names.
 OTHER_OPTIONS = {
-    "method1": "Method 1, lumped to 32 knobs by cell",
     "start-model": "start model",
 }
-
-#: The Method-1 option's on-disk name; not a case slug.
-METHOD1_OPTION = "method1"
 
 
 def display_name(slug: str) -> str:
@@ -161,7 +156,7 @@ class Page:
 
 
 def _cases(planes: str, families: tuple[str, ...]) -> tuple[str, ...]:
-    """The cases of a page, all lumped ``bpm-family``; per-magnet fits live on :data:`PER_MAGNET_PAGE`."""
+    """The cases of a page, all lumped ``bpm-family``."""
     return tuple(f"{planes}__{family}__bpm-family" for family in families)
 
 
@@ -177,9 +172,12 @@ DELTA_PAGE = Page(
         "of a delta orbit to linear order and is not fitted here. A roll does "
         "not cancel -- its skew kick goes as the beam position at the magnet, "
         "which is what the correctors change -- so the rolls are fitted "
-        "alongside the gradients."
+        "alongside the gradients. The gains case also frees a gain per BPM and "
+        "plane and per corrector kick; only differences between correctors of "
+        "one plane are determined, and the gains absorb whatever the model "
+        "dispersion gets wrong."
     ),
-    cases=_cases("none", ("k1", "k1+t")),
+    cases=_cases("none", ("k1", "k1+t", "k1+g")),
 )
 
 #: Absolute-orbit page: bends and offsets are constrained by the static orbit and must be free.
@@ -199,55 +197,19 @@ ABSOLUTE_PAGE = Page(
     cases=_cases("xy", ("k1+b+dy", "k1+b+dy+t")),
 )
 
-#: Per-magnet page: one option per orbit mode.
-PER_MAGNET_PAGE = Page(
-    slug="per-magnet",
-    planes="",
-    title="One knob per magnet",
-    lede=(
-        "Every gradient free, one knob per quadrupole: 48 parameters against 16 "
-        "BPMs per plane. The two options here are the same parametrisation in "
-        "the two orbit-matching modes, kept off the results pages and shown "
-        "together instead."
-    ),
-    cases=("none__k1__none", "xy__k1+b+dy__none"),
-)
-
-#: Method-1 page: delta-orbit only, beside the Method-2 fit at the same 32 knobs.
-METHOD1_PAGE = Page(
-    slug="method1",
-    planes="none",
-    title="Method 1",
-    lede=(
-        "The MAD-NG parametric-twiss fit of the measured response matrix, on "
-        "the delta orbits, beside the two Method-2 delta-orbit fits of the same "
-        "data."
-    ),
-    cases=(METHOD1_OPTION, "none__k1__bpm-family"),
-)
-
 #: The pages ``run_campaign_fits`` fits, in nav order.
 PAGES = (DELTA_PAGE, ABSOLUTE_PAGE)
 
-#: Every rendered page, including those that re-show options fitted for the above.
-ALL_PAGES = (*PAGES, PER_MAGNET_PAGE, METHOD1_PAGE)
-
-
 def every_page_case() -> list[str]:
-    """Every Method-2 case any page shows, deduplicated, in page order (Method 1 excluded)."""
+    """Every POCO case any page shows, deduplicated, in page order."""
     return list(
         dict.fromkeys(
             slug
-            for page in ALL_PAGES
+            for page in PAGES
             for slug in page.cases
             if slug not in OTHER_OPTIONS
         )
     )
-
-
-def every_option() -> list[str]:
-    """Every fitted option a page shows, Method 1 included."""
-    return list(dict.fromkeys(slug for page in ALL_PAGES for slug in page.cases))
 
 
 #: Fit mode the perturbation figures' fitted half is drawn from; fixed across campaigns.

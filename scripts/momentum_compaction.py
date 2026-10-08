@@ -104,7 +104,7 @@ def orbit_dpp_by_rf_offset(campaign: Campaign) -> dict[int, float]:
         scan_quads=False,
     )
     pt = estimate_pt_by_rf_offset(absolute, model_twiss(model, chrom=True))
-    from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: PLC0415, N811
+    from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
 
     accelerator = OptimiserPSB(
         ring=model.ring,

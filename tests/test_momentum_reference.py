@@ -3,7 +3,7 @@ from pathlib import Path
 
 import psb_md
 import pytest
-from aba_optimiser.accelerators import PSB
+from adelmo.machine.accelerators.psb import PSB
 from psb_md.defaults import DPP_PER_MM
 from psb_md.tune_measurements import load_orbit_tune_table
 
@@ -60,16 +60,3 @@ def test_chroma_pt_error_combines_the_band_and_reference_scatter(chroma, acceler
     for offset in (-2.0, 2.0):
         sigma = math.hypot(table[int(offset)].dpp_std, table[0].dpp_std)
         assert errors[offset] == pytest.approx(slope * sigma, rel=1e-2)
-
-
-def test_calibration_comparison_requires_the_same_relative_reference():
-    assert momentum.compare_momentum_calibrations(
-        {-1.0: -0.2, 0.0: 0.0, 1.0: 0.3},
-        {-1.0: -0.1, 0.0: 0.0, 1.0: 0.5},
-    ) == pytest.approx({-1.0: 0.1, 0.0: 0.0, 1.0: 0.2})
-
-    with pytest.raises(ValueError, match="zero at the nominal-RF reference"):
-        momentum.compare_momentum_calibrations(
-            {-1.0: -0.2, 0.0: 0.4, 1.0: 0.3},
-            {-1.0: -0.1, 0.0: 0.0, 1.0: 0.5},
-        )

@@ -1,4 +1,6 @@
-"""Momentum fit layouts shared by every campaign tool."""
+"""Momentum fit layouts shared by every campaign tool.
+
+``single`` is not reported: its absolute fits warm-start the ``multi`` ones."""
 
 from __future__ import annotations
 
@@ -31,23 +33,13 @@ class FitMode:
         return base if self.slug == "single" else base / self.slug
 
     def rf_offsets_for(self, campaign: Campaign) -> tuple[float, ...]:
-        """Nominal RF only, the innermost offset either side of it, or every offset."""
-        offsets = campaign.rf_offsets
-        if self.slug == "single":
-            return (0.0,)
-        if self.slug == "multi":
-            return offsets
-        return (
-            max(offset for offset in offsets if offset < 0),
-            0.0,
-            min(offset for offset in offsets if offset > 0),
-        )
+        """Nominal RF only, or every offset the scan visited."""
+        return campaign.rf_offsets if self.slug == "multi" else (0.0,)
 
 
 SINGLE = FitMode("single", "Single momentum", batch_momenta=False)
-THREE = FitMode("three", "Three momentum", batch_momenta=True)
 MULTI = FitMode("multi", "Multi momentum", batch_momenta=True)
-FIT_MODES = {mode.slug: mode for mode in (SINGLE, THREE, MULTI)}
+FIT_MODES = {mode.slug: mode for mode in (SINGLE, MULTI)}
 
 
 def fit_mode_by_slug(slug: str) -> FitMode:
@@ -61,13 +53,13 @@ def add_fit_mode_argument(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--momentum-mode",
         choices=sorted(FIT_MODES),
-        default="single",
-        help="Fit/result scope: nominal only, the innermost RF offset either side, or every one.",
+        default="multi",
+        help="Fit/result scope: nominal RF only (a warm start, not reported) or every RF offset.",
     )
 
 
 def result_is_valid(directory: Path) -> bool:
-    """Whether a Method-2 directory contains an accepted optimisation step."""
+    """Whether a POCO directory contains an accepted optimisation step."""
     summary = directory / "summary.json"
     if not summary.exists():
         return False

@@ -20,31 +20,15 @@ nav = [
   { "Method" = "method.md" },
   { "Inverted tunes" = [
       "inverted_tunes/reports/index.md",
-      { "Method 2 - single momentum" = [
-          { "Delta orbits" = "inverted_tunes/reports/delta.md" },
-          { "Absolute orbits" = "inverted_tunes/reports/absolute.md" },
-          { "One knob per magnet" = "inverted_tunes/reports/per-magnet.md" },
-      ]},
-      { "Method 2 - multi momentum" = [
-          { "Delta orbits" = "inverted_tunes/reports/multi/delta.md" },
-          { "Absolute orbits" = "inverted_tunes/reports/multi/absolute.md" },
-          { "One knob per magnet" = "inverted_tunes/reports/multi/per-magnet.md" },
-      ]},
+      { "Delta orbits" = "inverted_tunes/reports/delta.md" },
+      { "Absolute orbits" = "inverted_tunes/reports/absolute.md" },
       { "Measured optics" = "inverted_tunes/studies/measured-optics.md" },
       { "Scenario comparison" = "inverted_tunes/reports/scenarios.md" },
   ]},
   { "Normal tunes" = [
       "normal_tunes/reports/index.md",
-      { "Method 2 - single momentum" = [
-          { "Delta orbits" = "normal_tunes/reports/delta.md" },
-          { "Absolute orbits" = "normal_tunes/reports/absolute.md" },
-          { "One knob per magnet" = "normal_tunes/reports/per-magnet.md" },
-      ]},
-      { "Method 2 - multi momentum" = [
-          { "Delta orbits" = "normal_tunes/reports/multi/delta.md" },
-          { "Absolute orbits" = "normal_tunes/reports/multi/absolute.md" },
-          { "One knob per magnet" = "normal_tunes/reports/multi/per-magnet.md" },
-      ]},
+      { "Delta orbits" = "normal_tunes/reports/delta.md" },
+      { "Absolute orbits" = "normal_tunes/reports/absolute.md" },
       { "Measured optics" = "normal_tunes/studies/measured-optics.md" },
       { "Scenario comparison" = "normal_tunes/reports/scenarios.md" },
   ]},

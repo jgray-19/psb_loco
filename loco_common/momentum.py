@@ -1,4 +1,4 @@
-"""Momentum of each RF-steering setting, for Method 2's multi-``pt`` mode.
+"""Momentum of each RF-steering setting, for POCO's multi-``pt`` mode.
 
 The chromaticity scan visited the same orbit plateaus as the LOCO scan and gives an
 RF-derived ``Dp/p`` calibration, kept separate from the orbit-projection estimate for comparison.
@@ -104,23 +104,6 @@ def chroma_pt_error_by_rf_offset(
     for offset in sorted(errors):
         logger.info("RF offset %+g mm -> chroma pt one-sigma %.4e", offset, errors[offset])
     return errors
-
-
-def compare_momentum_calibrations(
-    reference: dict[float, float], alternative: dict[float, float]
-) -> dict[float, float]:
-    """Return ``alternative - reference`` for matching RF offsets; both must be reference-relative."""
-    if set(reference) != set(alternative):
-        raise ValueError("Momentum calibrations must contain the same RF offsets")
-    if 0.0 in reference and (
-        not np.isclose(reference[0.0], 0.0)
-        or not np.isclose(alternative[0.0], 0.0)
-    ):
-        raise ValueError("Momentum calibrations must be zero at the nominal-RF reference")
-    return {
-        offset: float(alternative[offset] - reference[offset])
-        for offset in sorted(reference)
-    }
 
 
 def frame_from_orbit(orbit: pd.DataFrame, twiss: pd.DataFrame) -> pd.DataFrame:

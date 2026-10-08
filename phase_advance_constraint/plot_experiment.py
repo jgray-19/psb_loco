@@ -23,7 +23,7 @@ sys.path.insert(0, "/afs/cern.ch/work/j/jmgray/private/psb_md")
 
 import numpy as np
 import pandas as pd
-from psb_md.plotting import finalize_figure, style_axis
+from psb_md.plots import save_figure, style_axis
 
 from loco_common.campaign import campaign_by_slug
 from loco_common.measured_response import (
@@ -117,7 +117,7 @@ def plot_optics_family(model, campaign_slug: str, labels: list[str], output: Pat
         axes[-1].set_xlabel("s [m]")
         axes[0].legend(fontsize=7, ncols=2, loc="upper left")
         legend_headroom(axes[0])
-        finalize_figure(figure, output / f"{campaign_slug}_{stem}.png")
+        save_figure(figure, output / f"{campaign_slug}_{stem}.png")
     print(f"wrote {campaign_slug} beta_beating/phase_error/dispersion/coupling to {output}")
 
 
@@ -155,7 +155,7 @@ def plot_phase_advance(model, campaign_slug: str, labels: list[str], output: Pat
     axes[-1].set_xlabel("s [m]")
     legend_headroom(axes[0])
     path = output / f"{campaign_slug}_phase_advance.png"
-    finalize_figure(figure, path)
+    save_figure(figure, path)
     print(f"wrote {path}")
 
 
@@ -185,7 +185,7 @@ def plot_orbit(model, campaign_slug: str, labels: list[str], output: Path) -> No
     axes[-1].set_xlabel("BPM index")
     legend_headroom(axes[0])
     path = output / f"{campaign_slug}_orbit.png"
-    finalize_figure(figure, path)
+    save_figure(figure, path)
     print(f"wrote {path}")
 
 

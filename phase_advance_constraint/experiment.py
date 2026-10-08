@@ -15,12 +15,11 @@ from pathlib import Path
 sys.path.insert(0, "/afs/cern.ch/work/j/jmgray/private/psb_md")
 sys.path.insert(0, "/afs/cern.ch/work/j/jmgray/private/sgd-magnet-tuner/src")
 
-from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: E402, N811
-from aba_optimiser.training.config import OutputConfig, SequenceConfig  # noqa: E402
-from aba_optimiser.training_closed_twiss import (  # noqa: E402
-    ClosedTwissFitter,
-    LevenbergMarquardtConfig,
-)
+from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
+from adelmo.machine.mad.machine_state import merge_machine_states
+from adelmo.fitting.config import OutputConfig, SequenceConfig
+from adelmo.poco.fitter import ClosedTwissFitter
+from adelmo.optimisers.levenberg_marquardt import LevenbergMarquardtConfig
 from psb_md.closed_orbit_fitting import (  # noqa: E402
     GRADIENT_CONVERGED_VALUE,
     isotropic_prior_strengths,
@@ -115,16 +114,13 @@ def run_fit(campaign_slug: str, observables: tuple[str, ...], phase_weight: floa
         output_config=OutputConfig(
             tensorboard_root=Path("/tmp/phase_advance_experiment") / label / "tensorboard"
         ),
-        tune_knobs=model.tune_knobs or None,
-        corrector_knobs=model.corrector_knobs or None,
+        machine_state=merge_machine_states(model.corrector_knobs, model.tune_knobs) or None,
         use_errors=True,
     )
     try:
         knobs, uncertainties = fitter.run()
     finally:
-        mad_iface = getattr(fitter.config_manager, "mad_iface", None)
-        if mad_iface is not None:
-            mad_iface.close()
+        fitter.close()
     print(f"{label}: {len(knobs)} knobs, diagnostics={dict(fitter.diagnostics)}", flush=True)
     return knobs, uncertainties
 

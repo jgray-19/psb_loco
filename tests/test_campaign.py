@@ -115,29 +115,27 @@ def _offsets_in(argv: list[str]) -> list[str]:
     return rest[:end]
 
 
-@pytest.mark.parametrize("mode", ["multi", "three"])
-def test_momentum_commands_use_the_campaigns_rf_offsets_and_batch(mode):
-    """Every campaign steps -2/0/+2 mm, so both staged modes fit all three."""
+def test_multi_momentum_command_uses_the_campaigns_rf_offsets_and_batches():
+    """Every campaign steps -2/0/+2 mm, so the multi mode fits all three."""
     from loco_common.fit_mode import fit_mode_by_slug
     from scripts.run_campaign_fits import command
 
-    expected = fit_mode_by_slug(mode).rf_offsets_for(P23_P13_FINAL)
-    argv = command("xy__k1+b+dy+t__bpm-family", "p23_p13_final", "seq", Path("out"), mode)
+    expected = fit_mode_by_slug("multi").rf_offsets_for(P23_P13_FINAL)
+    argv = command("xy__k1+b+dy+t__bpm-family", "p23_p13_final", "seq", Path("out"), "multi")
     assert expected == (-2.0, 0.0, 2.0)
     assert _offsets_in(argv) == [f"{value:g}" for value in expected]
     assert "--batch-momenta" in argv
-    # Warm-started from the nominal-momentum fit: PREVIOUS_MODE sends both staged modes back to SINGLE.
+    # Warm-started from the nominal-momentum fit: PREVIOUS_MODE sends the multi mode back to SINGLE.
     assert argv[argv.index("--initial-knobs") + 1].endswith(
         "results/matrix_p23_p13_final/xy__k1+b+dy+t__bpm-family/knobs.csv"
     )
 
 
-def test_both_staged_modes_warm_start_from_the_nominal_momentum_fit():
-    from loco_common.fit_mode import MULTI, SINGLE, THREE
+def test_multi_warm_starts_from_the_nominal_momentum_fit():
+    from loco_common.fit_mode import MULTI, SINGLE
     from scripts.run_campaign_fits import PREVIOUS_MODE
 
     assert PREVIOUS_MODE[MULTI.slug] is SINGLE
-    assert PREVIOUS_MODE[THREE.slug] is SINGLE
 
 
 def test_single_momentum_command_keeps_the_nominal_only_default():

@@ -1,4 +1,4 @@
-"""The pages that are not per-case: measured optics, benchmark, scenarios."""
+"""The pages that are not per-case: measured optics, scenarios."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from loco_common.case_names import DELTA_PAGE, LOCO_OPTICS_FITS, parse_case
 from loco_report import render
-from loco_report.data import benchmark, read_json
+from loco_report.data import read_json
 from loco_report.style import FAMILIES
 
 if TYPE_CHECKING:
@@ -163,90 +163,6 @@ def render_optics_page(campaigns, figure_root: Path, scenario_root: Path,
     return render.page("Measured optics", statement, blocks)
 
 
-BENCHMARK_FIGURES = (
-    ("benchmark_speed.png", "wall clock and CPU per method",
-     "Wall clock and whole-tree CPU for each method, every benchmarked "
-     "configuration."),
-    ("benchmark_agreement.png", "Method 1 against Method 2 per magnet",
-     "Each magnet's fitted gradient, Method 1 against Method 2."),
-)
-
-
-def benchmark_table(record: dict) -> str:
-    """One configuration's two runs, side by side."""
-    rows = []
-    for key, name in (("method1", "Method 1"), ("method2", "Method 2")):
-        run = record.get(key)
-        if not run:
-            continue
-        rows.append([
-            name,
-            f"{run.get('wall_s', float('nan')):.1f}",
-            f"{run.get('cpu_s', float('nan')):.1f}",
-            f"{run.get('max_rss_mb', float('nan')):.0f}",
-            str(run.get("processes", "—")),
-        ])
-    return render.table(
-        ["method", "wall [s]", "CPU [s]", "peak RSS [MB]", "processes"], rows
-    )
-
-
-def agreement_table(records: list[dict]) -> str:
-    """How closely the two methods' gradients agree, per configuration."""
-    rows = []
-    for record in records:
-        agreement = record.get("agreement")
-        if not agreement:
-            continue
-        rows.append([
-            record["campaign_object"].label,
-            str(agreement["magnets"]),
-            f"{agreement['correlation']:+.4f}",
-            f"{agreement['rms_difference_pct']:.2f}",
-            f"{agreement['max_difference_pct']:.2f}",
-        ])
-    return render.table(
-        ["configuration", "magnets", "correlation", "rms difference [%]",
-         "max difference [%]"],
-        rows,
-    )
-
-
-def render_benchmark_page(campaigns, benchmark_root: Path, scenario_root: Path,
-                          destination: Path) -> str:
-    """Both methods on the same data, run back to back."""
-    records = benchmark(benchmark_root, campaigns)
-    if not records:
-        return render.page(
-            "Method 1 against Method 2",
-            "_Not measured: run `python -m scripts.benchmark_methods --campaign "
-            + " ".join(campaign.slug for campaign in campaigns) + "`._",
-            [],
-        )
-    prefix = render.prefix(scenario_root, destination)
-    blocks = [
-        render.heading("The two runs"),
-        render.tabbed({
-            record["campaign_object"].label: benchmark_table(record) for record in records
-        }),
-    ]
-    blocks += [render.heading("Agreement"), agreement_table(records)]
-    figures = [
-        render.figure(name, alt, caption, prefix)
-        for name, alt, caption in BENCHMARK_FIGURES
-        if (scenario_root / name).exists()
-    ]
-    if figures:
-        blocks += [render.heading("Speed and agreement"), "\n\n".join(figures)]
-    statement = (
-        "PSB ring 3 · both methods, same 32 cell-grouped knobs, same delta "
-        "orbits. Wall clock is one run on one machine, not a mean over repeats; "
-        "the CPU column is the whole process tree, which for Method 2 is one "
-        "worker per corrector setting."
-    )
-    return render.page("Method 1 against Method 2", statement, blocks)
-
-
 #: What each scenario figure shows, per fit.
 PERTURBATION_FIGURES = (
     ("scenario_perturbation_beta", "beta-beating difference from baseline",
@@ -339,21 +255,18 @@ GLOSSARY = (
      "*scenario* on the scenario-comparison page, where the baseline is "
      "subtracted from the other three."),
     ("case", "One fitted option within a page: which knob families the fit was "
-     "allowed to move, and how they were grouped. Two per page."),
+     "allowed to move. The quadrupoles are always lumped to 32 knobs by cell."),
     ("orbit-matching mode", "What the fit was scored against. *Delta orbits* "
      "subtract a reference orbit from both planes, so a constant kick is "
      "invisible and quadrupole offsets are not fitted. *Absolute orbits* keep "
      "the machine's own closed orbit in both planes, so bends and offsets are "
      "constrained and free."),
-    ("momentum mode", "*Single momentum* fits the nominal-RF acquisitions only, "
-     "and the other RF settings are held-out validation. *Multi momentum* fits "
-     "every RF setting together."),
-    ("lumping", "How per-magnet families were grouped. *Lumped to 32 knobs by "
-     "cell* ties the two QFO flanking a QDE and leaves the QDE free. *One knob "
-     "per magnet* frees all 48 against 16 BPMs per plane."),
-    ("Method 1", "The MAD-NG parametric-twiss fit of the measured response "
-     "matrix, on the delta orbits, over the same 32 cell-grouped knobs."),
-    ("Method 2", "The closed-orbit fit: one MAD-NG worker per corrector "
+    ("lumping", "*Lumped to 32 knobs by cell* ties the two QFO of a cell and "
+     "leaves the QDE free."),
+    ("gains", "A multiplicative error on a BPM reading (per BPM and plane) or on "
+     "a corrector's kick. Only differences between correctors of one plane are "
+     "determined; the priors set the overall scale."),
+    ("POCO", "The closed-orbit fit: one MAD-NG worker per corrector "
      "setting, Levenberg-Marquardt over the same knobs."),
 )
 

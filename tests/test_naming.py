@@ -88,41 +88,36 @@ def test_horizontal_lsa_k_is_inverted_in_the_measurement(sequence_file):
     The signed conversion must make the measured response agree in sign with the model in both
     planes; under the wrong convention DHZ correlate at -0.998 and DVT at +0.999. Skipped without the acquisition cache.
     """
-    import numpy as np
-
     from loco_common.campaign import P23_P13_FINAL
+    from loco_common.measured_response import measured_response
     from loco_common.naming import lsa_k_to_rad
+    from tests.madng_helpers import closed_orbit, open_interface, set_knob
 
-    cache = P23_P13_FINAL.cache_file("response_xy_rfp0.parquet")
-    if not cache.exists():
-        pytest.skip("needs the cached measured response (build it from the mount)")
+    if not P23_P13_FINAL.cache_file("scan_points.parquet").exists():
+        pytest.skip("needs the cached scan (build it from the mount)")
 
-    import pandas as pd
-
-    from method1_madng_da.run_method1 import _matrices
-    from tests.madng_helpers import open_response_interface, setup_response_da
-
-    response = pd.read_parquet(cache)
-    correctors = sorted(response["CORRECTOR"].unique())
-    interface = open_response_interface(sequence_file)
+    response = measured_response(0.0, campaign=P23_P13_FINAL)
+    step_k = 1e-4
+    interface = open_interface(sequence_file)
     try:
-        bpms, model = setup_response_da(
-            interface,
-            [lsa_to_element(name) for name in correctors],
-        )
+        nominal = closed_orbit(interface)
+        for corrector in sorted(response["CORRECTOR"].unique()):
+            plane = plane_of(corrector)
+            column = plane.upper()
+            measured = response[(response["CORRECTOR"] == corrector) & (response["PLANE"] == plane)].set_index("NAME")["SLOPE"]
+            set_knob(interface, lsa_to_knob(corrector), step_k * lsa_k_to_rad(corrector))
+            kicked = closed_orbit(interface)
+            set_knob(interface, lsa_to_knob(corrector), 0.0)
+
+            common = [bpm for bpm in kicked.index if bpm in measured.index and np.isfinite(measured[bpm])]
+            if len(common) < 8:
+                continue
+            model = (kicked.loc[common, column] - nominal.loc[common, column]).to_numpy()
+            correlation = np.corrcoef(measured.loc[common].to_numpy(), model)[0, 1]
+            assert correlation > 0.9, (
+                f"{corrector} response is anti-correlated with the model "
+                f"({correlation:+.3f}) -- LSA_K_SIGN[{plane!r}] is wrong"
+            )
+            assert lsa_k_to_rad(corrector) != 0.0
     finally:
         interface.close()
-
-    target, weight = _matrices(response, bpms, correctors)
-    for i, corrector in enumerate(correctors):
-        offset = 0 if plane_of(corrector) == "x" else len(bpms)
-        rows = slice(offset, offset + len(bpms))
-        usable = weight[rows, i] > 0
-        if usable.sum() < 8:
-            continue
-        correlation = np.corrcoef(target[rows, i][usable], model[rows, i][usable])[0, 1]
-        assert correlation > 0.9, (
-            f"{corrector} response is anti-correlated with the model "
-            f"({correlation:+.3f}) -- LSA_K_SIGN[{plane_of(corrector)!r}] is wrong"
-        )
-        assert lsa_k_to_rad(corrector) != 0.0

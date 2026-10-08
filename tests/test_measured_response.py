@@ -18,6 +18,7 @@ from loco_common.measured_response import (
     measured_response,
     pooled_intershot_noise,
     read_scan_log,
+    subtract_reference,
 )
 
 CORRECTOR = "logical.BR3.DHZ8L1/K"
@@ -180,7 +181,7 @@ def test_slope_error_covers_the_noise(fake_scan):
 
 
 def test_slope_errors_include_intershot_noise(fake_scan):
-    """Method 1's single acquisitions are not exempt from shot-to-shot jitter."""
+    """Single acquisitions are not exempt from shot-to-shot jitter."""
     points, orbits = fake_scan({CORRECTOR: SLOPES}, noise=1e-6)
     errors = [
         measured_response(
@@ -222,3 +223,82 @@ def test_delta_orbit_errors_add_in_quadrature(fake_scan):
     # The reference averages the zero step and the reset.
     expected = np.hypot(noise, noise / np.sqrt(2))
     np.testing.assert_allclose(frame["ERRX"].to_numpy(), expected, rtol=1e-9)
+
+
+# --------------------------------------------------------- absolute planes
+
+BASELINE = 5e-3
+
+def _frame(values_x, values_y, error=1e-6) -> pd.DataFrame:
+    index = pd.Index([f"BPM{i}" for i in range(len(values_x))], name="NAME")
+    return pd.DataFrame(
+        {
+            "X": np.asarray(values_x, dtype=float),
+            "ERRX": np.full(len(values_x), error),
+            "Y": np.asarray(values_y, dtype=float),
+            "ERRY": np.full(len(values_y), error),
+        },
+        index=index,
+    )
+
+
+def test_an_absolute_plane_keeps_its_orbit_and_the_other_does_not():
+    frame = _frame([1.0, 2.0], [3.0, 4.0])
+    reference = _frame([0.5, 0.5], [1.0, 1.0])
+
+    delta = subtract_reference(frame, reference, absolute_planes=("y",))
+
+    np.testing.assert_allclose(delta["X"], [0.5, 1.5])
+    np.testing.assert_allclose(delta["Y"], [3.0, 4.0])
+
+
+def test_an_absolute_plane_does_not_inherit_the_references_error():
+    """There is no reference on that side, so there is no error to add."""
+    frame = _frame([1.0, 2.0], [3.0, 4.0], error=3e-6)
+    reference = _frame([0.5, 0.5], [1.0, 1.0], error=4e-6)
+
+    delta = subtract_reference(frame, reference, absolute_planes=("y",))
+
+    np.testing.assert_allclose(delta["ERRX"], 5e-6)  # hypot(3, 4) micron
+    np.testing.assert_allclose(delta["ERRY"], 3e-6)
+
+
+def test_no_absolute_planes_is_the_untouched_default():
+    frame, reference = _frame([1.0, 2.0], [3.0, 4.0]), _frame([0.5, 0.5], [1.0, 1.0])
+    pd.testing.assert_frame_equal(
+        subtract_reference(frame, reference), subtract_reference(frame, reference, ())
+    )
+
+
+def test_an_unknown_plane_is_rejected():
+    frame = _frame([1.0], [1.0])
+    with pytest.raises(ValueError, match="Unknown plane"):
+        subtract_reference(frame, frame, absolute_planes=("z",))
+
+
+def test_the_untrimmed_acquisitions_survive_only_in_absolute_mode(fake_scan):
+    """They are zero by construction only in a plane that was subtracted."""
+    points, orbits = fake_scan({CORRECTOR: SLOPES}, baseline=BASELINE)
+
+    assert (CORRECTOR, 0.0) not in measured_orbits(
+        0.0, points=points, orbit_by_path=orbits
+    )
+    absolute = measured_orbits(
+        0.0, points=points, orbit_by_path=orbits, absolute_planes=("y",)
+    )
+    assert (CORRECTOR, 0.0) in absolute
+    # The untrimmed vertical orbit is the static orbit itself, not zero.
+    np.testing.assert_allclose(absolute[(CORRECTOR, 0.0)]["Y"], BASELINE)
+    np.testing.assert_allclose(absolute[(CORRECTOR, 0.0)]["X"], 0.0, atol=1e-12)
+
+
+def test_the_delta_plane_is_unchanged_by_the_other_planes_mode(fake_scan):
+    """The test that protects the default: x must not notice what y is doing."""
+    points, orbits = fake_scan({CORRECTOR: SLOPES}, baseline=BASELINE, noise=1e-6)
+    delta = measured_orbits(0.0, points=points, orbit_by_path=orbits)
+    mixed = measured_orbits(
+        0.0, points=points, orbit_by_path=orbits, absolute_planes=("y",)
+    )
+    for key, frame in delta.items():
+        for column in ("X", "ERRX"):
+            np.testing.assert_array_equal(mixed[key][column], frame[column])

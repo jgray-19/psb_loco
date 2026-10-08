@@ -5,14 +5,14 @@
 each setting was written; this module joins it to the BPM acquisitions of a campaign
 (:mod:`loco_common.campaign`) and produces:
 
-* :func:`measured_orbits` -- the closed orbit change at each scan point (Method 2's target);
-* :func:`measured_response` -- the per-BPM slope ``d(orbit)/d(k)`` (Method 1's target).
+* :func:`measured_orbits` -- the closed orbit change at each scan point (POCO's target);
+* :func:`measured_response` -- the per-BPM slope ``d(orbit)/d(k)``.
 
 Both use one reference for the whole scan, :func:`global_reference_orbit` (untrimmed, nominal RF):
-a per-RF reference would subtract away the dispersion signal. Method 1's slopes are independent of
-the reference (free intercept); Method 2's model side must take its own reference at ``pt = 0``.
+a per-RF reference would subtract away the dispersion signal. The response slopes are independent of
+the reference (free intercept); POCO's model side must take its own reference at ``pt = 0``.
 
-Reading the SDDS files dominates the runtime (~650 acquisitions per campaign), so both products are cached to parquet.
+Reading the SDDS files dominates the runtime (~650 acquisitions per campaign), so the scan is cached to parquet (:func:`cached_scan`).
 """
 
 from __future__ import annotations
@@ -326,7 +326,7 @@ def measured_orbits(
 
     Pass a campaign or its ``(points, orbit_by_path)``. Repeat acquisitions of one key are averaged first.
 
-    With *delta* (default; Method 2's target) the global reference is subtracted from every
+    With *delta* (default; POCO's target) the global reference is subtracted from every
     acquisition. At ``rf_offset = 0`` the ``offset_k = 0`` points are then zero and dropped; at other
     RF settings they are that momentum's dispersion orbit, kept under ``(corrector, 0.0)``.
 
@@ -422,38 +422,3 @@ def measured_response(
                     }
                 )
     return pd.DataFrame(rows)
-
-
-def _cache_name(stem: str, rf_offset: float) -> str:
-    return f"{stem}_rf{rf_offset:+g}.parquet".replace("+", "p").replace("-", "m")
-
-
-def cached_response(
-    rf_offset: float, *, campaign: Campaign, refresh: bool = False
-) -> pd.DataFrame:
-    """:func:`measured_response`, cached to parquet."""
-    cache = campaign.cache_file(_cache_name("response_xy", rf_offset))
-    if cache.exists() and not refresh:
-        return pd.read_parquet(cache)
-    response = measured_response(rf_offset, campaign=campaign)
-    response.to_parquet(cache)
-    return response
-
-
-def cached_orbits(
-    rf_offset: float, *, campaign: Campaign, refresh: bool = False
-) -> dict[tuple[str, float], pd.DataFrame]:
-    """:func:`measured_orbits`, cached to a single tidy parquet file."""
-    cache = campaign.cache_file(_cache_name("orbits", rf_offset))
-    if cache.exists() and not refresh:
-        stacked = pd.read_parquet(cache)
-        return {
-            (corrector, float(offset)): frame.drop(columns=["CORRECTOR", "OFFSET_K"])
-            for (corrector, offset), frame in stacked.groupby(["CORRECTOR", "OFFSET_K"])
-        }
-    orbits = measured_orbits(rf_offset, campaign=campaign)
-    stacked = pd.concat(
-        [frame.assign(CORRECTOR=corrector, OFFSET_K=offset) for (corrector, offset), frame in orbits.items()]
-    )
-    stacked.to_parquet(cache)
-    return orbits

@@ -20,8 +20,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
-from aba_optimiser.mad import GradientDescentMadInterface
+from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
+from adelmo.machine.mad.optimising_mad_interface import GradientDescentMadInterface
+from adelmo.machine.mad.machine_state import merge_machine_states
 from tmom_recon.physics.closed_orbit import fit_dispersion, measure_dispersion
 
 from loco_common.campaign import Campaign, add_campaign_argument, campaign_by_slug
@@ -33,13 +34,13 @@ from loco_common.fit_mode import (
 )
 from loco_common.measured_response import (
     average_orbit_frames,
-    cached_orbits,
     cached_scan,
     measured_orbits,
 )
 from loco_common.model import DEFAULT_SEQUENCE_FILE, build_model, model_twiss
 from loco_common.momentum import chroma_pt_by_rf_offset, chroma_pt_error_by_rf_offset
-from method2_delta_orbit.run_method2 import build_settings
+from loco_common.naming import lsa_to_element
+from poco.settings import trim_settings
 
 logger = logging.getLogger(__name__)
 
@@ -86,10 +87,9 @@ def measured_targets(model, campaign: Campaign):
     measured_dispersion_error = measured_dispersion_uncertainty(
         raw_by_offset, pt, pt_error, model_twiss(model, chrom=True)
     )
-    # ``machine`` baseline: trim applied as nominal + dk on the machine's corrector values.
-    deltas = build_settings(
-        cached_orbits(0.0, campaign=campaign), model, rf_offset=0.0,
-        corrector_baseline="machine",
+    # Trims are applied as nominal + dk on the machine's corrector values.
+    deltas = trim_settings(
+        measured_orbits(0.0, points=points, orbit_by_path=orbit_by_path)
     )
     return deltas, absolute, pt, measured_dispersion_error
 
@@ -145,8 +145,7 @@ def open_full_interface(model):
     )
     return GradientDescentMadInterface(
         accelerator=accelerator,
-        tune_knobs=model.tune_knobs or None,
-        corrector_knobs=model.corrector_knobs or None,
+        machine_state=merge_machine_states(model.corrector_knobs, model.tune_knobs) or None,
     )
 
 
@@ -165,18 +164,29 @@ def orbit_at(interface, pt: float = 0.0, *, high_order: bool = False) -> pd.Data
     )
 
 
+def corrector_value(interface, standing: dict[str, float], knob: str) -> float:
+    """The corrector's standing value, else the one the MAD environment holds for it."""
+    if knob in standing:
+        return standing[knob]
+    from adelmo.machine.mad.machine_state import read_state
+
+    return read_state(interface.mad, interface.py_name, [knob])[knob]
+
+
 def set_corrector(interface, knob: str, value: float) -> None:
     """Set a corrector's MAD-X global, the same deferral the sequence uses."""
     interface.mad.send(f"MADX['{knob}'] = {value:.15e}")
 
 
-def predict(open_interface, model, targets, *, high_order: bool = False):
+def predict(open_interface, model, targets, *, high_order: bool = False, gains: pd.Series | None = None):
     """Model predictions for the three common targets, aligned to the BPMs.
 
     *open_interface* is a factory: a lattice can fail to close off-momentum and MAD-NG is
     unreliable after an error, so each off-momentum point gets a fresh process and a failure becomes ``NaN``.
-    ``high_order`` is passed to :func:`orbit_at`.
+    ``high_order`` is passed to :func:`orbit_at`. *gains* (a fit's ``gains.csv``) scales each delta-orbit kick by
+    ``1 + corrgain`` and each BPM reading by ``1 + bpmgain``; the closed and dispersion orbits are not scaled, as the fit did not use them.
     """
+    gains = gains if gains is not None else pd.Series(dtype=float)
     deltas, absolute, pt, _measured_dispersion_error = targets
     standing = dict(model.corrector_knobs)
     interface = open_interface()
@@ -188,13 +198,16 @@ def predict(open_interface, model, targets, *, high_order: bool = False):
 
     delta_rows = []
     for setting in deltas:
-        set_corrector(interface, setting.knob, setting.nominal + setting.dk)
+        base = corrector_value(interface, standing, setting.knob)
+        kick = setting.dk * (1.0 + gains.get(f"corrgain.{lsa_to_element(setting.corrector).split('.', 1)[1]}", 0.0))
+        set_corrector(interface, setting.knob, base + kick)
         kicked = orbit_at(interface, high_order=high_order)
-        set_corrector(interface, setting.knob, standing.get(setting.knob, 0.0))
+        set_corrector(interface, setting.knob, base)
         difference = kicked - nominal[0.0]
         target = setting.orbit
         common = difference.index.intersection(target.index)
         for plane in PLANES:
+            bpm_gain = np.array([gains.get(f"bpmgain.{plane}.{bpm}", 0.0) for bpm in common])
             delta_rows.append(
                 pd.DataFrame(
                     {
@@ -202,7 +215,7 @@ def predict(open_interface, model, targets, *, high_order: bool = False):
                         "offset_k": setting.offset_k,
                         "plane": plane,
                         "bpm": common,
-                        "model": difference.loc[common, plane].to_numpy(),
+                        "model": (1.0 + bpm_gain) * difference.loc[common, plane].to_numpy(),
                         "measured": target.loc[common, MEASURED_COLUMN[plane]].to_numpy(),
                         "error": target.loc[common, MEASURED_ERROR_COLUMN[plane]].to_numpy(),
                     }
@@ -371,8 +384,14 @@ def main() -> None:
 
         # Only the skew-multipole families use the order-8 integrator.
         high_order = bool({"k0s", "k1s"} & set(parse_case(name).family_list))
+        gain_file = None if run is None else run / "gains.csv"
+        gains = (
+            pd.read_csv(gain_file).set_index("parameter")["value"]
+            if gain_file is not None and gain_file.exists()
+            else None
+        )
         delta_frame, absolute_frame, lost = predict(
-            open_configured, model, targets, high_order=high_order
+            open_configured, model, targets, high_order=high_order, gains=gains
         )
         dispersion_frame = dispersion(absolute_frame).merge(
             measured_dispersion_error, on=["plane", "bpm"], how="left"

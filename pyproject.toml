@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "psb-loco"
 version = "0.1.0"
-description = "PSB ring-3 LOCO: quadrupole k1 recovery from measured orbit response, by two independent methods."
+description = "PSB ring-3 LOCO: quadrupole k1 recovery from measured orbit response, by POCO."
 requires-python = ">=3.11,<3.12"
 license = "MIT"
 authors = [{ name = "Joshua Gray" }]
 dependencies = [
-    "aba_optimiser",
+    "adelmo",
     "matplotlib",
     "numpy",
     "pandas",
@@ -26,14 +26,14 @@ test = ["pytest", "xsuite", "xtrack-tools"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["loco_common*", "loco_report*", "method1_madng_da*", "method2_delta_orbit*", "phase_advance_constraint*"]
+include = ["loco_common*", "loco_report*", "poco*", "phase_advance_constraint*"]
 
 [tool.uv]
 package = true
 environments = ["sys_platform == 'linux'"]
 
 [tool.uv.sources]
-aba_optimiser = { path = "../sgd-magnet-tuner", editable = true }
+adelmo = { path = "../sgd-magnet-tuner", editable = true }
 psb-md = { path = "../psb_md", editable = true }
 tmom-recon = { path = "../tmom-recon", editable = true }
 xtrack-tools = { path = "../xtrack-tools", editable = true }

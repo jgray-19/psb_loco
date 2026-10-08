@@ -31,19 +31,16 @@ Statements only. What was measured, what was modelled, what was fitted. The conv
 : One machine state within a working point: the unperturbed baseline, or one of the three with an error injected. Four per working point, shown as the tabs on every results page. Called a *scenario* on the scenario-comparison page, where the baseline is subtracted from the other three.
 
 **case**
-: One fitted option within a page: which knob families the fit was allowed to move, and how they were grouped. Two per page.
+: One fitted option within a page: which knob families the fit was allowed to move. The quadrupoles are always lumped to 32 knobs by cell.
 
 **orbit-matching mode**
 : What the fit was scored against. *Delta orbits* subtract a reference orbit from both planes, so a constant kick is invisible and quadrupole offsets are not fitted. *Absolute orbits* keep the machine's own closed orbit in both planes, so bends and offsets are constrained and free.
 
-**momentum mode**
-: *Single momentum* fits the nominal-RF acquisitions only, and the other RF settings are held-out validation. *Multi momentum* fits every RF setting together.
-
 **lumping**
-: How per-magnet families were grouped. *Lumped to 32 knobs by cell* ties the two QFO flanking a QDE and leaves the QDE free. *One knob per magnet* frees all 48 against 16 BPMs per plane.
+: *Lumped to 32 knobs by cell* ties the two QFO of a cell and leaves the QDE free.
 
-**Method 1**
-: The MAD-NG parametric-twiss fit of the measured response matrix, on the delta orbits, over the same 32 cell-grouped knobs.
+**gains**
+: A multiplicative error on a BPM reading (per BPM and plane) or on a corrector's kick. Only differences between correctors of one plane are determined; the priors set the overall scale.
 
-**Method 2**
+**POCO**
 : The closed-orbit fit: one MAD-NG worker per corrector setting, Levenberg-Marquardt over the same knobs.

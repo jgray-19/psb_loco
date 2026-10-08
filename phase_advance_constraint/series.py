@@ -1,13 +1,10 @@
-"""Phase-only ``ClosedOrbitSeries`` for Method 2's ``--phase-constraint`` (see ``docs/studies/phase-advance-constraint.md``)."""
+"""Phase-only ``ClosedOrbitSeries`` for POCO's ``--phase-constraint`` (see ``docs/studies/phase-advance-constraint.md``)."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from aba_optimiser.training_closed_twiss import (
-    ClosedOrbitMeasurement,
-    ClosedOrbitSeries,
-)
+from adelmo.poco.closed_orbit import ClosedOrbitMeasurement, ClosedOrbitSeries
 from psb_md.defaults import FINAL_ACD_ORBIT_FOLDERS
 from psb_md.measured_optics import assemble_measured_optics
 
@@ -43,7 +40,7 @@ def build_phase_series(
 ) -> list[ClosedOrbitSeries]:
     """One phase-only series per RF offset: a plain twiss, no corrector trim, residual is the BPM-to-BPM phase advance (mu1/mu2).
 
-    Each is its own ``ClosedOrbitSeries`` with ``control_knob=None``, and each momentum has its own measured phase.
+    Each is its own ``ClosedOrbitSeries`` at the fitter's machine state, and each momentum has its own measured phase.
 
     ``phase_weight`` divides ``mu1_var``/``mu2_var``, multiplying phase's fit weight by it; phase SNR
     (median ~290) is far below orbit's (~3400), so ~140 orbit settings otherwise swamp 3 phase settings.

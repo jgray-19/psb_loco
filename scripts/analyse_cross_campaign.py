@@ -1,6 +1,6 @@
 """Persist the cross-campaign comparison data under ``results/cross_campaign/``.
 
-Combines what earlier stages wrote per campaign (``summary.json``, benchmark records, per-case
+Combines what earlier stages wrote per campaign (``summary.json``, per-case
 ``knobs.csv``) into tidy files; ``scripts/plot_cross_campaign.py`` draws from them.
 
     uv run python scripts/analyse_cross_campaign.py
@@ -26,7 +26,6 @@ from scripts.plot_knobs import read_knobs
 from scripts.measured_optics import model_optics
 from scripts.report_cases import (
     LOCO_OPTICS_FITS,
-    benchmark_records,
     loco_optics_values_along_s,
     optics_beat_along_s,
     optics_summary,
@@ -56,15 +55,14 @@ def matched_model_bpms(campaign, summary: dict, sequence_file: Path) -> pd.DataF
 
 def analyse_direction(
     direction: str, page_campaigns: tuple, positions: dict[str, float],
-    benchmark_root: Path, sequence_file: Path, output_root: Path,
+    sequence_file: Path, output_root: Path,
 ) -> None:
-    """One direction's scenario campaigns: optics summaries, dispersion, benchmark records and raw per-magnet fits."""
+    """One direction's scenario campaigns: optics summaries, dispersion and raw per-magnet fits."""
     root = output_root / direction
     summaries = {c.slug: optics_summary(c) for c in page_campaigns}
     _write_json(root / "scenario_optics_summaries.json", summaries)
     dispersion = {c.slug: scenario_dispersion_beat(c) for c in page_campaigns}
     _write_json(root / "scenario_dispersion_beat.json", dispersion)
-    _write_json(root / "benchmark.json", benchmark_records(benchmark_root, page_campaigns))
 
     # Per-BPM beating for the along-s comparison figures.
     beats = pd.concat(
@@ -96,7 +94,7 @@ def analyse_direction(
     _write_json(root / "element_positions.json", positions)
 
     baseline, *scenarios = page_campaigns
-    for mode in (fit_mode_by_slug("single"), fit_mode_by_slug("multi")):
+    for mode in (fit_mode_by_slug("multi"),):
         for case_slug in DELTA_PAGE.cases:
             base_path = mode.results_root(baseline) / case_slug / "knobs.csv"
             if not base_path.exists():
@@ -122,8 +120,6 @@ def analyse_direction(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--benchmark", type=Path, default=Path("results/benchmark"),
-                        help="Where scripts/benchmark_methods.py wrote its records.")
     parser.add_argument("--sequence-file", type=Path, default=DEFAULT_SEQUENCE_FILE)
     parser.add_argument("--output", type=Path, default=OUTPUT_ROOT)
     parser.add_argument(
@@ -146,8 +142,7 @@ def main() -> None:
             build_model(sequence_file=args.sequence_file, campaign=page_campaigns[0])
         )
         analyse_direction(
-            direction, page_campaigns, positions, args.benchmark,
-            args.sequence_file, args.output,
+            direction, page_campaigns, positions, args.sequence_file, args.output,
         )
 
 

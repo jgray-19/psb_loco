@@ -17,8 +17,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
-from aba_optimiser.mad import GenericMadInterface
+from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
+from adelmo.machine.mad.optimising_mad_interface import GenericMadInterface
+from adelmo.machine.mad.machine_state import merge_machine_states
 
 from loco_common.model import build_model
 
@@ -66,8 +67,7 @@ class Lattice:
         )
         interface = GenericMadInterface(
             accelerator=accelerator,
-            tune_knobs=self.model.tune_knobs or None,
-            corrector_knobs=self.model.corrector_knobs or None,
+            machine_state=merge_machine_states(self.model.corrector_knobs, self.model.tune_knobs) or None,
         )
         try:
             if attach_dpsi:

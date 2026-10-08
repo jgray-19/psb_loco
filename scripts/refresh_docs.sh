@@ -52,7 +52,7 @@ print(' '.join(c.slug for c in groups['$DIRECTION']))
 # Clear cached artifacts so every stage is forced to regenerate from scratch.
 # Comment this block out to reuse whatever is already on disk.
 for campaign in $CAMPAIGNS; do
-    rm -f "data/${campaign}_scan_points.parquet" "data/${campaign}_scan_orbits.parquet" "data/${campaign}_orbits_rfp0.parquet"
+    rm -f "data/${campaign}_scan_points.parquet" "data/${campaign}_scan_orbits.parquet"
     rm -rf "results/optics/${campaign}"
     rm -rf "docs/assets/figures/${campaign}"
     for mode in single multi; do
@@ -77,15 +77,13 @@ for campaign in $CAMPAIGNS; do
 done
 wait_all measured_optics
 
-# Stage 2: the fit pipeline, one chain per campaign, every campaign at once;
-# single for all campaigns first, then multi. The modes are sequential because
-# multi's absolute cases warm-start from single's fits: run side by side, the
-# multi chain found those fits missing and fitted them itself into the same
-# directories, and both chains wrote data/<campaign>_orbits_rfp0.parquet.
+# Stage 2: the fit pipeline, one chain per campaign, every campaign at once.
+# Only the multi-momentum fits are reported; run_campaign_fits fits the
+# single-momentum warm start of each absolute case itself.
 # predict_loco writes scoreboard.shard1of1.csv and only --merge turns that into
 # the scoreboard.csv that loco_report's scores figure reads, so the merge is
 # part of the chain, not optional.
-for mode in single multi; do
+for mode in multi; do
     pids=""
     for campaign in $CAMPAIGNS; do
         (
@@ -128,6 +126,5 @@ done
 run analyse_cross_campaign "$PYTHON" scripts/analyse_cross_campaign.py --direction "$DIRECTION"
 run plot_cross_campaign "$PYTHON" scripts/plot_cross_campaign.py --direction "$DIRECTION"
 
-# Stage 4: every figure and every page for this direction, both momentum
-# modes, in one call.
+# Stage 4: every figure and every page for this direction, in one call.
 run report "$PYTHON" -m loco_report --direction "$DIRECTION"

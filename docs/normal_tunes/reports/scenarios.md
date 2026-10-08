@@ -72,25 +72,6 @@ PSB ring 3 · Normal tunes, 29th as the unperturbed baseline, against Normal tun
 
 ## Fitted gradients against the baseline
 
-=== "Single momentum, gradients"
-
-    <figure markdown>
-    ![fitted gradient difference from baseline](../../assets/figures/scenarios/normal/scenario-comparison/single/none__k1__bpm-family/knob_diffs_dk1l.png)
-    <figcaption>Fitted gradient per magnet, each scenario minus the unperturbed baseline.</figcaption>
-    </figure>
-
-=== "Single momentum, gradients and rolls"
-
-    <figure markdown>
-    ![fitted gradient difference from baseline](../../assets/figures/scenarios/normal/scenario-comparison/single/none__k1+t__bpm-family/knob_diffs_dk1l.png)
-    <figcaption>Fitted gradient per magnet, each scenario minus the unperturbed baseline.</figcaption>
-    </figure>
-
-    <figure markdown>
-    ![fitted roll difference from baseline](../../assets/figures/scenarios/normal/scenario-comparison/single/none__k1+t__bpm-family/knob_diffs_tilt.png)
-    <figcaption>Fitted roll per magnet, each scenario minus the unperturbed baseline.</figcaption>
-    </figure>
-
 === "Multi momentum, gradients"
 
     <figure markdown>
@@ -108,4 +89,11 @@ PSB ring 3 · Normal tunes, 29th as the unperturbed baseline, against Normal tun
     <figure markdown>
     ![fitted roll difference from baseline](../../assets/figures/scenarios/normal/scenario-comparison/multi/none__k1+t__bpm-family/knob_diffs_tilt.png)
     <figcaption>Fitted roll per magnet, each scenario minus the unperturbed baseline.</figcaption>
+    </figure>
+
+=== "Multi momentum, gradients and BPM and corrector gains"
+
+    <figure markdown>
+    ![fitted gradient difference from baseline](../../assets/figures/scenarios/normal/scenario-comparison/multi/none__k1+g__bpm-family/knob_diffs_dk1l.png)
+    <figcaption>Fitted gradient per magnet, each scenario minus the unperturbed baseline.</figcaption>
     </figure>

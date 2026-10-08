@@ -133,7 +133,7 @@ def main() -> None:
                         default=DEFAULT_SEQUENCE_FILE)
     parser.add_argument(
         "--options", nargs="+", default=None,
-        help="Options to twiss; default is every option any report page shows, Method 1 included.",
+        help="Options to twiss; default is every option any report page shows.",
     )
     parser.add_argument(
         "--models-only", action="store_true",
@@ -142,7 +142,7 @@ def main() -> None:
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-    from loco_common.case_names import every_option
+    from loco_common.case_names import every_page_case
 
     campaign = campaign_by_slug(args.campaign)
     mode = fit_mode_by_slug(args.momentum_mode)
@@ -150,7 +150,7 @@ def main() -> None:
     args.matrix = args.matrix or root
     args.output = args.output or root / "optics"
     model = build_model(sequence_file=args.sequence_file, campaign=campaign)
-    options = args.options or every_option()
+    options = args.options or every_page_case()
     args.output.mkdir(parents=True, exist_ok=True)
 
     start = _twiss(model, None)
@@ -173,7 +173,7 @@ def main() -> None:
         if not knobs.exists():
             logger.warning("%s: no knobs.csv, skipping", option)
             continue
-        if option != "method1" and not result_is_valid(args.matrix / option):
+        if not result_is_valid(args.matrix / option):
             logger.warning("%s: no accepted optimisation step, skipping", option)
             continue
         # Only the skew-multipole families use the order-8 integrator.

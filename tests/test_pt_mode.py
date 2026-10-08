@@ -1,12 +1,15 @@
-"""Method 2's multi-momentum mode: the momentum has to be estimated (the scan records mm, not ``dp/p``), so test the estimate and the cost of a wrong one."""
+"""POCO's multi-momentum mode: the momentum has to be estimated (the scan records mm, not ``dp/p``), so test the estimate and the cost of a wrong one."""
 
 from __future__ import annotations
+
+from dataclasses import replace
 
 import numpy as np
 import pandas as pd
 import pytest
 
 from loco_common.momentum import estimate_pt, frame_from_orbit
+from loco_common.naming import lsa_to_knob
 
 pytestmark = pytest.mark.slow
 
@@ -57,47 +60,25 @@ def test_the_estimate_is_monotonic_in_momentum(psb_line, bpms):
     assert np.all(np.diff(estimates) > 0)
 
 
-def test_a_retained_plane_needs_fitted_angles(psb_line, bpms):
-    """The frame refuses to invent the closed-orbit angles it is not given.
-
-    Momentum is an offset from a *measured* orbit zero (a modelled one biases ``pt`` by tens of percent).
-    :func:`frame_from_orbit` makes both planes dynamic; a retained plane needs explicitly fitted momenta.
-    """
-    from tmom_recon import ReconstructionFrame
-
+def test_the_frame_is_the_measured_orbit_origin(psb_line, bpms):
+    """The frame is the measured nominal-RF orbit itself, so that orbit has zero momentum offset."""
     model = _ng_twiss(psb_line, bpms)
-    orbit_zero = _orbit(model).rename(columns={"X": "x", "Y": "y"})
+    orbit = _orbit(model)
+    frame = frame_from_orbit(orbit, model)
 
-    with pytest.raises(ValueError, match="fitted"):
-        ReconstructionFrame(orbit_zero=orbit_zero, dynamic_planes=("y",))
-
-
-def test_the_frame_subtracts_the_measured_origin(psb_line, bpms):
-    """Both planes dynamic, so the origin leaves the data before the projection."""
-    model = _ng_twiss(psb_line, bpms)
-    frame = frame_from_orbit(_orbit(model), model)
-
-    assert frame.dynamic_planes == ("x", "y")
-    assert frame.fitted_momenta is None
-    prepared = frame.prepare_data(
-        pd.DataFrame(
-            {
-                "name": list(model.index),
-                "x": model["x"].to_numpy(dtype=float),
-                "y": model["y"].to_numpy(dtype=float),
-            }
-        )
-    )
-    assert prepared[["x", "y"]].abs().to_numpy().max() == pytest.approx(0.0, abs=1e-12)
+    assert list(frame.columns) == ["x", "y"]
+    assert frame.index.name == "name"
+    assert frame["x"].to_numpy() == pytest.approx(orbit["X"].to_numpy(dtype=float))
+    assert estimate_pt(orbit, model, frame) == pytest.approx(0.0, abs=1e-9)
 
 
 def _delta_settings(line, bpms, correctors, dk, pt):
-    """Measured delta orbits at one momentum, as Method-2 settings.
+    """Measured delta orbits at one momentum, as POCO settings.
 
     The reference is the *global* one (``pt = 0``), as in ``loco_common.measured_response``, so each
     delta carries this momentum's dispersion orbit.
     """
-    from method2_delta_orbit.run_method2 import CorrectorSetting
+    from poco.settings import CorrectorSetting
 
     nominal = _ng_twiss(line, bpms, pt=0.0)
     settings = []
@@ -123,7 +104,6 @@ def _delta_settings(line, bpms, correctors, dk, pt):
                 orbit=frame,
                 dk=dk,
                 pt=pt,
-                reference_pt=0.0,
             )
         )
     return settings
@@ -148,19 +128,22 @@ def test_a_wrong_pt_costs_more_than_it_gains(
     makes the lattice unstable and MAD's normal form fails.
     """
     from loco_common.model import LocoModel
-    from method2_delta_orbit.run_method2 import run
+    from poco.run_poco import run
 
-    model = LocoModel(sequence_file=sequence_file, tune_knobs={}, corrector_knobs={})
     correctors = ["BR3.DHZ8L1", "BR3.DVT2L4"]
+    model = LocoModel(
+        sequence_file=sequence_file,
+        tune_knobs={},
+        corrector_knobs={lsa_to_knob(corrector): 0.0 for corrector in correctors},
+    )
     dk, true_pt = 5e-4, 1e-3
 
     settings = _delta_settings(truth_line, bpms, correctors, dk, true_pt)
-    correct, _, _ = run(settings, model, max_iterations=8, output_path=tmp_path / "right")
+    correct = run(settings, model, max_iterations=8, output_path=tmp_path / "right")[0].knobs
 
-    for setting in settings:
-        # 20% low; a sign flip makes the lattice unstable and MAD's normal form fail.
-        setting.pt = 0.8 * true_pt
-    wrong, _, _ = run(settings, model, max_iterations=8, output_path=tmp_path / "wrong")
+    # 20% low; a sign flip makes the lattice unstable and MAD's normal form fail.
+    biased = [replace(setting, pt=0.8 * true_pt) for setting in settings]
+    wrong = run(biased, model, max_iterations=8, output_path=tmp_path / "wrong")[0].knobs
 
     correct_error = _distance_to_truth(correct, truth_errors, psb_line)
     wrong_error = _distance_to_truth(wrong, truth_errors, psb_line)

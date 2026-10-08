@@ -25,8 +25,6 @@ from scripts.analyse_cross_campaign import OUTPUT_ROOT
 from scripts.report_cases import (
     LOCO_OPTICS_FITS,
     figure_beta_beat_summary,
-    figure_benchmark_agreement,
-    figure_benchmark_speed,
     figure_perturbation_effect,
     figure_perturbation_tunes,
     figure_scenario_knob_diffs,
@@ -71,12 +69,9 @@ def plot_direction(direction: str, page_campaigns: tuple, analysis_root: Path, o
         fit_output.mkdir(parents=True, exist_ok=True)
         figure_perturbation_effect(summaries, values, positions, fit_output, fit)
     figure_perturbation_tunes(summaries, scenario_output)
-    records = _read_json(root / "benchmark.json")
-    figure_benchmark_speed(records, scenario_output)
-    figure_benchmark_agreement(records, scenario_output)
 
     baseline, *scenarios = page_campaigns
-    for mode in (fit_mode_by_slug("single"), fit_mode_by_slug("multi")):
+    for mode in (fit_mode_by_slug("multi"),):
         for case_slug in DELTA_PAGE.cases:
             path = root / "scenario_knobs" / mode.slug / f"{case_slug}.parquet"
             if not path.exists():

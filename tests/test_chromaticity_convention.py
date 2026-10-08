@@ -46,8 +46,8 @@ def test_all_ctimes_share_one_slope_but_keep_independent_tune_intercepts():
 @pytest.mark.slow
 def test_madng_twiss_dispersion_and_chromaticity_are_derivatives_by_pt(sequence_file):
     """Pin the MAD-NG convention against explicit method-6 finite differences."""
-    from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
-    from aba_optimiser.mad import GenericMadInterface
+    from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
+    from adelmo.machine.mad.optimising_mad_interface import GenericMadInterface
 
     accelerator = OptimiserPSB(ring=3, sequence_file=sequence_file, kinetic_energy=0.16)
     interface = GenericMadInterface(accelerator=accelerator)

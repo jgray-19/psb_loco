@@ -8,8 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from psb_md.acd_config import psb_orbit_corrector_strengths
-from psb_md.defaults import REFERENCE_MODEL_DIR
-from psb_md.modelling import matched_tune_knobs, resolve_sequence_file
+from psb_md.modelling import matched_tune_knobs
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-#: The vendored ring-3 sequence; ``REFERENCE_MODEL_DIR`` points into ``psb_md``'s working directory, which it may rebuild.
+#: The vendored ring-3 sequence.
 DEFAULT_SEQUENCE_FILE = (
     Path(__file__).resolve().parent.parent
     / "models"
@@ -48,7 +47,6 @@ class LocoModel:
 def build_model(
     *,
     campaign: Campaign,
-    model_dir: Path = REFERENCE_MODEL_DIR,
     sequence_file: Path | None = None,
     orbit: int = 0,
     scan_quads: bool = True,
@@ -61,7 +59,7 @@ def build_model(
     ``scan_quads`` (default) uses the campaign's quadrupole circuits rather than a tune match;
     pass ``False`` for the tune-matched lattice.
     """
-    sequence = Path(sequence_file) if sequence_file else resolve_sequence_file(model_dir)
+    sequence = Path(sequence_file or DEFAULT_SEQUENCE_FILE)
     matched = matched_tune_knobs(campaign.machine_config, orbit, kinetic_energy=KINETIC_ENERGY)
     quad_settings = campaign.quad_settings
     model = LocoModel(
@@ -91,8 +89,9 @@ def build_model(
 
 
 def _interface(model: LocoModel):
-    from aba_optimiser.accelerators import PSB as OptimiserPSB  # noqa: N811
-    from aba_optimiser.mad import GenericMadInterface
+    from adelmo.machine.accelerators.psb import PSB as OptimiserPSB
+    from adelmo.machine.mad.optimising_mad_interface import GenericMadInterface
+    from adelmo.machine.mad.machine_state import merge_machine_states
 
     accelerator = OptimiserPSB(
         ring=model.ring,
@@ -101,8 +100,7 @@ def _interface(model: LocoModel):
     )
     return GenericMadInterface(
         accelerator=accelerator,
-        tune_knobs=model.tune_knobs,
-        corrector_knobs=model.corrector_knobs,
+        machine_state=merge_machine_states(model.corrector_knobs, model.tune_knobs),
     )
 
 

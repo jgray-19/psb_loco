@@ -1,4 +1,4 @@
-"""The phase-advance-constraint extension to Method 2 (docs/studies/phase-advance-constraint.md).
+"""The phase-advance-constraint extension to POCO (docs/studies/phase-advance-constraint.md).
 
-``series.py`` is the glue behind ``run_method2``'s ``--phase-constraint``; the other modules are the investigation scripts.
+``series.py`` is the glue behind ``run_poco``'s ``--phase-constraint``; the other modules are the investigation scripts.
 """

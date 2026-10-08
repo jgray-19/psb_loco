@@ -12,7 +12,6 @@ import numpy as np
 import pandas as pd
 
 from loco_common.campaign import Campaign
-from loco_common.case_names import METHOD1_OPTION
 from loco_common.fit_mode import FitMode, result_is_valid
 
 logger = logging.getLogger(__name__)
@@ -46,13 +45,18 @@ class Results:
 
     def has(self, option: str) -> bool:
         """Whether this option produced a usable fit."""
-        return option == METHOD1_OPTION or result_is_valid(self.matrix / option)
+        return result_is_valid(self.matrix / option)
 
     def valid(self, options) -> tuple[str, ...]:
         return tuple(option for option in options if self.has(option))
 
     def knobs(self, option: str) -> pd.DataFrame:
         return knobs(self.matrix / option / "knobs.csv", self.positions)
+
+    def gains(self, option: str) -> pd.Series:
+        """``gains.csv`` as ``corrgain.<corrector>`` / ``bpmgain.<plane>.<bpm>`` -> value; empty for a fit without gains."""
+        path = self.matrix / option / "gains.csv"
+        return pd.read_csv(path).set_index("parameter")["value"] if path.exists() else pd.Series(dtype=float)
 
     def summary(self, option: str) -> dict:
         return read_json(self.matrix / option / "summary.json")
@@ -120,7 +124,7 @@ def knob_statistics(frame: pd.DataFrame, suffix: str) -> dict[str, float] | None
         return None
     sigma = family["uncertainty"].abs()
     ratio = (family["value"].abs() / sigma).replace([np.inf, -np.inf], np.nan).dropna()
-    # Method 1 reports no covariance (NaN sigma), so its significance is empty.
+    # A fit with no covariance (NaN sigma) has an empty significance.
     if ratio.empty:
         ratio = pd.Series([float("nan")])
     return {
@@ -173,14 +177,3 @@ def measured_dispersion(predictions: Path, positions: dict[str, float]) -> pd.Da
     frame = frame.rename(columns={"measured_error": "uncertainty"}).copy()
     frame["s"] = frame["bpm"].astype(str).str.upper().map(by_name)
     return frame.loc[~frame["s"].isna(), columns]
-
-
-def benchmark(root: Path, campaigns) -> list[dict]:
-    """The Method-1-against-Method-2 record per campaign, where one was written."""
-    records = []
-    for campaign in campaigns:
-        record = read_json(root / f"{campaign.slug}.json")
-        if record:
-            # The record's own "campaign" is the slug; keep the object apart.
-            records.append({**record, "campaign_object": campaign})
-    return records
